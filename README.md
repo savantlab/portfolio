@@ -116,46 +116,6 @@ savantlab-portfolio/
 └── README.md                   # This file
 ```
 
-## Deployment to DigitalOcean
-
-The app is designed to run on the flask-server droplet (192.34.61.197) with Nginx as reverse proxy.
-
-### Nginx Configuration
-
-```nginx
-server {
-    listen 80;
-    server_name savantlab.org www.savantlab.org;
-
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-
-    location /static {
-        alias /path/to/savantlab-portfolio/static;
-    }
-}
-```
-
-### Systemd Service
-
-```ini
-[Unit]
-Description=Savantlab Portfolio
-After=network.target
-
-[Service]
-User=www-data
-WorkingDirectory=/path/to/savantlab-portfolio
-ExecStart=/usr/bin/gunicorn -w 4 -b 127.0.0.1:5000 app:app
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
 ## License
 
 © 2025 Savantlab. All rights reserved.
