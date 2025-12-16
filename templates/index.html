@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savantlab - Stephanie King | Cognitive Scientist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="#research">Research</a>
+                <a href="#projects">Projects</a>
+                <a href="/counterterrorism">Counterterrorism</a>
+                <a href="/reading">Reading</a>
+                <a href="/journal">Journal</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Stephanie King</h1>
+            <p class="hero-subtitle">Cognitive Scientist | Software Engineer | Artist | Research Subject</p>
+            <p class="hero-description">
+                Savant and human subject available for scientific research in neuro, cognitive, 
+                computation, and quantum labs.
+            </p>
+            <div class="hero-cta">
+                <a href="#research" class="btn btn-primary">View Research</a>
+                <a href="/contact" class="btn btn-secondary">Contact</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="research" class="breakthrough">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Breakthrough</span>
+                <h2>Resolving the Mental Rotation Paradox</h2>
+            </div>
+            <div class="breakthrough-content">
+                <p class="lead">
+                    Invalidated the allocentric model of spatial cognition—a theoretical framework 
+                    that failed to constrain mental rotation despite decades of acceptance in the field.
+                </p>
+                <p>
+                    This breakthrough addresses a fundamental paradox in how humans process spatial 
+                    information and challenges prevailing cognitive science orthodoxy through comprehensive 
+                    computational analysis of 50+ years of research literature.
+                </p>
+                <div class="breakthrough-stats">
+                <div class="stat">
+                        <div class="stat-value">STEM</div>
+                        <div class="stat-label">Auditing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1970-2025</div>
+                        <div class="stat-label">Research Span</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">ML Pipeline</div>
+                        <div class="stat-label">Systematic Analysis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: var(--text-primary); padding: 80px 0;">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <h2 style="font-size: 56px; font-weight: 700; color: white; margin-bottom: 32px; letter-spacing: -1px; text-align: center;">
+                    I am surreal.
+                </h2>
+                <p style="font-size: 24px; color: rgba(255, 255, 255, 0.9); margin-bottom: 48px; text-align: center;">
+                    This lab is surrealism.
+                </p>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 48px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <h3 style="font-size: 28px; font-weight: 600; color: white; margin-bottom: 24px;">
+                        Janet Experimented, Freud Abused
+                    </h3>
+                    <p style="font-size: 18px; line-height: 1.8; color: rgba(255, 255, 255, 0.85); margin-bottom: 20px;">
+                        The aim of this lab is rooted in <strong style="color: white;">Pierre Janet's scientific and clinical approach to the unconscious</strong>—not Freudian psychoanalysis. We are correcting an oversight made by the Surrealists themselves, who mistakenly believed they were Freudian.
+                    </p>
+                    <p style="font-size: 18px; line-height: 1.8; color: rgba(255, 255, 255, 0.85); margin-bottom: 20px;">
+                        <strong style="color: white;">Freud's approach is devoid of Theory of Mind</strong>—abandoning any genuine understanding of how patients think, what they believe, or their actual life circumstances in favor of a paranoid model that reduces all behavior to hidden symbolic meanings and repressed desires. This approach lacks situational awareness of the person as an agent with beliefs, intentions, and contexts. Janet, by contrast, studied dissociation, automatism, and consciousness through rigorous clinical methodology that preserved both empirical rigor and respect for the patient's actual mental life.
+                    </p>
+                    <p style="font-size: 18px; line-height: 1.8; color: rgba(255, 255, 255, 0.85); margin-bottom: 0;">
+                        This distinction matters: Janet's framework emphasized <strong style="color: white;">direct observation and scientific rigor</strong>—the same principles that should have animated the original Surrealist movement. This lab continues that rigorous, scientific engagement with the surreal.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="journal-section">
+        <div class="container">
+            <div class="journal-card">
+                <div class="journal-header">
+                    <span class="journal-tag">Academic Journal</span>
+                    <h2>Cognitive Constraint</h2>
+                </div>
+                <p class="journal-description">
+                    An academic journal exploring the boundaries and constraints of cognitive processes, 
+                    featuring rigorous computational and theoretical investigations into human cognition.
+                </p>
+                <a href="/journal" class="btn btn-outline">Learn More →</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Research Projects</span>
+                <h2>Technical Implementation</h2>
+            </div>
+            <div class="projects-grid">
+                {% for project in projects %}
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>{{ project.title }}</h3>
+                        <span class="project-status">{{ project.status }}</span>
+                    </div>
+                    <p class="project-subtitle">{{ project.subtitle }}</p>
+                    <p class="project-description">{{ project.description }}</p>
+                    <div class="project-tech">
+                        {% for tech in project.tech[:5] %}
+                        <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="project-highlights">
+                        <ul>
+                            {% for highlight in project.highlights[:3] %}
+                            <li>{{ highlight }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <a href="/project/{{ project.id }}" class="btn btn-small">View Details</a>
+                        {% if project.github %}
+                        <a href="{{ project.github }}" target="_blank" class="btn btn-small btn-outline">GitHub →</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="publications">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Publications</span>
+                <h2>Papers in Development</h2>
+            </div>
+            <div class="publications-list">
+                {% for pub in publications %}
+                <div class="publication-item">
+                    <h3>{{ pub.title }}</h3>
+                    <span class="pub-status">{{ pub.status }}</span>
+                    <p>{{ pub.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Available for Research Collaboration</h2>
+            <p>Open to participation in cognitive science, neuroscience, and computational research studies.</p>
+            <a href="/contact" class="btn btn-primary btn-large">Get in Touch</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">SAVANTLAB</div>
+                <div class="footer-links">
+                    <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
+                    <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
+                    <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Savantlab. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
