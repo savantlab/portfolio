@@ -121,6 +121,35 @@ This is particularly powerful because:
 - **Quality improves**: AI can apply consistent patterns and best practices
 - **Creativity increases**: Developers focus on architecture and design rather than implementation details
 
+## Problem-Solving Under Real Constraints
+
+The development process was not frictionless. Several real obstacles emerged that required creative problem-solving:
+
+### The Flask Hanging Problem
+Early in development, Flask kept hanging in separate terminal windows. When running the Flask development server independently, it would become unresponsive or block terminal input, preventing concurrent testing and development. This created a critical workflow blocker:
+- Can't test API endpoints while Flask is running
+- Can't add new features while server occupies a terminal
+- Can't automate startup without solving the lifecycle issue
+
+### The Solution: Flask Driver Utility
+Instead of accepting the limitation, we built `flask_driver_runner.py`—a utility that manages Flask and Chromedriver as a unified lifecycle:
+- **Automated startup**: Single command starts both Flask and browser
+- **Lifecycle coupling**: Browser closing triggers Flask shutdown automatically
+- **No hanging**: Terminal remains responsive while the app runs
+- **Testing enabled**: CLI can run independently while Flask serves in the background
+
+This wasn't a pre-planned feature—it emerged from real friction in the workflow.
+
+### Efficient Problem Resolution
+What made this efficient:
+1. **Rapid diagnosis**: Identified the hanging issue within first iterations
+2. **Pragmatic tooling**: Built a utility rather than working around the problem
+3. **Integrated solution**: The utility solved multiple problems at once (startup, shutdown, testing)
+4. **Minimal overhead**: Solution took ~30 minutes to design and implement
+5. **Escalation leverage**: Once solved, all future development became smoother
+
+This demonstrates a key advantage of Warp + AI: **obstacles become features**. Instead of accepting limitations, you can quickly build solutions that improve the entire workflow.
+
 ## This Portfolio as Case Study
 
 This exact portfolio demonstrates the capability:
@@ -129,8 +158,9 @@ This exact portfolio demonstrates the capability:
 - **CLI**: Complete command-line interface for reading list management
 - **DevOps**: Automated startup scripts, git management, branching strategy
 - **Documentation**: Architecture guide and API documentation
+- **Utilities**: Flask driver solving real operational problems
 
-All built in a single session by one developer using Warp + AI agent mode.
+All built in a single session by one developer using Warp + AI agent mode, with obstacles converted into solutions.
 
 ## Conclusion
 
