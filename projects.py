@@ -2,10 +2,10 @@
 Projects Storage Module
 Manages projects data with API support
 """
-from datetime import datetime
-from typing import List, Dict, Optional
+from database import db
+from models import Project
 
-# Default projects data
+# Default projects data for seeding
 DEFAULT_PROJECTS = [
     {
         "id": "mental-rotation",
@@ -91,23 +91,21 @@ DEFAULT_PROJECTS = [
     }
 ]
 
-# In-memory storage
-_projects: Dict[str, Dict] = {p["id"]: p for p in DEFAULT_PROJECTS}
-
-
-def get_all_projects() -> List[Dict]:
+def get_all_projects() -> list:
     """Get all projects"""
-    return list(_projects.values())
+    projects = Project.query.all()
+    return [p.to_dict() for p in projects]
 
 
-def get_project(project_id: str) -> Optional[Dict]:
+def get_project(project_id: str) -> dict:
     """Get a specific project by ID"""
-    return _projects.get(project_id)
+    project = Project.query.get(project_id)
+    return project.to_dict() if project else None
 
 
-def add_project(title: str, subtitle: str, description: str, tech: List[str],
-                highlights: List[str], github: str = None, status: str = "Active",
-                image: str = None) -> Dict:
+def add_project(title: str, subtitle: str, description: str, tech: list,
+                highlights: list, github: str = None, status: str = "Active",
+                image: str = None) -> dict:
     """Add a new project"""
     if not title or not subtitle or not description:
         raise ValueError("Title, subtitle, and description are required")
@@ -115,52 +113,59 @@ def add_project(title: str, subtitle: str, description: str, tech: List[str],
     # Generate ID from title
     project_id = title.lower().replace(" ", "-")[:50]
     
-    if project_id in _projects:
+    if Project.query.get(project_id):
         raise ValueError(f"Project ID {project_id} already exists")
     
-    project = {
-        "id": project_id,
-        "title": title,
-        "subtitle": subtitle,
-        "description": description,
-        "tech": tech,
-        "highlights": highlights,
-        "github": github,
-        "status": status,
-        "image": image,
-        "created_at": datetime.now().isoformat()
-    }
+    project = Project(
+        id=project_id,
+        title=title,
+        subtitle=subtitle,
+        description=description,
+        tech=tech,
+        highlights=highlights,
+        github=github,
+        status=status,
+        image=image
+    )
     
-    _projects[project_id] = project
-    return project
+    db.session.add(project)
+    db.session.commit()
+    return project.to_dict()
 
 
-def update_project(project_id: str, **kwargs) -> Optional[Dict]:
+def update_project(project_id: str, **kwargs) -> dict:
     """Update a project"""
-    if project_id not in _projects:
+    project = Project.query.get(project_id)
+    if not project:
         return None
     
-    project = _projects[project_id]
-    
-    # Allowed fields to update
     allowed_fields = {"title", "subtitle", "description", "tech", "highlights", "github", "status", "image"}
     for field in allowed_fields:
         if field in kwargs:
-            project[field] = kwargs[field]
+            setattr(project, field, kwargs[field])
     
-    project["updated_at"] = datetime.now().isoformat()
-    return project
+    db.session.commit()
+    return project.to_dict()
 
 
 def delete_project(project_id: str) -> bool:
     """Delete a project"""
-    if project_id in _projects:
-        del _projects[project_id]
-        return True
-    return False
+    project = Project.query.get(project_id)
+    if not project:
+        return False
+    
+    db.session.delete(project)
+    db.session.commit()
+    return True
 
 
-def reset_projects() -> None:
-    """Reset to default projects"""
-    global _projects
-    _projects = {p["id"]: p for p in DEFAULT_PROJECTS}
+def seed_default_projects() -> None:
+    """Seed database with default projects if empty"""
+    if Project.query.first():
+        return
+    
+    for proj in DEFAULT_PROJECTS:
+        project = Project(**proj)
+        db.session.add(project)
+    
+    db.session.commit()

@@ -1,80 +1,66 @@
 """
-Technical Implementation Row Items Storage
-Stores and manages technical implementation notes that can be displayed on pages
+Technical Implementation Storage Module - Database-backed
+Manages technical implementation items with SQLAlchemy
 """
-from datetime import datetime
-from typing import List, Dict, Optional
-
-# In-memory storage (will be lost on server restart)
-_implementations: Dict[int, Dict] = {}
-_next_id = 1
+from database import db
+from models import TechnicalImplementation
 
 
-def add_implementation(title: str, description: str, tech_stack: List[str] = None, 
-                      status: str = "Active") -> Dict:
-    """Add a new technical implementation row item"""
-    global _next_id
-    
+def add_implementation(title: str, description: str, tech_stack: list = None, status: str = "Active") -> dict:
+    """Add a new technical implementation"""
     if not title or not description:
         raise ValueError("Title and description are required")
     
-    item = {
-        "id": _next_id,
-        "title": title,
-        "description": description,
-        "tech_stack": tech_stack or [],
-        "status": status,
-        "created_at": datetime.now().isoformat(),
-        "updated_at": datetime.now().isoformat()
-    }
+    impl = TechnicalImplementation(
+        title=title,
+        description=description,
+        tech_stack=tech_stack or [],
+        status=status
+    )
     
-    _implementations[_next_id] = item
-    _next_id += 1
+    db.session.add(impl)
+    db.session.commit()
     
-    return item
+    return impl.to_dict()
 
 
-def get_all_implementations() -> List[Dict]:
+def get_all_implementations() -> list:
     """Get all technical implementations"""
-    return sorted(_implementations.values(), key=lambda x: x["id"], reverse=True)
+    impls = TechnicalImplementation.query.order_by(TechnicalImplementation.created_at.desc()).all()
+    return [i.to_dict() for i in impls]
 
 
-def get_implementation(item_id: int) -> Optional[Dict]:
-    """Get a specific implementation by ID"""
-    return _implementations.get(item_id)
+def get_implementation(item_id: int) -> dict:
+    """Get a specific implementation"""
+    impl = TechnicalImplementation.query.get(item_id)
+    return impl.to_dict() if impl else None
 
 
-def update_implementation(item_id: int, **kwargs) -> Optional[Dict]:
+def update_implementation(item_id: int, **kwargs) -> dict:
     """Update an implementation"""
-    if item_id not in _implementations:
+    impl = TechnicalImplementation.query.get(item_id)
+    if not impl:
         return None
     
-    item = _implementations[item_id]
-    
-    # Allow updating title, description, tech_stack, status
     if "title" in kwargs:
-        item["title"] = kwargs["title"]
+        impl.title = kwargs["title"]
     if "description" in kwargs:
-        item["description"] = kwargs["description"]
+        impl.description = kwargs["description"]
     if "tech_stack" in kwargs:
-        item["tech_stack"] = kwargs["tech_stack"]
+        impl.tech_stack = kwargs["tech_stack"]
     if "status" in kwargs:
-        item["status"] = kwargs["status"]
+        impl.status = kwargs["status"]
     
-    item["updated_at"] = datetime.now().isoformat()
-    return item
+    db.session.commit()
+    return impl.to_dict()
 
 
 def delete_implementation(item_id: int) -> bool:
     """Delete an implementation"""
-    if item_id in _implementations:
-        del _implementations[item_id]
-        return True
-    return False
-
-
-def clear_all() -> None:
-    """Clear all implementations (for testing)"""
-    global _implementations, _next_id
-    _implementations = {}
-    _next_id = 1
+    impl = TechnicalImplementation.query.get(item_id)
+    if not impl:
+        return False
+    
+    db.session.delete(impl)
+    db.session.commit()
+    return True
