@@ -46,3 +46,9 @@ htmlcov/
 
 # Logs
 *.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+migrations/versions/

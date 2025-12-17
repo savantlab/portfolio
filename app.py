@@ -1,12 +1,26 @@
 from flask import Flask, render_template, request, jsonify
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Initialize Flask
+app = Flask(__name__)
+
+# Initialize database
+from database import init_db
+init_db(app)
+
+# Import models to ensure they're registered
+import models
+
+# Import modules after database initialization
 import reading_list
 import auth
 import technical_implementation
 import projects as projects_module
 import blog
-
-app = Flask(__name__)
 
 PUBLICATIONS = [
     {
