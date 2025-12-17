@@ -74,15 +74,15 @@ PROJECTS = [
         "id": "tax-budget",
         "title": "Tax Budget Allocator",
         "subtitle": "Enterprise-Scale Budget Planning with Multi-Container Orchestration",
-        "description": "Production-ready Django application with multi-container Docker Compose architecture. Uses Redis for caching and as a Celery broker, PostgreSQL for persistence, Gunicorn for WSGI, optional Nginx reverse proxy, and Celery workers/beat for background and scheduled jobs. Demonstrates solving operational complexity via health checks, service dependencies, and persistent volumes.",
-        "tech": ["Django", "Docker Compose", "PostgreSQL", "Redis", "Celery", "Flower", "Nginx", "Gunicorn", "Python", "JavaScript"],
+        "description": "Production-ready Django application with multi-container Docker Compose architecture. Uses Redis for caching and as a Celery broker, SQLite for persistence, Gunicorn for WSGI, optional Nginx reverse proxy, and Celery workers/beat for background and scheduled jobs. Demonstrates solving operational complexity via health checks, service dependencies, and persistent volumes.",
+        "tech": ["Django", "Docker Compose", "SQLite", "Redis", "Celery", "Flower", "Nginx", "Gunicorn", "Python", "JavaScript"],
         "highlights": [
             "Multi-container orchestration (db, redis, web, celery, celery-beat, flower, nginx)",
             "Redis-backed caching and message brokering with AOF persistence",
             "Automated health checks and dependency gating for startup",
             "Background processing via Celery workers and periodic tasks via Celery Beat",
             "Operational observability through Flower dashboard",
-            "PostgreSQL with volume-backed data persistence and migrations",
+            "SQLite with volume-backed data persistence and migrations",
             "Interactive budget allocation and aggregate reporting interfaces"
         ],
         "github": "https://github.com/savantlab/taxbudget",
