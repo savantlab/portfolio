@@ -73,15 +73,17 @@ PROJECTS = [
     {
         "id": "tax-budget",
         "title": "Tax Budget Allocator",
-        "subtitle": "Interactive Budget Planning and Tax Impact Analysis Tool",
-        "description": "Django-based web application for modeling tax budgets and capital allocation strategies. Enables users to explore different allocation scenarios, track changes over time, and analyze tax impact on various budget categories through an interactive interface with persistent storage.",
-        "tech": ["Django", "Python", "SQLite", "HTML/CSS", "JavaScript", "Forms"],
+        "subtitle": "Enterprise-Scale Budget Planning with Multi-Container Orchestration",
+        "description": "Production-ready Django application with multi-container Docker Compose architecture. Uses Redis for caching and as a Celery broker, PostgreSQL for persistence, Gunicorn for WSGI, optional Nginx reverse proxy, and Celery workers/beat for background and scheduled jobs. Demonstrates solving operational complexity via health checks, service dependencies, and persistent volumes.",
+        "tech": ["Django", "Docker Compose", "PostgreSQL", "Redis", "Celery", "Flower", "Nginx", "Gunicorn", "Python", "JavaScript"],
         "highlights": [
-            "Interactive budget allocation interface",
-            "Historical tracking of allocation decisions",
-            "Aggregate analysis and reporting views",
-            "Admin interface for data management",
-            "Multi-category budget modeling"
+            "Multi-container orchestration (db, redis, web, celery, celery-beat, flower, nginx)",
+            "Redis-backed caching and message brokering with AOF persistence",
+            "Automated health checks and dependency gating for startup",
+            "Background processing via Celery workers and periodic tasks via Celery Beat",
+            "Operational observability through Flower dashboard",
+            "PostgreSQL with volume-backed data persistence and migrations",
+            "Interactive budget allocation and aggregate reporting interfaces"
         ],
         "github": "https://github.com/savantlab/taxbudget",
         "status": "Active Development",
