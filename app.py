@@ -69,6 +69,23 @@ PROJECTS = [
         "github": None,
         "status": "Research in Progress",
         "image": None
+    },
+    {
+        "id": "tax-budget",
+        "title": "Tax Budget Allocator",
+        "subtitle": "Interactive Budget Planning and Tax Impact Analysis Tool",
+        "description": "Django-based web application for modeling tax budgets and capital allocation strategies. Enables users to explore different allocation scenarios, track changes over time, and analyze tax impact on various budget categories through an interactive interface with persistent storage.",
+        "tech": ["Django", "Python", "SQLite", "HTML/CSS", "JavaScript", "Forms"],
+        "highlights": [
+            "Interactive budget allocation interface",
+            "Historical tracking of allocation decisions",
+            "Aggregate analysis and reporting views",
+            "Admin interface for data management",
+            "Multi-category budget modeling"
+        ],
+        "github": "https://github.com/savantlab/taxbudget",
+        "status": "Active Development",
+        "image": None
     }
 ]
 
