@@ -30,14 +30,14 @@
     <section class="hero">
         <div class="container">
             <h1 class="hero-title">Stephanie King</h1>
-            <p class="hero-subtitle">Cognitive Scientist | Software Engineer | Artist | Research Subject</p>
+            <p class="hero-subtitle">Cognitive Scientist | Full-Stack Software Engineer | Research Subject</p>
             <p class="hero-description">
-                Savant and human subject available for scientific research in neuro, cognitive, 
-                computation, and quantum labs.
+                Building production-grade systems for cognitive science research, machine learning, and data analysis.
+                Specializing in full-stack development, DevOps, and research infrastructure.
             </p>
             <div class="hero-cta">
-                <a href="#research" class="btn btn-primary">View Research</a>
-                <a href="/contact" class="btn btn-secondary">Contact</a>
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="/contact" class="btn btn-secondary">Hire or Collaborate</a>
             </div>
         </div>
     </section>
@@ -120,11 +120,41 @@
         </div>
     </section>
 
+    <section style="background: var(--bg-secondary); padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Expertise</span>
+                <h2>Software Development</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1200px; margin: 48px auto 0;">
+                <div style="background: white; padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h3 style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 12px 0;">Full-Stack Development</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                        Flask, Django, JavaScript/React frontend development. Building complete systems from database schema to user interface.
+                    </p>
+                </div>
+                <div style="background: white; padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h3 style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 12px 0;">DevOps & Infrastructure</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                        Docker, Docker Compose, multi-container orchestration. Redis, Celery, and background task processing.
+                    </p>
+                </div>
+                <div style="background: white; padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h3 style="font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 12px 0;">Research Infrastructure</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                        ML pipelines, NLP analysis, data processing. Python, scikit-learn, pandas, and custom analysis tools.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="projects" class="projects">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Research Projects</span>
-                <h2>Technical Implementation</h2>
+                <span class="section-tag">Projects</span>
+                <h2>Software & Research Infrastructure</h2>
+                <p style="font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 16px auto 0;">Full-stack applications built with Flask, Django, and modern DevOps. From machine learning pipelines to multi-container production systems.</p>
             </div>
             <div class="projects-grid">
                 {% for project in projects %}
