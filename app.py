@@ -4,6 +4,7 @@ import reading_list
 import auth
 import technical_implementation
 import projects as projects_module
+import blog
 
 app = Flask(__name__)
 
@@ -38,6 +39,21 @@ def project_detail(project_id):
     if not project:
         return "Project not found", 404
     return render_template("project.html", project=project)
+
+@app.route("/blog")
+def blog_page():
+    """Display the blog listing page."""
+    posts = blog.get_all_posts(published_only=True)
+    tags = blog.get_all_tags(published_only=True)
+    return render_template("blog.html", posts=posts, tags=tags)
+
+@app.route("/blog/<int:post_id>")
+def blog_post(post_id):
+    """Display a single blog post."""
+    post = blog.get_post(post_id)
+    if not post or not post.get("published"):
+        return "Post not found", 404
+    return render_template("blog_post.html", post=post)
 
 @app.route("/journal")
 def journal():
@@ -273,6 +289,71 @@ def delete_project(project_id):
     
     projects_module.delete_project(project_id)
     return jsonify({"success": True})
+
+@app.route("/api/blog", methods=["GET"])
+def get_blog_posts():
+    """Get all published blog posts."""
+    return jsonify(blog.get_all_posts(published_only=True))
+
+@app.route("/api/blog", methods=["POST"])
+def create_blog_post():
+    """Create a new blog post."""
+    data = request.get_json()
+    
+    if not data or "title" not in data or "content" not in data:
+        return jsonify({"error": "Title and content are required"}), 400
+    
+    try:
+        post = blog.add_post(
+            title=data.get("title"),
+            content=data.get("content"),
+            tags=data.get("tags", []),
+            published=data.get("published", True)
+        )
+        return jsonify(post), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route("/api/blog/<int:post_id>", methods=["GET"])
+def get_blog_post(post_id):
+    """Get a specific blog post."""
+    post = blog.get_post(post_id)
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+    return jsonify(post)
+
+@app.route("/api/blog/<int:post_id>", methods=["PUT"])
+def update_blog_post(post_id):
+    """Update a blog post."""
+    post = blog.get_post(post_id)
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+    
+    data = request.get_json()
+    updated = blog.update_post(post_id, **data)
+    return jsonify(updated)
+
+@app.route("/api/blog/<int:post_id>", methods=["DELETE"])
+def delete_blog_post(post_id):
+    """Delete a blog post."""
+    post = blog.get_post(post_id)
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+    
+    blog.delete_post(post_id)
+    return jsonify({"success": True})
+
+@app.route("/api/blog/tags/<tag>", methods=["GET"])
+def get_posts_by_tag(tag):
+    """Get all posts with a specific tag."""
+    posts = blog.get_posts_by_tag(tag, published_only=True)
+    return jsonify(posts)
+
+@app.route("/api/blog/tags", methods=["GET"])
+def get_all_tags():
+    """Get all available tags."""
+    tags = blog.get_all_tags(published_only=True)
+    return jsonify(tags)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

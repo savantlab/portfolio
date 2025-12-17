@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Savantlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="/#research">Research</a>
+                <a href="/#projects">Projects</a>
+                <a href="/counterterrorism">Counterterrorism</a>
+                <a href="/blog">Blog</a>
+                <a href="/reading">Reading</a>
+                <a href="/journal">Journal</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="padding: 80px 0;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="margin-bottom: 48px;">
+                    <a href="/blog" style="color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to Blog</a>
+                </div>
+
+                <header style="margin-bottom: 48px;">
+                    <h1 style="font-size: 48px; font-weight: 700; color: var(--text-primary); margin: 0 0 24px 0; line-height: 1.2;">
+                        {{ post.title }}
+                    </h1>
+                    <p style="font-size: 16px; color: var(--text-tertiary); margin: 0 0 24px 0;">
+                        Published {{ post.created_at[:10] }}
+                    </p>
+                    {% if post.tags %}
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        {% for tag in post.tags %}
+                        <span style="background: var(--bg-secondary); color: var(--text-secondary); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 500;">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </header>
+
+                <div style="font-size: 18px; color: var(--text-secondary); line-height: 1.8; word-wrap: break-word; white-space: pre-wrap;">
+                    {{ post.content }}
+                </div>
+
+                <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border);">
+                    <a href="/blog" class="btn btn-primary">Back to Blog</a>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">SAVANTLAB</div>
+                <div class="footer-links">
+                    <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
+                    <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
+                    <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Savantlab. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
