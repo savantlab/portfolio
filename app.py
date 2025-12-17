@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import os
 import reading_list
 import auth
+import technical_implementation
 
 app = Flask(__name__)
 
@@ -225,6 +226,60 @@ def delete_reading_item(item_id):
         return jsonify({"error": "Item not found"}), 404
     
     reading_list.delete_item(item_id)
+    return jsonify({"success": True})
+
+@app.route("/api/technical-implementations", methods=["GET"])
+def get_technical_implementations():
+    """Get all technical implementation rows."""
+    items = technical_implementation.get_all_implementations()
+    return jsonify(items)
+
+@app.route("/api/technical-implementations", methods=["POST"])
+def add_technical_implementation():
+    """Add a new technical implementation row item."""
+    data = request.get_json()
+    
+    if not data or "title" not in data or "description" not in data:
+        return jsonify({"error": "Title and description are required"}), 400
+    
+    try:
+        item = technical_implementation.add_implementation(
+            title=data.get("title"),
+            description=data.get("description"),
+            tech_stack=data.get("tech_stack", []),
+            status=data.get("status", "Active")
+        )
+        return jsonify(item), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route("/api/technical-implementations/<int:item_id>", methods=["GET"])
+def get_technical_implementation(item_id):
+    """Get a specific technical implementation."""
+    item = technical_implementation.get_implementation(item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+    return jsonify(item)
+
+@app.route("/api/technical-implementations/<int:item_id>", methods=["PUT"])
+def update_technical_implementation(item_id):
+    """Update a technical implementation."""
+    item = technical_implementation.get_implementation(item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+    
+    data = request.get_json()
+    updated_item = technical_implementation.update_implementation(item_id, **data)
+    return jsonify(updated_item)
+
+@app.route("/api/technical-implementations/<int:item_id>", methods=["DELETE"])
+def delete_technical_implementation(item_id):
+    """Delete a technical implementation."""
+    item = technical_implementation.get_implementation(item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+    
+    technical_implementation.delete_implementation(item_id)
     return jsonify({"success": True})
 
 if __name__ == "__main__":
