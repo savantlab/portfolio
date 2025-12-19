@@ -94,7 +94,16 @@ DEPLOYMENT PROCESS:
    - git checkout deploy
    - git merge main
    - git push origin deploy
-7. GitHub Actions deploys to DigitalOcean droplet
+7. GitHub Actions (.github/workflows/deploy.yml) triggers automatically
+8. Workflow deploys to DigitalOcean droplet (192.34.61.197)
+
+WORKFLOW FILE:
+--------------
+- .github/workflows/deploy.yml exists on BOTH main and deploy branches
+- Make workflow changes on main branch
+- Merge to deploy to activate the updated workflow
+- Workflow triggers on push to deploy branch only
+- Deploys by pulling origin/deploy on the server
 
 NEVER:
 ------

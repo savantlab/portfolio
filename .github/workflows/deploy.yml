@@ -1,0 +1,39 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ deploy ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 192.34.61.197
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /flask
+            git fetch origin deploy
+            git reset --hard origin/deploy
+            pip3 install -r requirements.txt
+            
+            # Initialize database if needed
+            python3 -c "from app import app; from database import db; 
+            with app.app_context(): db.create_all()" 2>/dev/null || true
+            
+            # Restart gunicorn
+            pkill gunicorn || true
+            sleep 2
+            nohup gunicorn -w 4 -b 0.0.0.0:8000 app:app > gunicorn.log 2>&1 &
+            
+            echo "Deployment complete!"
+            sleep 3
+            ps aux | grep gunicorn | grep -v grep
