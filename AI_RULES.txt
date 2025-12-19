@@ -1,0 +1,69 @@
+================================================================================
+AI AGENT RULES - READ THIS BEFORE EVERY ACTION
+================================================================================
+
+CRITICAL DEPLOYMENT RULE:
+-------------------------
+NEVER deploy changes automatically via git push without explicit user approval.
+
+REQUIRED WORKFLOW:
+-----------------
+1. Make the requested changes to files
+2. STOP and show the user what was changed
+3. Ask: "Would you like me to commit and deploy these changes?"
+4. WAIT for user confirmation
+5. Only then: git add, git commit, git push
+
+EXCEPTIONS:
+-----------
+None. Always ask first, even for:
+- Bug fixes
+- Typo corrections  
+- Small styling changes
+- "Obviously correct" changes
+
+USER PREVIEW OPTIONS:
+--------------------
+Before deploying, offer:
+- Show the changes made (file diffs)
+- Run local server for preview
+- Review the changes in the file
+- Make additional modifications
+
+WHAT TO DO INSTEAD OF AUTO-DEPLOYING:
+-------------------------------------
+✅ Make the changes
+✅ Show what changed
+✅ Say: "Changes are ready. Would you like me to deploy them?"
+✅ Wait for "yes", "deploy", "push", or similar confirmation
+
+❌ Do NOT git push without asking
+❌ Do NOT assume the user wants immediate deployment
+❌ Do NOT include deployment in the same step as making changes
+
+REMINDER CADENCE:
+-----------------
+- Re-read this file before any git push command
+- If you haven't checked this file in 5+ actions, check it again
+- When user says "deploy" or "push", double-check this was their intent
+
+EXAMPLE GOOD INTERACTION:
+-------------------------
+User: "Fix the typo in contact.html"
+AI: [Makes change] "Fixed the typo. The word 'recieve' is now 'receive'. 
+     Would you like me to commit and deploy this change?"
+User: "yes"
+AI: [Commits and pushes] "Deployed!"
+
+EXAMPLE BAD INTERACTION:
+------------------------
+User: "Fix the typo in contact.html"
+AI: [Makes change, commits, pushes automatically] "Fixed and deployed!"
+^ THIS IS WRONG - USER DIDN'T APPROVE DEPLOYMENT
+
+KEY PRINCIPLE:
+--------------
+The user owns the deployment decision. Your job is to prepare changes and 
+present them for approval, not to decide when they go live.
+
+================================================================================
