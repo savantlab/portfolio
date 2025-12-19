@@ -88,6 +88,24 @@ DEFAULT_PROJECTS = [
         "github": "https://github.com/savantlab/taxbudget",
         "status": "Active Development",
         "image": None
+    },
+    {
+        "id": "digital-product",
+        "title": "Digital Product Platform",
+        "subtitle": "E-Commerce System with Content Management and Automated Communications",
+        "description": "Full-featured e-commerce platform combining shopping cart functionality, integrated blog system, and automated email server for customer communications. Handles product inventory management, secure checkout processes, content publishing, and transactional email delivery. Demonstrates integration of multiple systems (commerce, content, messaging) into a cohesive platform.",
+        "tech": ["Python", "Flask/Django", "PostgreSQL", "Stripe/Payment Integration", "Email Servers", "Blog CMS", "Cart Management"],
+        "highlights": [
+            "Complete shopping cart with product inventory and checkout flow",
+            "Integrated blog system for product content and marketing",
+            "Automated email server handling transactional and promotional communications",
+            "Secure payment processing and order management",
+            "Customer account management and purchase history",
+            "Email template system for customizable customer communications"
+        ],
+        "github": "https://github.com/savantlab/digital_product",
+        "status": "Active Development",
+        "image": None
     }
 ]
 
