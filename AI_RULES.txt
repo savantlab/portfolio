@@ -67,3 +67,54 @@ The user owns the deployment decision. Your job is to prepare changes and
 present them for approval, not to decide when they go live.
 
 ================================================================================
+GIT WORKFLOW
+================================================================================
+
+BRANCH STRATEGY:
+----------------
+- **main**: Development branch (source of truth)
+- **deploy**: Production branch (triggers auto-deployment)
+
+WORKFLOW:
+---------
+1. Work on main branch for all changes
+2. Test and verify changes locally
+3. When ready for production: merge main → deploy
+4. Push to deploy triggers GitHub Actions CI/CD
+5. Changes auto-deploy to savantlab.org
+
+DEPLOYMENT PROCESS:
+-------------------
+1. Make changes on main branch
+2. Commit to main
+3. Push main to origin
+4. ASK USER: "Ready to deploy to production? I'll merge main → deploy"
+5. Wait for approval
+6. If approved:
+   - git checkout deploy
+   - git merge main
+   - git push origin deploy
+7. GitHub Actions (.github/workflows/deploy.yml) triggers automatically
+8. Workflow deploys to DigitalOcean droplet (192.34.61.197)
+
+WORKFLOW FILE:
+--------------
+- .github/workflows/deploy.yml exists on BOTH main and deploy branches
+- Make workflow changes on main branch
+- Merge to deploy to activate the updated workflow
+- Workflow triggers on push to deploy branch only
+- Deploys by pulling origin/deploy on the server
+
+NEVER:
+------
+❌ Push directly to deploy branch without user approval
+❌ Merge main → deploy automatically
+❌ Skip the main branch and work on deploy
+
+ALWAYS:
+-------
+✅ Work on main first
+✅ Ask before merging to deploy
+✅ Ensure main is source of truth
+
+================================================================================

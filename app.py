@@ -1,26 +1,95 @@
 from flask import Flask, render_template, request, jsonify
 import os
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
-# Initialize Flask
-app = Flask(__name__)
-
-# Initialize database
-from database import init_db
-init_db(app)
-
-# Import models to ensure they're registered
-import models
-
-# Import modules after database initialization
 import reading_list
 import auth
-import technical_implementation
-import projects as projects_module
-import blog
+
+app = Flask(__name__)
+
+# Project data
+PROJECTS = [
+    {
+        "id": "mental-rotation",
+        "title": "Mental Rotation Research Platform",
+        "subtitle": "Resolving the Mental Rotation Paradox in Cognitive Science",
+        "description": "Comprehensive ML pipeline for systematic literature analysis invalidating the allocentric model of spatial cognition—a theoretical framework that failed to constrain mental rotation despite decades of acceptance.",
+        "tech": ["Python", "scikit-learn", "d6tflow", "NLP", "TF-IDF", "LDA", "Random Forest"],
+        "highlights": [
+            "280+ papers analyzed (1970-present)",
+            "6-stage ML workflow for topic discovery and citation prediction",
+            "Publication-ready Python library with CLI tools",
+            "Automated research infrastructure with async web scraping"
+        ],
+        "github": "https://github.com/savantlab/mental-rotation-research",
+        "status": "Active Research",
+        "image": None
+    },
+    {
+        "id": "parallel-critiques",
+        "title": "Parallel Critiques: Analyzing Rhetorical Extremism",
+        "subtitle": "Computational Discourse Analysis of Ideological Transmission",
+        "description": "Rigorous NLP analysis comparing Jordan Peterson's academic discourse with Nazi Anders Breivik's extremist manifesto, revealing textual and conceptual overlap, transformation points from abstract critique to concrete threat identification, and rhetorical patterns that mask dangerous ideologies.",
+        "tech": ["Python", "scikit-learn", "NetworkX", "TF-IDF", "N-gram Analysis", "Network Co-occurrence"],
+        "highlights": [
+            "16% semantic similarity, 75% conceptual overlap identified",
+            "Network density analysis: 3x difference between abstract vs operationalized ideologies",
+            "Mapped implicit terminology frameworks showing vocabulary masking",
+            "Interactive Jupyter notebooks with visualization dashboards"
+        ],
+        "github": None,
+        "status": "Manuscript in Preparation",
+        "image": "parallel-2.png"
+    },
+    {
+        "id": "mouse-trackpad",
+        "title": "Mouse-Trackpad Science Lab",
+        "subtitle": "Computational Analysis of Human-Computer Interaction Patterns",
+        "description": "Experimental platform for analyzing motor control and decision-making patterns through cursor tracking and interaction metrics.",
+        "tech": ["Python", "pandas", "matplotlib", "Data Analysis", "Eye Tracking"],
+        "highlights": [
+            "Real-time session analysis and processing",
+            "Comprehensive metrics and visualization tools",
+            "Left-right analysis for motor control patterns"
+        ],
+        "github": None,
+        "status": "Experimental",
+        "image": None
+    },
+    {
+        "id": "osiris-deception",
+        "title": "The Depth of Deception: Jordan Peterson's Fraud Story",
+        "subtitle": "Exposing Misrepresentation of Ancient Egyptian Symbolism",
+        "description": "Analysis revealing how Jordan Peterson fundamentally misrepresented the meaning of Osiris in ancient Egyptian theology, falsely claiming it signified the living and dead pharaoh when it never held that meaning to the ancient Egyptians.",
+        "tech": ["Historical Analysis", "Egyptology", "Symbolic Systems", "Critical Examination"],
+        "highlights": [
+            "Documented misuse of ancient Egyptian symbolism",
+            "Examination of Osiris's actual theological significance",
+            "Analysis of how incorrect meanings were propagated",
+            "Scholarly sources contradicting Peterson's claims"
+        ],
+        "github": None,
+        "status": "Research in Progress",
+        "image": None
+    },
+    {
+        "id": "tax-budget",
+        "title": "Tax Budget Allocator",
+        "subtitle": "Enterprise-Scale Budget Planning with Multi-Container Orchestration",
+        "description": "Production-ready Django application with multi-container Docker Compose architecture. Uses Redis for caching and as a Celery broker, SQLite for persistence, Gunicorn for WSGI, optional Nginx reverse proxy, and Celery workers/beat for background and scheduled jobs. Demonstrates solving operational complexity via health checks, service dependencies, and persistent volumes.",
+        "tech": ["Django", "Docker Compose", "SQLite", "Redis", "Celery", "Flower", "Nginx", "Gunicorn", "Python", "JavaScript"],
+        "highlights": [
+            "Multi-container orchestration (db, redis, web, celery, celery-beat, flower, nginx)",
+            "Redis-backed caching and message brokering with AOF persistence",
+            "Automated health checks and dependency gating for startup",
+            "Background processing via Celery workers and periodic tasks via Celery Beat",
+            "Operational observability through Flower dashboard",
+            "SQLite with volume-backed data persistence and migrations",
+            "Interactive budget allocation and aggregate reporting interfaces"
+        ],
+        "github": "https://github.com/savantlab/taxbudget",
+        "status": "Active Development",
+        "image": None
+    }
+]
 
 PUBLICATIONS = [
     {
@@ -37,7 +106,7 @@ PUBLICATIONS = [
 
 @app.route("/")
 def index():
-    return render_template("index.html", projects=projects_module.get_all_projects(), publications=PUBLICATIONS)
+    return render_template("index.html", projects=PROJECTS, publications=PUBLICATIONS)
 
 @app.route("/about")
 def about():
@@ -49,25 +118,10 @@ def contact():
 
 @app.route("/project/<project_id>")
 def project_detail(project_id):
-    project = projects_module.get_project(project_id)
+    project = next((p for p in PROJECTS if p["id"] == project_id), None)
     if not project:
         return "Project not found", 404
     return render_template("project.html", project=project)
-
-@app.route("/blog")
-def blog_page():
-    """Display the blog listing page."""
-    posts = blog.get_all_posts(published_only=True)
-    tags = blog.get_all_tags(published_only=True)
-    return render_template("blog.html", posts=posts, tags=tags)
-
-@app.route("/blog/<int:post_id>")
-def blog_post(post_id):
-    """Display a single blog post."""
-    post = blog.get_post(post_id)
-    if not post or not post.get("published"):
-        return "Post not found", 404
-    return render_template("blog_post.html", post=post)
 
 @app.route("/journal")
 def journal():
@@ -81,11 +135,6 @@ def counterterrorism():
 def reading():
     """Display the reading list page."""
     return render_template("reading_list.html")
-
-@app.route("/resume")
-def resume():
-    """Display the resume page."""
-    return render_template("resume.html")
 
 @app.route("/healthz")
 def healthz():
@@ -196,183 +245,6 @@ def delete_reading_item(item_id):
     
     reading_list.delete_item(item_id)
     return jsonify({"success": True})
-
-@app.route("/api/technical-implementations", methods=["GET"])
-def get_technical_implementations():
-    """Get all technical implementation rows."""
-    items = technical_implementation.get_all_implementations()
-    return jsonify(items)
-
-@app.route("/api/technical-implementations", methods=["POST"])
-def add_technical_implementation():
-    """Add a new technical implementation row item."""
-    data = request.get_json()
-    
-    if not data or "title" not in data or "description" not in data:
-        return jsonify({"error": "Title and description are required"}), 400
-    
-    try:
-        item = technical_implementation.add_implementation(
-            title=data.get("title"),
-            description=data.get("description"),
-            tech_stack=data.get("tech_stack", []),
-            status=data.get("status", "Active")
-        )
-        return jsonify(item), 201
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
-@app.route("/api/technical-implementations/<int:item_id>", methods=["GET"])
-def get_technical_implementation(item_id):
-    """Get a specific technical implementation."""
-    item = technical_implementation.get_implementation(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    return jsonify(item)
-
-@app.route("/api/technical-implementations/<int:item_id>", methods=["PUT"])
-def update_technical_implementation(item_id):
-    """Update a technical implementation."""
-    item = technical_implementation.get_implementation(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    
-    data = request.get_json()
-    updated_item = technical_implementation.update_implementation(item_id, **data)
-    return jsonify(updated_item)
-
-@app.route("/api/technical-implementations/<int:item_id>", methods=["DELETE"])
-def delete_technical_implementation(item_id):
-    """Delete a technical implementation."""
-    item = technical_implementation.get_implementation(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    
-    technical_implementation.delete_implementation(item_id)
-    return jsonify({"success": True})
-
-@app.route("/api/projects", methods=["GET"])
-def get_projects():
-    """Get all projects."""
-    return jsonify(projects_module.get_all_projects())
-
-@app.route("/api/projects", methods=["POST"])
-def add_project():
-    """Add a new project."""
-    data = request.get_json()
-    
-    required = ["title", "subtitle", "description", "tech", "highlights"]
-    if not data or not all(k in data for k in required):
-        return jsonify({"error": f"Required fields: {', '.join(required)}"}), 400
-    
-    try:
-        project = projects_module.add_project(
-            title=data.get("title"),
-            subtitle=data.get("subtitle"),
-            description=data.get("description"),
-            tech=data.get("tech"),
-            highlights=data.get("highlights"),
-            github=data.get("github"),
-            status=data.get("status", "Active"),
-            image=data.get("image")
-        )
-        return jsonify(project), 201
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
-@app.route("/api/projects/<project_id>", methods=["GET"])
-def get_project_api(project_id):
-    """Get a specific project."""
-    project = projects_module.get_project(project_id)
-    if not project:
-        return jsonify({"error": "Project not found"}), 404
-    return jsonify(project)
-
-@app.route("/api/projects/<project_id>", methods=["PUT"])
-def update_project(project_id):
-    """Update a project."""
-    project = projects_module.get_project(project_id)
-    if not project:
-        return jsonify({"error": "Project not found"}), 404
-    
-    data = request.get_json()
-    updated = projects_module.update_project(project_id, **data)
-    return jsonify(updated)
-
-@app.route("/api/projects/<project_id>", methods=["DELETE"])
-def delete_project(project_id):
-    """Delete a project."""
-    project = projects_module.get_project(project_id)
-    if not project:
-        return jsonify({"error": "Project not found"}), 404
-    
-    projects_module.delete_project(project_id)
-    return jsonify({"success": True})
-
-@app.route("/api/blog", methods=["GET"])
-def get_blog_posts():
-    """Get all published blog posts."""
-    return jsonify(blog.get_all_posts(published_only=True))
-
-@app.route("/api/blog", methods=["POST"])
-def create_blog_post():
-    """Create a new blog post."""
-    data = request.get_json()
-    
-    if not data or "title" not in data or "content" not in data:
-        return jsonify({"error": "Title and content are required"}), 400
-    
-    try:
-        post = blog.add_post(
-            title=data.get("title"),
-            content=data.get("content"),
-            tags=data.get("tags", []),
-            published=data.get("published", True)
-        )
-        return jsonify(post), 201
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
-@app.route("/api/blog/<int:post_id>", methods=["GET"])
-def get_blog_post(post_id):
-    """Get a specific blog post."""
-    post = blog.get_post(post_id)
-    if not post:
-        return jsonify({"error": "Post not found"}), 404
-    return jsonify(post)
-
-@app.route("/api/blog/<int:post_id>", methods=["PUT"])
-def update_blog_post(post_id):
-    """Update a blog post."""
-    post = blog.get_post(post_id)
-    if not post:
-        return jsonify({"error": "Post not found"}), 404
-    
-    data = request.get_json()
-    updated = blog.update_post(post_id, **data)
-    return jsonify(updated)
-
-@app.route("/api/blog/<int:post_id>", methods=["DELETE"])
-def delete_blog_post(post_id):
-    """Delete a blog post."""
-    post = blog.get_post(post_id)
-    if not post:
-        return jsonify({"error": "Post not found"}), 404
-    
-    blog.delete_post(post_id)
-    return jsonify({"success": True})
-
-@app.route("/api/blog/tags/<tag>", methods=["GET"])
-def get_posts_by_tag(tag):
-    """Get all posts with a specific tag."""
-    posts = blog.get_posts_by_tag(tag, published_only=True)
-    return jsonify(posts)
-
-@app.route("/api/blog/tags", methods=["GET"])
-def get_all_tags():
-    """Get all available tags."""
-    tags = blog.get_all_tags(published_only=True)
-    return jsonify(tags)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
