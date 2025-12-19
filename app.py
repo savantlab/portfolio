@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template
 import os
-import reading_list
-import auth
 
 app = Flask(__name__)
 
@@ -131,120 +129,10 @@ def journal():
 def counterterrorism():
     return render_template("counterterrorism.html")
 
-@app.route("/reading")
-def reading():
-    """Display the reading list page."""
-    return render_template("reading_list.html")
 
 @app.route("/healthz")
 def healthz():
     return {"ok": True}
-
-@app.route("/api/auth/token", methods=["POST"])
-def request_token():
-    """Request an authentication token via email."""
-    data = request.get_json()
-    
-    if not data or "email" not in data:
-        return jsonify({"error": "Email is required"}), 400
-    
-    email = data.get("email").strip().lower()
-    token, error = auth.create_token(email)
-    
-    if error:
-        return jsonify({"error": error}), 401
-    
-    # In production, send token via email
-    # For now, return it directly (use with caution)
-    return jsonify({
-        "token": token,
-        "message": "Token created. Use this token in your API requests.",
-        "expires_in": f"{auth.TOKEN_EXPIRY_HOURS} hours"
-    }), 201
-
-@app.route("/api/auth/verify", methods=["POST"])
-def verify_token_endpoint():
-    """Verify (activate) a token."""
-    data = request.get_json()
-    
-    if not data or "token" not in data:
-        return jsonify({"error": "Token is required"}), 400
-    
-    token = data.get("token").strip()
-    
-    if not auth.mark_token_verified(token):
-        return jsonify({"error": "Invalid token"}), 401
-    
-    return jsonify({
-        "success": True,
-        "message": "Token verified. You can now use it for API requests."
-    })
-
-@app.route("/api/reading-list", methods=["GET"])
-@auth.require_auth
-def get_reading_list():
-    """Get all reading list items as JSON."""
-    items = reading_list.get_all_items()
-    return jsonify(items)
-
-@app.route("/api/reading-list", methods=["POST"])
-@auth.require_auth
-def add_reading_item():
-    """Add a new item to the reading list."""
-    data = request.get_json()
-    
-    if not data or "title" not in data:
-        return jsonify({"error": "Title is required"}), 400
-    
-    item = reading_list.add_item(
-        title=data.get("title"),
-        url=data.get("url"),
-        description=data.get("description"),
-        category=data.get("category")
-    )
-    
-    return jsonify(item), 201
-
-@app.route("/api/reading-list/<int:item_id>", methods=["GET"])
-@auth.require_auth
-def get_reading_item(item_id):
-    """Get a specific reading list item."""
-    item = reading_list.get_item(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    return jsonify(item)
-
-@app.route("/api/reading-list/<int:item_id>", methods=["PUT"])
-@auth.require_auth
-def update_reading_item(item_id):
-    """Update a reading list item."""
-    item = reading_list.get_item(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    
-    data = request.get_json()
-    updated_item = reading_list.update_item(item_id, **data)
-    return jsonify(updated_item)
-
-@app.route("/api/reading-list/<int:item_id>/toggle", methods=["POST"])
-@auth.require_auth
-def toggle_reading_item(item_id):
-    """Toggle the completed status of a reading list item."""
-    item = reading_list.toggle_completed(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    return jsonify(item)
-
-@app.route("/api/reading-list/<int:item_id>", methods=["DELETE"])
-@auth.require_auth
-def delete_reading_item(item_id):
-    """Delete a reading list item."""
-    item = reading_list.get_item(item_id)
-    if not item:
-        return jsonify({"error": "Item not found"}), 404
-    
-    reading_list.delete_item(item_id)
-    return jsonify({"success": True})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
