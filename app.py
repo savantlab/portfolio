@@ -82,6 +82,11 @@ def reading():
     """Display the reading list page."""
     return render_template("reading_list.html")
 
+@app.route("/resume")
+def resume():
+    """Display the resume page."""
+    return render_template("resume.html")
+
 @app.route("/healthz")
 def healthz():
     return {"ok": True}

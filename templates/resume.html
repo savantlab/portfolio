@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Stephanie King | Cognitive Savant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .resume-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .resume-hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+        .resume-hero .subtitle {
+            font-size: 24px;
+            opacity: 0.95;
+            margin-bottom: 32px;
+        }
+        .resume-meta {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .resume-content {
+            max-width: 900px;
+            margin: -40px auto 80px;
+            background: white;
+            padding: 60px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .resume-section {
+            margin-bottom: 48px;
+        }
+        .resume-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
+        }
+        .resume-section h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        .resume-section h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .resume-section p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .resume-section ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        .resume-section li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid var(--primary);
+            padding: 24px;
+            margin: 24px 0;
+            border-radius: 8px;
+        }
+        .download-buttons {
+            display: flex;
+            gap: 16px;
+            margin: 32px 0;
+            justify-content: center;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .download-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        .download-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        .download-btn.secondary:hover {
+            background: var(--border);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="/#research">Research</a>
+                <a href="/#projects">Projects</a>
+                <a href="/counterterrorism">Counterterrorism</a>
+                <a href="/blog">Blog</a>
+                <a href="/reading">Reading</a>
+                <a href="/journal">Journal</a>
+                <a href="/resume">Resume</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="resume-hero">
+        <div class="container">
+            <h1>Stephanie King</h1>
+            <div class="subtitle">Cognitive Savant | Research Pipeline Architect | App Developer | STEM Auditor</div>
+            <div class="resume-meta">
+                (757) 386-5698 | Richmond, VA<br>
+                <a href="https://github.com/savantlab" style="color: white;">github.com/savantlab</a> | 
+                <a href="https://github.com/stepheweffie" style="color: white;">github.com/stepheweffie</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="resume-content">
+            <div class="download-buttons">
+                <a href="/static/resume/Savant_Portfolio_Resume.md" class="download-btn" download>
+                    📄 Download Resume (Markdown)
+                </a>
+                <a href="/static/resume/Savant_Portfolio_Resume.md" class="download-btn secondary" target="_blank">
+                    👁️ View Raw
+                </a>
+            </div>
+
+            <div class="resume-section">
+                <h2>Cognitive Profile</h2>
+                <div class="highlight-box">
+                    <h4>Savant Syndrome: Exceptional Spatial Reasoning</h4>
+                    <p><strong>Demonstrated Achievement:</strong> Performed the most complex mental rotation task ever completed by a human for cognitive science research—resolving a paradox that challenged the field for decades.</p>
+                </div>
+                <p><strong>Core Abilities:</strong></p>
+                <ul>
+                    <li>Extraordinary three-dimensional spatial transformation and visualization</li>
+                    <li>Pattern recognition across complex systems and architectures</li>
+                    <li>Rapid comprehension of abstract technical frameworks</li>
+                    <li>Simultaneous processing of multiple conceptual models</li>
+                </ul>
+                <p><strong>Application Domains:</strong></p>
+                <ul>
+                    <li>Cognitive science research and experimental design</li>
+                    <li>Software architecture and system design</li>
+                    <li>Data pipeline orchestration and optimization</li>
+                    <li>Visual arts and spatial composition</li>
+                </ul>
+            </div>
+
+            <div class="resume-section">
+                <h2>Breakthrough Research</h2>
+                <h3>Mental Rotation Paradox Resolution</h3>
+                <p><strong>Achievement:</strong> Invalidated the allocentric model of spatial cognition through systematic analysis and novel experimental design.</p>
+                <p><strong>Significance:</strong></p>
+                <ul>
+                    <li>Challenged theoretical framework accepted by the field for decades</li>
+                    <li>Demonstrated model's inability to constrain mental rotation behavior</li>
+                    <li>Applied savant-level spatial reasoning to identify what traditional researchers missed</li>
+                    <li><strong>Publication in preparation</strong></li>
+                </ul>
+                <p><strong>Technical Implementation:</strong></p>
+                <ul>
+                    <li>Built ML/NLP research platform analyzing 50+ years of literature (280+ papers)</li>
+                    <li>6-stage automated pipeline: scraping → vectorization → topic modeling → clustering → synthesis</li>
+                    <li>Reduced months of manual review to hours of computational analysis</li>
+                </ul>
+            </div>
+
+            <div class="resume-section">
+                <h2>Technical Expertise</h2>
+                <p><strong>Languages:</strong> Python, JavaScript, Swift, SQL, HTML/CSS</p>
+                <p><strong>Backend:</strong> FastAPI, Flask, Django, Node.js/Express, REST APIs</p>
+                <p><strong>Frontend:</strong> Vue 3, Vite, TailwindCSS, vanilla JavaScript, responsive design</p>
+                <p><strong>Database:</strong> PostgreSQL, SQLite, Redis, SQLAlchemy ORM, query optimization</p>
+                <p><strong>Infrastructure:</strong> Docker, Docker Compose, Nginx, Gunicorn, Celery, CI/CD (GitHub Actions)</p>
+                <p><strong>ML/Data Science:</strong> scikit-learn, pandas, NumPy, TF-IDF, LDA, Random Forest, K-means</p>
+                <p><strong>Research:</strong> Systematic review, reproducible pipelines, computational social science</p>
+            </div>
+
+            <div class="resume-section">
+                <h2>Featured Projects</h2>
+                
+                <h3>TaxBudget Allocator - Algorithmic Optimization</h3>
+                <p><strong>Challenge:</strong> System degraded linearly (O(n)), unusable beyond 10,000 users</p>
+                <p><strong>Results:</strong> 50,000x faster at 1M users (50s → 1ms), unlimited scalability</p>
+                <p><strong>Tech:</strong> Django, PostgreSQL, Redis, Celery, Docker Compose</p>
+
+                <h3>Savantlab Portfolio - This Site!</h3>
+                <p><strong>Features:</strong> PostgreSQL database, REST API, Docker Compose, automated CI/CD with GitHub Actions</p>
+                <p><strong>Deployment:</strong> Live at savantlab.org with automated deployment</p>
+                <p><strong>Tech:</strong> Flask, PostgreSQL, Docker, GitHub Actions</p>
+
+                <h3>Mental Rotation Research Platform</h3>
+                <p><strong>Purpose:</strong> End-to-end research automation with ML/NLP pipeline</p>
+                <p><strong>Output:</strong> 280+ papers analyzed, automated monthly updates, visualization dashboards</p>
+                <p><strong>Tech:</strong> Python, scikit-learn, pandas, d6tflow, asyncio, LDA, Random Forest</p>
+
+                <p><a href="/#projects" class="download-btn" style="display: inline-block; margin-top: 24px;">View All Projects →</a></p>
+            </div>
+
+            <div class="resume-section">
+                <h2>Computer Science Education</h2>
+                
+                <h4>MIT (Massachusetts Institute of Technology) - edX Verified Certificates</h4>
+                <p><strong>Introduction to Computer Science and Programming Using Python (6.00.1x)</strong><br>
+                Completed: October 2015<br>
+                MIT's foundational CS course covering algorithms, data structures, and computational thinking</p>
+
+                <p><strong>Computational Thinking and Data Science (6.00.2x)</strong><br>
+                Completed: December 2015<br>
+                Advanced computational methods, optimization, statistics, and machine learning</p>
+
+                <h4>University of London - Coursera Certificates</h4>
+                <p><strong>Responsive Website Basics:</strong> HTML, CSS, JavaScript (October 2015)</p>
+                <p><strong>Responsive Web Design:</strong> UI/UX, Bootstrap, Wireframing (December 2015)</p>
+
+                <h4>University of Washington - Coursera Certificate</h4>
+                <p><strong>Machine Learning Foundations:</strong> Deep learning, NLP, predictive modeling (January 2016)</p>
+            </div>
+
+            <div class="resume-section">
+                <h2>Unique Value Proposition</h2>
+                <div class="highlight-box">
+                    <p><strong>I bring capabilities that cannot be trained or acquired through conventional means:</strong></p>
+                    <ul>
+                        <li><strong>Savant-Level Spatial Reasoning:</strong> Solved the most complex mental rotation task in cognitive science history</li>
+                        <li><strong>Theoretical Breakthrough Capacity:</strong> Identified fundamental flaw in established scientific model that escaped decades of expert analysis</li>
+                        <li><strong>Full-Stack Technical Execution:</strong> MIT computer science education + 9 years continuous skill development</li>
+                        <li><strong>Research Infrastructure Architecture:</strong> Build systems that generate publishable research, not just code</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <a href="/static/resume/Savant_Portfolio_Resume.md" class="download-btn" download>
+                    📄 Download Full Resume
+                </a>
+                <a href="/contact" class="download-btn secondary">
+                    📧 Get In Touch
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: var(--text-primary); color: rgba(255,255,255,0.8); padding: 40px 0; text-align: center;">
+        <div class="container">
+            <p>© 2025 Stephanie King | Savantlab</p>
+            <p style="margin-top: 8px;">
+                <a href="https://github.com/savantlab" style="color: rgba(255,255,255,0.8); margin: 0 12px;">GitHub</a>
+                <a href="/contact" style="color: rgba(255,255,255,0.8); margin: 0 12px;">Contact</a>
+                <a href="/resume" style="color: rgba(255,255,255,0.8); margin: 0 12px;">Resume</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
