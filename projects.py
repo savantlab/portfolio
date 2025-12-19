@@ -33,9 +33,10 @@ DEFAULT_PROJECTS = [
             "16% semantic similarity, 75% conceptual overlap identified",
             "Network density analysis: 3x difference between abstract vs operationalized ideologies",
             "Mapped implicit terminology frameworks showing vocabulary masking",
-            "Interactive Jupyter notebooks with visualization dashboards"
+            "Interactive Jupyter notebooks with visualization dashboards",
+            "Full analysis available at scideology.app"
         ],
-        "github": None,
+        "github": "https://scideology.app",
         "status": "Manuscript in Preparation",
         "image": "parallel-2.png"
     },
