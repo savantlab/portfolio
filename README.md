@@ -152,6 +152,9 @@ Content iterations (clarifying the "Parallel Critiques" project framing, updatin
 **Security Consciousness**
 Identified and removed exposed API tokens (`.env.token`), added proper `.gitignore` patterns, and avoided hardcoded secrets throughout. Shows threat modeling instinct.
 
+**Infrastructure & Workflow Management**
+Established a proper CI/CD pipeline with main→deploy branch workflow for production safety. Implemented AI_RULES.txt to enforce deployment approval requirements, preventing unauthorized automatic deployments. Demonstrates understanding of change control, staging environments, and operational risk management.
+
 **Documentation & Communication**
 Produced three substantive documents (ARCHITECTURE.md, READING_LIST_API.md, WARP_AND_AI.md) that could serve as team onboarding material. Clear writing about technical tradeoffs.
 
