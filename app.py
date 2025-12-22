@@ -100,6 +100,11 @@ def api_reading_list_add():
     
     READING_LIST.append(new_item)
     
+    # Save to JSON file
+    filepath = os.path.join(os.path.dirname(__file__), 'data', 'reading_list.json')
+    with open(filepath, 'w') as f:
+        json.dump(READING_LIST, f, indent=2)
+    
     return jsonify({
         "message": "Item added successfully",
         "item": new_item,
