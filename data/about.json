@@ -1,0 +1,34 @@
+{
+  "name": "Stephanie King",
+  "title": "Cognitive Scientist | Software Engineer | Artist | Research Subject",
+  "tagline": "Savant and human subject available for scientific research in neuro, cognitive, computation, and quantum labs",
+  "bio": "Stephanie King is a savant and cognitive scientist available as a human subject for scientific research in neuroscience, cognitive science, computational neuroscience, and quantum cognition laboratories.",
+  "breakthrough": {
+    "title": "Mental Rotation Paradox",
+    "description": "Resolved the Mental Rotation Paradox in cognitive science—invalidating the allocentric model of spatial cognition, a theoretical framework that failed to constrain mental rotation despite decades of acceptance in the field.",
+    "details": "This breakthrough addresses a fundamental paradox in how humans process spatial information and challenges prevailing cognitive science orthodoxy through comprehensive computational analysis of 50+ years of research literature (280+ papers, 1970-present)."
+  },
+  "skills": {
+    "languages": ["Python", "JavaScript", "SQL", "Swift", "HTML/CSS"],
+    "ml_data_science": ["scikit-learn", "pandas", "NumPy", "TF-IDF", "LDA", "Random Forest", "K-means"],
+    "nlp_analysis": ["Natural language processing", "semantic analysis", "topic modeling", "network analysis"],
+    "data_engineering": ["d6tflow", "Luigi", "async/await patterns", "ETL pipelines"],
+    "development": ["Git", "Jupyter", "Docker", "Nginx", "RESTful APIs", "CLI design"]
+  },
+  "research_methods": "Systematic review methodology, citation analysis, computational social science, experimental design, and rigorous quantitative analysis combining academic-quality methodology with production software practices.",
+  "publications": [
+    {
+      "title": "The Surreal Art of Mental Rotation",
+      "status": "Manuscript in preparation"
+    },
+    {
+      "title": "Parallel Critiques: Analyzing Rhetorical Extremism",
+      "status": "Technical monograph"
+    }
+  ],
+  "availability": {
+    "status": "Available for research participation",
+    "areas": ["Cognitive science", "Neuroscience", "Computational research studies"],
+    "cta": "Contact for inquiries"
+  }
+}

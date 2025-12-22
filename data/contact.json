@@ -1,0 +1,58 @@
+{
+  "heading": "Get in Touch",
+  "tagline": "Available for research collaboration and participation in cognitive science studies",
+  "speaking": {
+    "title": "Book a Speaking Engagement",
+    "description": "Available for keynotes, panels, and technical talks on cognitive science, savant abilities, extremism research, and software engineering",
+    "topics": ["Cognitive Science", "Savant Syndrome", "Extremism Analysis"],
+    "formats": ["Keynotes", "Panels", "Technical Workshops"],
+    "venues": ["Universities", "Conferences", "Corporate Events"],
+    "cta": "Contact for Availability"
+  },
+  "research_participation": {
+    "title": "Research Participation",
+    "description": "Stephanie King is available as a human subject for scientific research in:",
+    "areas": [
+      {
+        "field": "Neuroscience",
+        "details": "Brain imaging, neural correlates"
+      },
+      {
+        "field": "Cognitive Science",
+        "details": "Spatial cognition, mental rotation, savant abilities"
+      },
+      {
+        "field": "Computational Neuroscience",
+        "details": "Modeling, simulation studies"
+      },
+      {
+        "field": "Quantum Cognition",
+        "details": "Consciousness, quantum processes"
+      }
+    ]
+  },
+  "social": [
+    {
+      "platform": "X / Twitter",
+      "handle": "@surrealsavant",
+      "url": "https://x.com/surrealsavant",
+      "icon": "𝕏"
+    },
+    {
+      "platform": "Instagram",
+      "handle": "@surrealsavantgenius",
+      "url": "https://instagram.com/surrealsavantgenius",
+      "icon": "📷"
+    },
+    {
+      "platform": "GitHub",
+      "handle": "github.com/savantlab",
+      "url": "https://github.com/savantlab",
+      "icon": "💻"
+    }
+  ],
+  "collaboration": {
+    "title": "Collaboration Inquiries",
+    "message": "For research collaboration, technical consulting, or speaking engagements, please reach out via social media."
+  }
+}
