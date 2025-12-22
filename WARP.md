@@ -6,13 +6,14 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ### Running the Application
 ```bash
-# Standard Flask development server
-python app.py
-
-# With Chromedriver lifecycle management (auto-shutdown when browser closes)
+# Recommended: Flask with Chromedriver lifecycle management
+# (auto-shutdown when browser closes)
 python flask_driver_runner.py app:app
 python flask_driver_runner.py app:app --headless
 python flask_driver_runner.py app:app --port 5002
+
+# Alternative: Standard Flask development server (when browser automation not needed)
+python app.py
 ```
 
 ### Production Deployment
