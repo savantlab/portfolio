@@ -3,8 +3,16 @@
     "id": "mental-rotation",
     "title": "Mental Rotation Research Platform",
     "subtitle": "Resolving the Mental Rotation Paradox in Cognitive Science",
-    "description": "Comprehensive ML pipeline for systematic literature analysis invalidating the allocentric model of spatial cognition—a theoretical framework that failed to constrain mental rotation despite decades of acceptance.",
-    "tech": ["Python", "scikit-learn", "d6tflow", "NLP", "TF-IDF", "LDA", "Random Forest"],
+    "description": "Comprehensive ML pipeline for systematic literature analysis invalidating the allocentric model of spatial cognition\u2014a theoretical framework that failed to constrain mental rotation despite decades of acceptance.",
+    "tech": [
+      "Python",
+      "scikit-learn",
+      "d6tflow",
+      "NLP",
+      "TF-IDF",
+      "LDA",
+      "Random Forest"
+    ],
     "highlights": [
       "280+ papers analyzed (1970-present)",
       "6-stage ML workflow for topic discovery and citation prediction",
@@ -20,7 +28,14 @@
     "title": "Parallel Critiques: Analyzing Rhetorical Extremism",
     "subtitle": "Computational Discourse Analysis of Ideological Transmission",
     "description": "Rigorous NLP analysis comparing Jordan Peterson's academic discourse with Nazi Anders Breivik's extremist manifesto, revealing textual and conceptual overlap, transformation points from abstract critique to concrete threat identification, and rhetorical patterns that mask dangerous ideologies.",
-    "tech": ["Python", "scikit-learn", "NetworkX", "TF-IDF", "N-gram Analysis", "Network Co-occurrence"],
+    "tech": [
+      "Python",
+      "scikit-learn",
+      "NetworkX",
+      "TF-IDF",
+      "N-gram Analysis",
+      "Network Co-occurrence"
+    ],
     "highlights": [
       "16% semantic similarity, 75% conceptual overlap identified",
       "Network density analysis: 3x difference between abstract vs operationalized ideologies",
@@ -36,7 +51,13 @@
     "title": "Mouse-Trackpad Science Lab",
     "subtitle": "Computational Analysis of Human-Computer Interaction Patterns",
     "description": "Experimental platform for analyzing motor control and decision-making patterns through cursor tracking and interaction metrics.",
-    "tech": ["Python", "pandas", "matplotlib", "Data Analysis", "Eye Tracking"],
+    "tech": [
+      "Python",
+      "pandas",
+      "matplotlib",
+      "Data Analysis",
+      "Eye Tracking"
+    ],
     "highlights": [
       "Real-time session analysis and processing",
       "Comprehensive metrics and visualization tools",
@@ -51,7 +72,12 @@
     "title": "The Depth of Deception: Jordan Peterson's Fraud Story",
     "subtitle": "Exposing Misrepresentation of Ancient Egyptian Symbolism",
     "description": "Analysis revealing how Jordan Peterson fundamentally misrepresented the meaning of Osiris in ancient Egyptian theology, falsely claiming it signified the living and dead pharaoh when it never held that meaning to the ancient Egyptians.",
-    "tech": ["Historical Analysis", "Egyptology", "Symbolic Systems", "Critical Examination"],
+    "tech": [
+      "Historical Analysis",
+      "Egyptology",
+      "Symbolic Systems",
+      "Critical Examination"
+    ],
     "highlights": [
       "Documented misuse of ancient Egyptian symbolism",
       "Examination of Osiris's actual theological significance",
@@ -67,7 +93,18 @@
     "title": "Tax Budget Allocator",
     "subtitle": "Enterprise-Scale Budget Planning with Multi-Container Orchestration",
     "description": "Production-ready Django application with multi-container Docker Compose architecture. Uses Redis for caching and as a Celery broker, SQLite for persistence, Gunicorn for WSGI, optional Nginx reverse proxy, and Celery workers/beat for background and scheduled jobs. Demonstrates solving operational complexity via health checks, service dependencies, and persistent volumes.",
-    "tech": ["Django", "Docker Compose", "SQLite", "Redis", "Celery", "Flower", "Nginx", "Gunicorn", "Python", "JavaScript"],
+    "tech": [
+      "Django",
+      "Docker Compose",
+      "SQLite",
+      "Redis",
+      "Celery",
+      "Flower",
+      "Nginx",
+      "Gunicorn",
+      "Python",
+      "JavaScript"
+    ],
     "highlights": [
       "Multi-container orchestration (db, redis, web, celery, celery-beat, flower, nginx)",
       "Redis-backed caching and message brokering with AOF persistence",
@@ -86,7 +123,17 @@
     "title": "Mad Scientist AI",
     "subtitle": "Production AI Chat Interface with Cloudflare Workers AI",
     "description": "Full-stack AI chat application built with FastAPI and Cloudflare Workers AI. Features production-ready deployment configurations for multiple platforms (Coolify, Railway, Render, AWS ECS, Docker, VPS), comprehensive health monitoring, and enterprise-grade infrastructure with reverse proxy support and SSL automation. Solves the common chatbot UI problem of routing AI-generated images from API responses to the dashboard.",
-    "tech": ["Python", "FastAPI", "Uvicorn", "Cloudflare AI", "Docker", "Docker Compose", "AWS ECS", "Nginx", "Traefik"],
+    "tech": [
+      "Python",
+      "FastAPI",
+      "Uvicorn",
+      "Cloudflare AI",
+      "Docker",
+      "Docker Compose",
+      "AWS ECS",
+      "Nginx",
+      "Traefik"
+    ],
     "highlights": [
       "Solved image routing for AI-generated content (avatars, generated images) in chat interfaces",
       "Multi-platform deployment (Coolify, Railway, Render, AWS ECS, bare metal)",
@@ -100,21 +147,28 @@
     "github": "https://github.com/stepheweffie/mad-scientist",
     "status": "Production Ready",
     "image": null
-  }
-]
-,
+  },
   {
     "id": "portfolio-microservices",
     "title": "Portfolio with Microservices Architecture",
     "subtitle": "REST API-Driven Portfolio with CI/CD Pipeline",
     "description": "This portfolio itself demonstrates microservices architecture principles. Features REST API endpoints for data services, JSON-based data separation, automated CI/CD pipeline with GitHub Actions, and a multi-branch deployment strategy. Data and presentation layers are completely decoupled, allowing independent scaling and maintenance.",
-    "tech": ["Flask", "REST API", "JSON", "GitHub Actions", "CI/CD", "JavaScript", "Git", "Bash"],
+    "tech": [
+      "Flask",
+      "REST API",
+      "JSON",
+      "GitHub Actions",
+      "CI/CD",
+      "JavaScript",
+      "Git",
+      "Bash"
+    ],
     "highlights": [
       "REST API microservices: /api/projects, /api/publications with JSON responses",
       "Data separation: JSON files gitignored on main, committed on deploy branch",
       "Automated CI/CD: Test pipeline validates code, deploy script merges and deploys",
       "Frontend consumes API via JavaScript fetch for dynamic rendering",
-      "Multi-branch strategy: main (code only) → deploy (code + data)",
+      "Multi-branch strategy: main (code only) \u2192 deploy (code + data)",
       "Comprehensive test suite: imports, data validation, route testing, security scans",
       "Deployment automation: ./deploy.sh handles merge, data files, and push",
       "Self-documenting: Architecture demonstrates principles it describes"
