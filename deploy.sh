@@ -150,8 +150,31 @@ git merge main -m "Deploy: Merge main into deploy
 
 Co-Authored-By: Warp <agent@warp.dev>"
 
-# Add JSON data files (not in main branch)
+# Validate and add JSON data files (not in main branch)
 if [ -d "data" ]; then
+    echo "Validating JSON data files..."
+    
+    # Validate each JSON file
+    json_valid=true
+    for json_file in data/*.json; do
+        if [ -f "$json_file" ]; then
+            echo "  Checking $json_file..."
+            if python3 -m json.tool "$json_file" > /dev/null 2>&1; then
+                echo -e "  ${GREEN}✓ Valid JSON${NC}"
+            else
+                echo -e "  ${RED}✗ Invalid JSON: $json_file${NC}"
+                json_valid=false
+            fi
+        fi
+    done
+    
+    if [ "$json_valid" = false ]; then
+        echo -e "${RED}ERROR: Invalid JSON files detected${NC}"
+        echo "Please fix JSON syntax errors before deploying"
+        git checkout main
+        exit 1
+    fi
+    
     echo "Adding data files to deploy branch..."
     git add -f data/*.json 2>/dev/null || true
     if ! git diff --cached --quiet; then
