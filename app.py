@@ -86,6 +86,26 @@ PROJECTS = [
         "github": "https://github.com/savantlab/taxbudget",
         "status": "Active Development",
         "image": None
+    },
+    {
+        "id": "mad-scientist",
+        "title": "Mad Scientist AI",
+        "subtitle": "Production AI Chat Interface with Cloudflare Workers AI",
+        "description": "Full-stack AI chat application built with FastAPI and Cloudflare Workers AI. Features production-ready deployment configurations for multiple platforms (Coolify, Railway, Render, AWS ECS, Docker, VPS), comprehensive health monitoring, and enterprise-grade infrastructure with reverse proxy support and SSL automation. Solves the common chatbot UI problem of routing AI-generated images from API responses to the dashboard.",
+        "tech": ["Python", "FastAPI", "Uvicorn", "Cloudflare AI", "Docker", "Docker Compose", "AWS ECS", "Nginx", "Traefik"],
+        "highlights": [
+            "Solved image routing for AI-generated content (avatars, generated images) in chat interfaces",
+            "Multi-platform deployment (Coolify, Railway, Render, AWS ECS, bare metal)",
+            "Production Docker architecture with health checks and service dependencies",
+            "Cloudflare Workers AI integration for scalable inference",
+            "Automated SSL/TLS certificate management",
+            "Reverse proxy configuration (Traefik/Nginx) for high availability",
+            "Systemd service integration for bare metal deployments",
+            "Comprehensive deployment scripts and documentation"
+        ],
+        "github": "https://github.com/stepheweffie/mad-scientist",
+        "status": "Production Ready",
+        "image": None
     }
 ]
 
