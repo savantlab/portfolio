@@ -1,9 +1,37 @@
 from flask import Flask, render_template, jsonify, request
 import os
 import json
+from functools import wraps
+from dotenv import load_dotenv
 from contact_list import ContactLinkedList
 
+# Load environment variables
+load_dotenv()
+
 app = Flask(__name__)
+
+# Authentication decorator
+def require_auth(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        api_token = os.getenv('API_TOKEN')
+        
+        if not api_token:
+            return jsonify({"error": "API authentication not configured"}), 500
+        
+        if not auth_header:
+            return jsonify({"error": "Authorization header required"}), 401
+        
+        if not auth_header.startswith('Bearer '):
+            return jsonify({"error": "Invalid authorization format. Use: Bearer <token>"}), 401
+        
+        token = auth_header.replace('Bearer ', '')
+        if token != api_token:
+            return jsonify({"error": "Invalid token"}), 403
+        
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Load data from JSON files
 def load_json_data(filename):
@@ -76,14 +104,15 @@ def api_reading_list():
     return jsonify(READING_LIST)
 
 @app.route("/api/reading-list/add", methods=['POST'])
+@require_auth
 def api_reading_list_add():
     """Add a new item to reading list"""
     data = request.get_json()
     
     # Validate required fields
-    required_fields = ['title', 'category']
+    required_fields = ['title', 'categories']
     if not all(field in data for field in required_fields):
-        return jsonify({"error": "Missing required fields: title, category"}), 400
+        return jsonify({"error": "Missing required fields: title, categories"}), 400
     
     # Generate ID
     new_id = max([item['id'] for item in READING_LIST], default=0) + 1
@@ -94,8 +123,8 @@ def api_reading_list_add():
         'title': data['title'],
         'description': data.get('description'),
         'url': data.get('url'),
-        'category': data['category'],
-        'completed': data.get('completed', False)
+        'categories': data['categories'],
+        'status': data.get('status', 'To Read')
     }
     
     READING_LIST.append(new_item)
@@ -110,6 +139,39 @@ def api_reading_list_add():
         "item": new_item,
         "total_items": len(READING_LIST)
     }), 201
+
+@app.route("/api/reading-list/<int:item_id>", methods=['PUT'])
+@require_auth
+def api_reading_list_update(item_id):
+    """Update an existing reading list item"""
+    data = request.get_json()
+    
+    # Find the item
+    item = next((i for i in READING_LIST if i['id'] == item_id), None)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+    
+    # Update fields if provided
+    if 'title' in data:
+        item['title'] = data['title']
+    if 'description' in data:
+        item['description'] = data['description']
+    if 'url' in data:
+        item['url'] = data['url']
+    if 'categories' in data:
+        item['categories'] = data['categories']
+    if 'status' in data:
+        item['status'] = data['status']
+    
+    # Save to JSON file
+    filepath = os.path.join(os.path.dirname(__file__), 'data', 'reading_list.json')
+    with open(filepath, 'w') as f:
+        json.dump(READING_LIST, f, indent=2)
+    
+    return jsonify({
+        "message": "Item updated successfully",
+        "item": item
+    }), 200
 
 @app.route("/api/contact/research")
 def api_contact_research():
@@ -137,6 +199,7 @@ def api_contact_list():
     return jsonify(contact_services.to_list())
 
 @app.route("/api/contact/add", methods=['POST'])
+@require_auth
 def api_contact_add():
     """Add a new contact microservice to the linked list"""
     data = request.get_json()

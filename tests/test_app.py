@@ -3,7 +3,12 @@ Test suite for Flask application
 """
 import pytest
 import json
+import os
+from dotenv import load_dotenv
 from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, NAVIGATION, READING_LIST, contact_services
+
+# Load environment variables for testing
+load_dotenv()
 
 
 @pytest.fixture
@@ -12,6 +17,13 @@ def client():
     app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
+
+
+@pytest.fixture
+def auth_headers():
+    """Get authorization headers for authenticated requests"""
+    api_token = os.getenv('API_TOKEN')
+    return {'Authorization': f'Bearer {api_token}'}
 
 
 class TestDataStructures:
@@ -208,20 +220,21 @@ class TestAPIEndpoints:
         data = response.get_json()
         assert isinstance(data, list)
     
-    def test_api_reading_list_add(self, client):
+    def test_api_reading_list_add(self, client, auth_headers):
         """Test adding item to reading list"""
         new_item = {
             'title': 'Test Book',
             'description': 'Test description',
-            'category': 'Test Category',
+            'categories': ['Test Category'],
             'url': 'https://example.com',
-            'completed': False
+            'status': 'To Read'
         }
         
         initial_count = len(READING_LIST)
         
         response = client.post('/api/reading-list/add',
                               data=json.dumps(new_item),
+                              headers=auth_headers,
                               content_type='application/json')
         
         assert response.status_code == 201
@@ -253,7 +266,7 @@ class TestAPIEndpoints:
             assert 'endpoint' in item
             assert 'data' in item
     
-    def test_api_contact_add(self, client):
+    def test_api_contact_add(self, client, auth_headers):
         """Test adding a new contact microservice"""
         new_service = {
             'id': 'test_service',
@@ -265,6 +278,7 @@ class TestAPIEndpoints:
         
         response = client.post('/api/contact/add', 
                               data=json.dumps(new_service),
+                              headers=auth_headers,
                               content_type='application/json')
         
         assert response.status_code == 201
@@ -273,12 +287,13 @@ class TestAPIEndpoints:
         assert data['service']['id'] == 'test_service'
         assert data['total_services'] == initial_count + 1
     
-    def test_api_contact_add_missing_fields(self, client):
+    def test_api_contact_add_missing_fields(self, client, auth_headers):
         """Test validation for adding contact service"""
         incomplete_service = {'id': 'test'}
         
         response = client.post('/api/contact/add',
                               data=json.dumps(incomplete_service),
+                              headers=auth_headers,
                               content_type='application/json')
         
         assert response.status_code == 400
