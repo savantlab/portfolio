@@ -1,0 +1,12 @@
+{
+  "id": "research",
+  "title": "Research Participation",
+  "description": "Available as human subject for neuroscience, cognitive science, computational neuroscience, and quantum cognition research",
+  "type": "research",
+  "details": [
+    "Neuroscience - Brain imaging, neural correlates",
+    "Cognitive Science - Spatial cognition, mental rotation, savant abilities",
+    "Computational Neuroscience - Modeling, simulation studies",
+    "Quantum Cognition - Consciousness, quantum processes"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "consulting",
+  "title": "Technical Consulting",
+  "description": "Software engineering, ML pipelines, data analysis, and research infrastructure development",
+  "type": "consulting",
+  "details": [
+    "Software Engineering - Full-stack development, architecture design",
+    "ML Pipelines - Data processing, model deployment",
+    "Data Analysis - Statistical analysis, visualization",
+    "Research Infrastructure - Lab systems, data collection tools"
+  ]
+}

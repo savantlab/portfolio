@@ -1,0 +1,11 @@
+{
+  "id": "speaking",
+  "title": "Speaking Engagements",
+  "description": "Available for keynotes, panels, and technical talks on cognitive science, savant abilities, extremism research, and software engineering",
+  "type": "speaking",
+  "details": [
+    "Topic Areas: Cognitive Science, Savant Syndrome, Extremism Analysis",
+    "Format: Keynotes, Panels, Technical Workshops",
+    "Venues: Universities, Conferences, Corporate Events"
+  ]
+}
