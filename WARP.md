@@ -4,6 +4,12 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Core Development Commands
 
+### Virtual Environment
+Always activate the virtual environment before running commands:
+```bash
+source venv/bin/activate
+```
+
 ### Running the Application
 ```bash
 # Recommended: Flask with Chromedriver lifecycle management
@@ -90,10 +96,10 @@ The codebase contains SQLAlchemy models (`models.py`, `database.py`, `blog.py`, 
 ## Deployment Strategy
 
 ### Two-Branch Workflow
-- **main**: Development branch (source of truth)
+- **main**: Development branch (source of truth for code)
 - **deploy**: Production branch (triggers CI/CD)
 
-### Deployment Process
+### Deployment Process for Code Changes
 1. Work on `main` branch
 2. Test locally with `pytest`
 3. Run `./deploy.sh` which:
@@ -106,7 +112,81 @@ The codebase contains SQLAlchemy models (`models.py`, `database.py`, `blog.py`, 
    - Pushes to trigger GitHub Actions
 4. GitHub Actions (`.github/workflows/deploy.yml`) deploys to DigitalOcean (192.34.61.197)
 
+### JSON Data Management
+**IMPORTANT**: JSON data files in `data/` are NOT tracked in git (`.gitignore`).
+
+#### Authentication Setup
+All POST endpoints require bearer token authentication:
+
+1. Generate a secure token:
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+2. Create `.env` file (or copy from `.env.example`):
+```bash
+API_TOKEN=your-generated-token-here
+```
+
+3. Add the same token to production server's environment variables
+
+#### Local Development Workflow
+Test data changes locally first, then push to production:
+
+**WARP Workflow for Adding Reading List Items:**
+1. WARP asks user for book details (title, description, URL, category)
+2. WARP generates the curl command with the book data
+3. WARP starts Flask driver (`python flask_driver_runner.py app:app`)
+4. User opens another terminal and runs the curl command
+5. User verifies the data was added via browser or GET request
+6. User runs the same curl command against production (`https://savantlab.org`)
+
+**IMPORTANT**: WARP cannot send curl requests while Flask driver is running. User must run curl commands in a separate terminal window.
+
+**Example curl commands:**
+```bash
+# 1. Test locally (Flask running on localhost:5001)
+curl -X POST http://localhost:5001/api/reading-list/add \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "Book Title",
+    "description": "Book description",
+    "url": "https://example.com",
+    "category": "Category",
+    "completed": false
+  }'
+
+# 2. Verify locally in browser or via GET request
+curl http://localhost:5001/api/reading-list
+
+# 3. Push to production (same request, different URL)
+curl -X POST https://savantlab.org/api/reading-list/add \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "Book Title",
+    "description": "Book description",
+    "url": "https://example.com",
+    "category": "Category",
+    "completed": false
+  }'
+```
+
+This separation ensures:
+- Code changes go through git review and CI/CD
+- Content updates are tested locally before production
+- Production content updates happen instantly without deployment
+- No merge conflicts between code and data changes
+- Authenticated access prevents unauthorized modifications
+
 ### Critical Deployment Rules
+**NEVER** make ANY changes (code, documentation, configuration, etc.) without explicit user permission. Always:
+1. Propose the change
+2. Ask: "Would you like me to make this change?"
+3. Wait for confirmation
+4. Then make the change
+
 **NEVER** deploy automatically without user approval. Always:
 1. Make changes
 2. Show what changed
@@ -175,6 +255,7 @@ def contact_new():
 
 ### Data Layer (Active)
 - `data/*.json` - All application content (projects, publications, contact info)
+- **Note**: `data/` directory is in `.gitignore` and NOT tracked in version control
 
 ### Database Layer (Inactive)
 - `database.py` - SQLAlchemy initialization

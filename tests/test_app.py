@@ -3,7 +3,12 @@ Test suite for Flask application
 """
 import pytest
 import json
-from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, contact_services
+import os
+from dotenv import load_dotenv
+from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, NAVIGATION, READING_LIST, contact_services
+
+# Load environment variables for testing
+load_dotenv()
 
 
 @pytest.fixture
@@ -12,6 +17,13 @@ def client():
     app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
+
+
+@pytest.fixture
+def auth_headers():
+    """Get authorization headers for authenticated requests"""
+    api_token = os.getenv('API_TOKEN')
+    return {'Authorization': f'Bearer {api_token}'}
 
 
 class TestDataStructures:
@@ -50,6 +62,19 @@ class TestDataStructures:
         """Validate contact data structure"""
         assert isinstance(CONTACT, dict), "CONTACT must be a dictionary"
         assert len(CONTACT) > 0, "CONTACT data is empty"
+    
+    def test_navigation_structure(self):
+        """Validate navigation data structure"""
+        assert isinstance(NAVIGATION, dict), "NAVIGATION must be a dictionary"
+        assert 'links' in NAVIGATION, "NAVIGATION must have links key"
+        assert isinstance(NAVIGATION['links'], list), "NAVIGATION links must be a list"
+        assert len(NAVIGATION['links']) > 0, "NAVIGATION links cannot be empty"
+        
+        # Validate each link
+        for link in NAVIGATION['links']:
+            assert 'label' in link, "Each link must have a label"
+            assert 'url' in link, "Each link must have a url"
+            assert 'external' in link, "Each link must have external flag"
     
     def test_contact_services_linked_list(self):
         """Validate contact services linked list structure"""
@@ -94,6 +119,11 @@ class TestWebRoutes:
     def test_counterterrorism_page(self, client):
         """Test counterterrorism page loads successfully"""
         response = client.get('/counterterrorism')
+        assert response.status_code == 200
+    
+    def test_reading_page(self, client):
+        """Test reading page loads successfully"""
+        response = client.get('/reading')
         assert response.status_code == 200
     
     def test_healthz_endpoint(self, client):
@@ -174,6 +204,45 @@ class TestAPIEndpoints:
         data = response.get_json()
         assert isinstance(data, dict)
     
+    def test_api_navigation(self, client):
+        """Test navigation API endpoint"""
+        response = client.get('/api/navigation')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert isinstance(data, dict)
+        assert 'links' in data
+        assert len(data['links']) > 0
+    
+    def test_api_reading_list(self, client):
+        """Test reading list API endpoint"""
+        response = client.get('/api/reading-list')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert isinstance(data, list)
+    
+    def test_api_reading_list_add(self, client, auth_headers):
+        """Test adding item to reading list"""
+        new_item = {
+            'title': 'Test Book',
+            'description': 'Test description',
+            'categories': ['Test Category'],
+            'url': 'https://example.com',
+            'status': 'To Read'
+        }
+        
+        initial_count = len(READING_LIST)
+        
+        response = client.post('/api/reading-list/add',
+                              data=json.dumps(new_item),
+                              headers=auth_headers,
+                              content_type='application/json')
+        
+        assert response.status_code == 201
+        data = response.get_json()
+        assert 'message' in data
+        assert data['item']['title'] == 'Test Book'
+        assert data['total_items'] == initial_count + 1
+    
     def test_api_contact_microservices(self, client):
         """Test contact microservice API endpoints"""
         services = ['research', 'speaking', 'consulting', 'collaboration']
@@ -197,7 +266,7 @@ class TestAPIEndpoints:
             assert 'endpoint' in item
             assert 'data' in item
     
-    def test_api_contact_add(self, client):
+    def test_api_contact_add(self, client, auth_headers):
         """Test adding a new contact microservice"""
         new_service = {
             'id': 'test_service',
@@ -209,6 +278,7 @@ class TestAPIEndpoints:
         
         response = client.post('/api/contact/add', 
                               data=json.dumps(new_service),
+                              headers=auth_headers,
                               content_type='application/json')
         
         assert response.status_code == 201
@@ -217,12 +287,13 @@ class TestAPIEndpoints:
         assert data['service']['id'] == 'test_service'
         assert data['total_services'] == initial_count + 1
     
-    def test_api_contact_add_missing_fields(self, client):
+    def test_api_contact_add_missing_fields(self, client, auth_headers):
         """Test validation for adding contact service"""
         incomplete_service = {'id': 'test'}
         
         response = client.post('/api/contact/add',
                               data=json.dumps(incomplete_service),
+                              headers=auth_headers,
                               content_type='application/json')
         
         assert response.status_code == 400
