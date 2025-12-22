@@ -149,6 +149,18 @@ git pull origin deploy
 git merge main -m "Deploy: Merge main into deploy
 
 Co-Authored-By: Warp <agent@warp.dev>"
+
+# Add JSON data files (not in main branch)
+if [ -d "data" ]; then
+    echo "Adding data files to deploy branch..."
+    git add -f data/*.json 2>/dev/null || true
+    if ! git diff --cached --quiet; then
+        git commit -m "Update data files for deployment
+
+Co-Authored-By: Warp <agent@warp.dev>"
+    fi
+fi
+
 git push origin deploy
 
 echo ""

@@ -123,38 +123,13 @@
     <section id="projects" class="projects">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Research Projects</span>
-                <h2>Technical Implementation</h2>
+                <span class="section-tag">Projects</span>
+                <h2>Software & Research Infrastructure</h2>
+                <p style="font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 16px auto 0;">Full-stack applications built with Flask, Django, and modern DevOps. From machine learning pipelines to multi-container production systems.</p>
             </div>
-            <div class="projects-grid">
-                {% for project in projects %}
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>{{ project.title }}</h3>
-                        <span class="project-status">{{ project.status }}</span>
-                    </div>
-                    <p class="project-subtitle">{{ project.subtitle }}</p>
-                    <p class="project-description">{{ project.description }}</p>
-                    <div class="project-tech">
-                        {% for tech in project.tech[:5] %}
-                        <span class="tech-tag">{{ tech }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="project-highlights">
-                        <ul>
-                            {% for highlight in project.highlights[:3] %}
-                            <li>{{ highlight }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="project-footer">
-                        <a href="/project/{{ project.id }}" class="btn btn-small">View Details</a>
-                        {% if project.github %}
-                        <a href="{{ project.github }}" target="_blank" class="btn btn-small btn-outline">GitHub →</a>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="projects-grid" id="projects-container">
+                <!-- Projects loaded via API -->
+                <div class="loading">Loading projects...</div>
             </div>
         </div>
     </section>
@@ -202,5 +177,68 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Load projects from API
+        async function loadProjects() {
+            const container = document.getElementById('projects-container');
+            
+            try {
+                const response = await fetch('/api/projects');
+                if (!response.ok) throw new Error('Failed to load projects');
+                
+                const projects = await response.json();
+                
+                // Clear loading message
+                container.innerHTML = '';
+                
+                // Render each project
+                projects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'project-card';
+                    
+                    const techTags = project.tech.slice(0, 5)
+                        .map(tech => `<span class="tech-tag">${tech}</span>`)
+                        .join('');
+                    
+                    const highlights = project.highlights.slice(0, 3)
+                        .map(highlight => `<li>${highlight}</li>`)
+                        .join('');
+                    
+                    const githubButton = project.github 
+                        ? `<a href="${project.github}" target="_blank" class="btn btn-small btn-outline">GitHub →</a>`
+                        : '';
+                    
+                    projectCard.innerHTML = `
+                        <div class="project-header">
+                            <h3>${project.title}</h3>
+                            <span class="project-status">${project.status}</span>
+                        </div>
+                        <p class="project-subtitle">${project.subtitle}</p>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-tech">
+                            ${techTags}
+                        </div>
+                        <div class="project-highlights">
+                            <ul>
+                                ${highlights}
+                            </ul>
+                        </div>
+                        <div class="project-footer">
+                            <a href="/project/${project.id}" class="btn btn-small">View Details</a>
+                            ${githubButton}
+                        </div>
+                    `;
+                    
+                    container.appendChild(projectCard);
+                });
+            } catch (error) {
+                container.innerHTML = '<p class="error">Failed to load projects. Please refresh the page.</p>';
+                console.error('Error loading projects:', error);
+            }
+        }
+        
+        // Load projects when page loads
+        document.addEventListener('DOMContentLoaded', loadProjects);
+    </script>
 </body>
 </html>
