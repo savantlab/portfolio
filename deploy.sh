@@ -42,86 +42,25 @@ echo -e "${GREEN}✓ Main branch up to date${NC}"
 echo ""
 
 # Run local tests
-echo "Running local validation tests..."
+echo "Running test suite..."
 echo ""
 
-echo "1. Testing Flask app imports..."
-if python3 -c "from app import app, PROJECTS, PUBLICATIONS; print('✓ Flask app imports successfully')"; then
-    echo -e "${GREEN}✓ Flask imports OK${NC}"
+echo "1. Running pytest..."
+if pytest tests/ -v --tb=short --no-cov; then
+    echo -e "${GREEN}✓ All tests passed${NC}"
 else
-    echo -e "${RED}✗ Flask imports FAILED${NC}"
+    echo -e "${RED}✗ Tests FAILED${NC}"
+    echo ""
+    echo "To see detailed test results, run: pytest tests/ -v"
     exit 1
 fi
 echo ""
 
-echo "2. Validating data structures..."
-if python3 -c "
-from app import PROJECTS, PUBLICATIONS
-import sys
-
-# Validate PROJECTS
-required_keys = ['id', 'title', 'subtitle', 'description', 'tech', 'highlights', 'github', 'status', 'image']
-for p in PROJECTS:
-    for k in required_keys:
-        if k not in p:
-            print(f'ERROR: Project {p.get(\"id\", \"unknown\")} missing key: {k}')
-            sys.exit(1)
-
-# Validate PUBLICATIONS  
-for pub in PUBLICATIONS:
-    for k in ['title', 'status', 'description']:
-        if k not in pub:
-            print(f'ERROR: Publication missing key: {k}')
-            sys.exit(1)
-
-print('✓ All data structures valid')
-"; then
-    echo -e "${GREEN}✓ Data validation OK${NC}"
+echo "2. Running code quality checks..."
+if flake8 app.py contact_list.py --count --select=E9,F63,F7,F82 --show-source --statistics > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ Code quality checks passed${NC}"
 else
-    echo -e "${RED}✗ Data validation FAILED${NC}"
-    exit 1
-fi
-echo ""
-
-echo "3. Testing Flask routes..."
-if python3 -c "
-from app import app, PROJECTS
-import sys
-
-with app.test_client() as client:
-    # Test page routes
-    for route in ['/', '/about', '/contact', '/journal', '/counterterrorism', '/healthz']:
-        r = client.get(route)
-        if r.status_code not in [200, 404]:
-            print(f'ERROR: Route {route} failed')
-            sys.exit(1)
-    
-    # Test project routes
-    for p in PROJECTS:
-        r = client.get(f'/project/{p[\"id\"]}')
-        if r.status_code != 200:
-            print(f'ERROR: Project route failed: {p[\"id\"]}')
-            sys.exit(1)
-    
-    # Test API endpoints
-    api_routes = ['/api/projects', '/api/publications', '/api/about', '/api/contact']
-    for route in api_routes:
-        r = client.get(route)
-        if r.status_code != 200:
-            print(f'ERROR: API route {route} failed')
-            sys.exit(1)
-        # Verify JSON response
-        data = r.get_json()
-        if data is None:
-            print(f'ERROR: API route {route} did not return JSON')
-            sys.exit(1)
-
-print('✓ All routes working')
-"; then
-    echo -e "${GREEN}✓ Route testing OK${NC}"
-else
-    echo -e "${RED}✗ Route testing FAILED${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠ Code quality warnings (non-blocking)${NC}"
 fi
 echo ""
 
