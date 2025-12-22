@@ -41,6 +41,18 @@ git pull origin main
 echo -e "${GREEN}✓ Main branch up to date${NC}"
 echo ""
 
+# Temporarily copy data from deploy branch for testing
+echo "Setting up test environment..."
+git fetch origin deploy
+if ! git show origin/deploy:data/ > /dev/null 2>&1; then
+    echo -e "${YELLOW}⚠ No data directory on deploy branch, skipping tests${NC}"
+else
+    # Extract data directory from deploy branch
+    git archive origin/deploy data/ | tar -x
+    echo -e "${GREEN}✓ Test data loaded from deploy branch${NC}"
+fi
+echo ""
+
 # Run local tests
 echo "Running test suite..."
 echo ""
@@ -68,6 +80,14 @@ echo -e "${GREEN}=========================================${NC}"
 echo -e "${GREEN}All local tests passed!${NC}"
 echo -e "${GREEN}=========================================${NC}"
 echo ""
+
+# Clean up test data
+if [ -d "data" ]; then
+    echo "Cleaning up test data..."
+    rm -rf data/
+    echo -e "${GREEN}✓ Test data cleaned up${NC}"
+    echo ""
+fi
 
 # Show diff between main and deploy
 echo "Comparing main vs deploy branch..."
