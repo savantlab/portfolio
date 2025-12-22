@@ -89,16 +89,31 @@ from app import app, PROJECTS
 import sys
 
 with app.test_client() as client:
+    # Test page routes
     for route in ['/', '/about', '/contact', '/journal', '/counterterrorism', '/healthz']:
         r = client.get(route)
         if r.status_code not in [200, 404]:
             print(f'ERROR: Route {route} failed')
             sys.exit(1)
     
+    # Test project routes
     for p in PROJECTS:
         r = client.get(f'/project/{p[\"id\"]}')
         if r.status_code != 200:
             print(f'ERROR: Project route failed: {p[\"id\"]}')
+            sys.exit(1)
+    
+    # Test API endpoints
+    api_routes = ['/api/projects', '/api/publications', '/api/about', '/api/contact']
+    for route in api_routes:
+        r = client.get(route)
+        if r.status_code != 200:
+            print(f'ERROR: API route {route} failed')
+            sys.exit(1)
+        # Verify JSON response
+        data = r.get_json()
+        if data is None:
+            print(f'ERROR: API route {route} did not return JSON')
             sys.exit(1)
 
 print('✓ All routes working')
