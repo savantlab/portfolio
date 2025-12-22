@@ -41,6 +41,16 @@ git pull origin main
 echo -e "${GREEN}✓ Main branch up to date${NC}"
 echo ""
 
+# Backup local data directory if it exists
+LOCAL_DATA_EXISTS=false
+if [ -d "data" ] && [ -n "$(ls -A data 2>/dev/null)" ]; then
+    LOCAL_DATA_EXISTS=true
+    echo "Backing up local data directory..."
+    cp -r data data_backup
+    echo -e "${GREEN}✓ Local data backed up${NC}"
+    echo ""
+fi
+
 # Temporarily copy data from deploy branch for testing
 echo "Setting up test environment..."
 git fetch origin deploy
@@ -80,16 +90,6 @@ echo -e "${GREEN}=========================================${NC}"
 echo -e "${GREEN}All local tests passed!${NC}"
 echo -e "${GREEN}=========================================${NC}"
 echo ""
-
-# Backup local data directory if it exists
-LOCAL_DATA_EXISTS=false
-if [ -d "data" ] && [ -n "$(ls -A data 2>/dev/null)" ]; then
-    LOCAL_DATA_EXISTS=true
-    echo "Backing up local data directory..."
-    mv data data_backup
-    echo -e "${GREEN}✓ Local data backed up${NC}"
-    echo ""
-fi
 
 # Clean up test data from deploy branch
 if [ -d "data" ]; then
