@@ -3,7 +3,7 @@ Test suite for Flask application
 """
 import pytest
 import json
-from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, NAVIGATION, contact_services
+from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, NAVIGATION, READING_LIST, contact_services
 
 
 @pytest.fixture
@@ -200,6 +200,35 @@ class TestAPIEndpoints:
         assert isinstance(data, dict)
         assert 'links' in data
         assert len(data['links']) > 0
+    
+    def test_api_reading_list(self, client):
+        """Test reading list API endpoint"""
+        response = client.get('/api/reading-list')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert isinstance(data, list)
+    
+    def test_api_reading_list_add(self, client):
+        """Test adding item to reading list"""
+        new_item = {
+            'title': 'Test Book',
+            'description': 'Test description',
+            'category': 'Test Category',
+            'url': 'https://example.com',
+            'completed': False
+        }
+        
+        initial_count = len(READING_LIST)
+        
+        response = client.post('/api/reading-list/add',
+                              data=json.dumps(new_item),
+                              content_type='application/json')
+        
+        assert response.status_code == 201
+        data = response.get_json()
+        assert 'message' in data
+        assert data['item']['title'] == 'Test Book'
+        assert data['total_items'] == initial_count + 1
     
     def test_api_contact_microservices(self, client):
         """Test contact microservice API endpoints"""

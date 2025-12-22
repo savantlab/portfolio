@@ -18,6 +18,7 @@ PUBLICATIONS = load_json_data('publications.json')
 ABOUT = load_json_data('about.json')
 CONTACT = load_json_data('contact.json')
 NAVIGATION = load_json_data('navigation.json')
+READING_LIST = load_json_data('reading_list.json')
 
 # Initialize contact microservices linked list
 contact_services = ContactLinkedList()
@@ -68,6 +69,42 @@ def api_contact():
 def api_navigation():
     """Get navigation links as JSON"""
     return jsonify(NAVIGATION)
+
+@app.route("/api/reading-list")
+def api_reading_list():
+    """Get all reading list items"""
+    return jsonify(READING_LIST)
+
+@app.route("/api/reading-list/add", methods=['POST'])
+def api_reading_list_add():
+    """Add a new item to reading list"""
+    data = request.get_json()
+    
+    # Validate required fields
+    required_fields = ['title', 'category']
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields: title, category"}), 400
+    
+    # Generate ID
+    new_id = max([item['id'] for item in READING_LIST], default=0) + 1
+    
+    # Create new item
+    new_item = {
+        'id': new_id,
+        'title': data['title'],
+        'description': data.get('description'),
+        'url': data.get('url'),
+        'category': data['category'],
+        'completed': data.get('completed', False)
+    }
+    
+    READING_LIST.append(new_item)
+    
+    return jsonify({
+        "message": "Item added successfully",
+        "item": new_item,
+        "total_items": len(READING_LIST)
+    }), 201
 
 @app.route("/api/contact/research")
 def api_contact_research():
