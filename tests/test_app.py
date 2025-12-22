@@ -3,7 +3,7 @@ Test suite for Flask application
 """
 import pytest
 import json
-from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, contact_services
+from app import app, PROJECTS, PUBLICATIONS, ABOUT, CONTACT, NAVIGATION, contact_services
 
 
 @pytest.fixture
@@ -50,6 +50,19 @@ class TestDataStructures:
         """Validate contact data structure"""
         assert isinstance(CONTACT, dict), "CONTACT must be a dictionary"
         assert len(CONTACT) > 0, "CONTACT data is empty"
+    
+    def test_navigation_structure(self):
+        """Validate navigation data structure"""
+        assert isinstance(NAVIGATION, dict), "NAVIGATION must be a dictionary"
+        assert 'links' in NAVIGATION, "NAVIGATION must have links key"
+        assert isinstance(NAVIGATION['links'], list), "NAVIGATION links must be a list"
+        assert len(NAVIGATION['links']) > 0, "NAVIGATION links cannot be empty"
+        
+        # Validate each link
+        for link in NAVIGATION['links']:
+            assert 'label' in link, "Each link must have a label"
+            assert 'url' in link, "Each link must have a url"
+            assert 'external' in link, "Each link must have external flag"
     
     def test_contact_services_linked_list(self):
         """Validate contact services linked list structure"""
@@ -173,6 +186,15 @@ class TestAPIEndpoints:
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, dict)
+    
+    def test_api_navigation(self, client):
+        """Test navigation API endpoint"""
+        response = client.get('/api/navigation')
+        assert response.status_code == 200
+        data = response.get_json()
+        assert isinstance(data, dict)
+        assert 'links' in data
+        assert len(data['links']) > 0
     
     def test_api_contact_microservices(self, client):
         """Test contact microservice API endpoints"""

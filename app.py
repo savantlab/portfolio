@@ -17,6 +17,7 @@ PROJECTS = load_json_data('projects.json')
 PUBLICATIONS = load_json_data('publications.json')
 ABOUT = load_json_data('about.json')
 CONTACT = load_json_data('contact.json')
+NAVIGATION = load_json_data('navigation.json')
 
 # Initialize contact microservices linked list
 contact_services = ContactLinkedList()
@@ -62,6 +63,11 @@ def api_about():
 def api_contact():
     """Get contact page data as JSON"""
     return jsonify(CONTACT)
+
+@app.route("/api/navigation")
+def api_navigation():
+    """Get navigation links as JSON"""
+    return jsonify(NAVIGATION)
 
 @app.route("/api/contact/research")
 def api_contact_research():
