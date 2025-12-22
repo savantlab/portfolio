@@ -29,56 +29,65 @@
             <div style="max-width: 800px; margin: 0 auto;">
                 <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 24px;">About</h1>
                 
-                <div style="font-size: 18px; line-height: 1.8; color: var(--text-secondary);">
+                <div id="about-content" style="font-size: 18px; line-height: 1.8; color: var(--text-secondary);">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        async function loadAbout() {
+            const container = document.getElementById('about-content');
+            
+            try {
+                const response = await fetch('/api/about');
+                if (!response.ok) throw new Error('Failed to load about data');
+                
+                const data = await response.json();
+                
+                container.innerHTML = `
                     <p style="margin-bottom: 24px;">
-                        <strong style="color: var(--text-primary);">Stephanie King</strong> is a savant and cognitive scientist 
-                        available as a human subject for scientific research in neuroscience, cognitive science, 
-                        computational neuroscience, and quantum cognition laboratories.
+                        <strong style="color: var(--text-primary);">${data.name}</strong> ${data.bio}
                     </p>
 
                     <h2 style="font-size: 32px; font-weight: 600; color: var(--text-primary); margin: 48px 0 24px;">
                         Research Breakthrough
                     </h2>
                     <p style="margin-bottom: 24px;">
-                        Resolved the <strong>Mental Rotation Paradox</strong> in cognitive science—invalidating the 
-                        allocentric model of spatial cognition, a theoretical framework that failed to constrain mental 
-                        rotation despite decades of acceptance in the field.
+                        Resolved the <strong>${data.breakthrough.title}</strong> in cognitive science—${data.breakthrough.description}
                     </p>
                     <p style="margin-bottom: 24px;">
-                        This breakthrough addresses a fundamental paradox in how humans process spatial information and 
-                        challenges prevailing cognitive science orthodoxy through comprehensive computational analysis of 
-                        50+ years of research literature (280+ papers, 1970-present).
+                        ${data.breakthrough.details}
                     </p>
 
                     <h2 style="font-size: 32px; font-weight: 600; color: var(--text-primary); margin: 48px 0 24px;">
                         Technical Skills
                     </h2>
                     <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 12px;"><strong>Languages:</strong> Python, JavaScript, SQL, Swift, HTML/CSS</li>
-                        <li style="margin-bottom: 12px;"><strong>ML/Data Science:</strong> scikit-learn, pandas, NumPy, TF-IDF, LDA, Random Forest, K-means</li>
-                        <li style="margin-bottom: 12px;"><strong>NLP & Analysis:</strong> Natural language processing, semantic analysis, topic modeling, network analysis</li>
-                        <li style="margin-bottom: 12px;"><strong>Data Engineering:</strong> d6tflow, Luigi, async/await patterns, ETL pipelines</li>
-                        <li style="margin-bottom: 12px;"><strong>Development:</strong> Git, Jupyter, Docker, Nginx, RESTful APIs, CLI design</li>
+                        <li style="margin-bottom: 12px;"><strong>Languages:</strong> ${data.skills.languages.join(', ')}</li>
+                        <li style="margin-bottom: 12px;"><strong>ML/Data Science:</strong> ${data.skills.ml_data_science.join(', ')}</li>
+                        <li style="margin-bottom: 12px;"><strong>NLP & Analysis:</strong> ${data.skills.nlp_analysis.join(', ')}</li>
+                        <li style="margin-bottom: 12px;"><strong>Data Engineering:</strong> ${data.skills.data_engineering.join(', ')}</li>
+                        <li style="margin-bottom: 12px;"><strong>Development:</strong> ${data.skills.development.join(', ')}</li>
                     </ul>
 
                     <h2 style="font-size: 32px; font-weight: 600; color: var(--text-primary); margin: 48px 0 24px;">
                         Research Methods
                     </h2>
                     <p style="margin-bottom: 24px;">
-                        Systematic review methodology, citation analysis, computational social science, experimental design, 
-                        and rigorous quantitative analysis combining academic-quality methodology with production software practices.
+                        ${data.research_methods}
                     </p>
 
                     <h2 style="font-size: 32px; font-weight: 600; color: var(--text-primary); margin: 48px 0 24px;">
                         Publications in Development
                     </h2>
                     <ul style="padding-left: 20px; margin-bottom: 32px;">
-                        <li style="margin-bottom: 12px;">
-                            "The Surreal Art of Mental Rotation" (manuscript in preparation)
-                        </li>
-                        <li style="margin-bottom: 12px;">
-                            "Parallel Critiques: Analyzing Rhetorical Extremism" (technical monograph)
-                        </li>
+                        ${data.publications.map(pub => `
+                            <li style="margin-bottom: 12px;">
+                                "${pub.title}" (${pub.status})
+                            </li>
+                        `).join('')}
                     </ul>
 
                     <div style="background: var(--bg-secondary); padding: 32px; border-radius: 12px; margin-top: 48px;">
@@ -86,14 +95,19 @@
                             Research Participation
                         </h3>
                         <p style="margin-bottom: 0;">
-                            Available for participation in cognitive science, neuroscience, and computational research studies. 
-                            <a href="/contact" style="color: var(--primary); text-decoration: none; font-weight: 600;">Contact for inquiries →</a>
+                            ${data.availability.status} in ${data.availability.areas.join(', ')}. 
+                            <a href="/contact" style="color: var(--primary); text-decoration: none; font-weight: 600;">${data.availability.cta} →</a>
                         </p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                `;
+            } catch (error) {
+                container.innerHTML = '<p class="error">Failed to load about information. Please refresh the page.</p>';
+                console.error('Error loading about:', error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadAbout);
+    </script>
 
     <footer>
         <div class="container">
