@@ -152,7 +152,7 @@
     "id": "portfolio-microservices",
     "title": "Portfolio with Microservices Architecture",
     "subtitle": "REST API-Driven Portfolio with CI/CD Pipeline",
-    "description": "This portfolio itself demonstrates microservices architecture principles. Features REST API endpoints for data services, JSON-based data separation, automated CI/CD pipeline with GitHub Actions, and a multi-branch deployment strategy. Data and presentation layers are completely decoupled, allowing independent scaling and maintenance.",
+    "description": "This website (savantlab.org) demonstrates microservices architecture principles in production. Features REST API endpoints for data services, JSON-based data separation, automated CI/CD pipeline with GitHub Actions, and a multi-branch deployment strategy. Data and presentation layers are completely decoupled, allowing independent scaling and maintenance.",
     "tech": [
       "Flask",
       "REST API",
@@ -164,7 +164,7 @@
       "Bash"
     ],
     "highlights": [
-      "REST API microservices: /api/projects, /api/publications with JSON responses",
+      "REST API microservices serving this website: /api/projects, /api/publications",
       "Data separation: JSON files gitignored on main, committed on deploy branch",
       "Automated CI/CD: Test pipeline validates code, deploy script merges and deploys",
       "Frontend consumes API via JavaScript fetch for dynamic rendering",
