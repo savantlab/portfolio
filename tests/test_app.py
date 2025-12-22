@@ -109,6 +109,11 @@ class TestWebRoutes:
         response = client.get('/counterterrorism')
         assert response.status_code == 200
     
+    def test_reading_page(self, client):
+        """Test reading page loads successfully"""
+        response = client.get('/reading')
+        assert response.status_code == 200
+    
     def test_healthz_endpoint(self, client):
         """Test health check endpoint"""
         response = client.get('/healthz')

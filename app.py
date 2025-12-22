@@ -168,6 +168,9 @@ def journal():
 def counterterrorism():
     return render_template("counterterrorism.html")
 
+@app.route("/reading")
+def reading():
+    return render_template("reading_list.html")
 
 @app.route("/healthz")
 def healthz():
