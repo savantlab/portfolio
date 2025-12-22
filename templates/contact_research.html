@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Participation - Savantlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="/#research">Research</a>
+                <a href="/#projects">Projects</a>
+                <a href="/counterterrorism">Counterterrorism</a>
+                <a href="/journal">Journal</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section style="padding: 120px 0 80px;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <a href="/contact" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">← Back to Contact</a>
+                </div>
+                
+                <div id="content" style="background: white; padding: 48px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h1 style="font-size: 42px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">Loading...</h1>
+                </div>
+
+                <div style="margin-top: 32px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: var(--text-secondary); font-size: 14px;">
+                        Microservice 1 of 4
+                    </div>
+                    <a href="/contact/speaking" style="padding: 12px 24px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                        Next: Speaking →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">SAVANTLAB</div>
+                <div class="footer-links">
+                    <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
+                    <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
+                    <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Savantlab. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        fetch('/api/contact/research')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('content').innerHTML = `
+                    <h1 style="font-size: 42px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);">${data.title}</h1>
+                    <p style="font-size: 18px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 32px;">${data.description}</p>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        ${data.details.map(detail => `
+                            <li style="padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-secondary);">
+                                ${detail}
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div style="margin-top: 32px; padding: 16px; background: var(--bg-secondary); border-radius: 8px; font-family: monospace; font-size: 13px;">
+                        <strong>API Endpoint:</strong> /api/contact/research
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>

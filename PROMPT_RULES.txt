@@ -1,0 +1,17 @@
+# Project Rules for savantlab-portfolio
+
+## Primary Documentation
+
+**READ WARP.md** for all development guidance, commands, and workflows.
+
+WARP.md contains:
+- How to run the application (Flask driver, standard mode, production)
+- Testing and validation procedures
+- Deployment strategy and processes
+- Architecture overview
+- Code patterns and common workflows
+
+Do not duplicate information here that is already in WARP.md.
+
+---
+Last Updated: 2025-12-22
