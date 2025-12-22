@@ -89,16 +89,31 @@ from app import app, PROJECTS
 import sys
 
 with app.test_client() as client:
+    # Test page routes
     for route in ['/', '/about', '/contact', '/journal', '/counterterrorism', '/healthz']:
         r = client.get(route)
         if r.status_code not in [200, 404]:
             print(f'ERROR: Route {route} failed')
             sys.exit(1)
     
+    # Test project routes
     for p in PROJECTS:
         r = client.get(f'/project/{p[\"id\"]}')
         if r.status_code != 200:
             print(f'ERROR: Project route failed: {p[\"id\"]}')
+            sys.exit(1)
+    
+    # Test API endpoints
+    api_routes = ['/api/projects', '/api/publications', '/api/about', '/api/contact']
+    for route in api_routes:
+        r = client.get(route)
+        if r.status_code != 200:
+            print(f'ERROR: API route {route} failed')
+            sys.exit(1)
+        # Verify JSON response
+        data = r.get_json()
+        if data is None:
+            print(f'ERROR: API route {route} did not return JSON')
             sys.exit(1)
 
 print('✓ All routes working')
@@ -150,8 +165,31 @@ git merge main -m "Deploy: Merge main into deploy
 
 Co-Authored-By: Warp <agent@warp.dev>"
 
-# Add JSON data files (not in main branch)
+# Validate and add JSON data files (not in main branch)
 if [ -d "data" ]; then
+    echo "Validating JSON data files..."
+    
+    # Validate each JSON file
+    json_valid=true
+    for json_file in data/*.json; do
+        if [ -f "$json_file" ]; then
+            echo "  Checking $json_file..."
+            if python3 -m json.tool "$json_file" > /dev/null 2>&1; then
+                echo -e "  ${GREEN}✓ Valid JSON${NC}"
+            else
+                echo -e "  ${RED}✗ Invalid JSON: $json_file${NC}"
+                json_valid=false
+            fi
+        fi
+    done
+    
+    if [ "$json_valid" = false ]; then
+        echo -e "${RED}ERROR: Invalid JSON files detected${NC}"
+        echo "Please fix JSON syntax errors before deploying"
+        git checkout main
+        exit 1
+    fi
+    
     echo "Adding data files to deploy branch..."
     git add -f data/*.json 2>/dev/null || true
     if ! git diff --cached --quiet; then

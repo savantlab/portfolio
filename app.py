@@ -14,6 +14,8 @@ def load_json_data(filename):
 # Load projects and publications
 PROJECTS = load_json_data('projects.json')
 PUBLICATIONS = load_json_data('publications.json')
+ABOUT = load_json_data('about.json')
+CONTACT = load_json_data('contact.json')
 
 # API Endpoints
 @app.route("/api/projects")
@@ -33,6 +35,16 @@ def api_project_detail(project_id):
 def api_publications():
     """Get all publications as JSON"""
     return jsonify(PUBLICATIONS)
+
+@app.route("/api/about")
+def api_about():
+    """Get about page data as JSON"""
+    return jsonify(ABOUT)
+
+@app.route("/api/contact")
+def api_contact():
+    """Get contact page data as JSON"""
+    return jsonify(CONTACT)
 
 # Web Routes
 @app.route("/")
