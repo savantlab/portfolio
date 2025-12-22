@@ -1,0 +1,39 @@
+{
+  "links": [
+    {
+      "label": "Research",
+      "url": "/#research",
+      "external": false
+    },
+    {
+      "label": "Projects",
+      "url": "/#projects",
+      "external": false
+    },
+    {
+      "label": "Counterterrorism",
+      "url": "/counterterrorism",
+      "external": false
+    },
+    {
+      "label": "Reading",
+      "url": "/reading",
+      "external": false
+    },
+    {
+      "label": "Journal",
+      "url": "/journal",
+      "external": false
+    },
+    {
+      "label": "About",
+      "url": "/about",
+      "external": false
+    },
+    {
+      "label": "Contact",
+      "url": "/contact",
+      "external": false
+    }
+  ]
+}
