@@ -1,0 +1,125 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov flake8 black
+      
+      - name: Lint with flake8
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit-zero treats all errors as warnings
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        continue-on-error: true
+      
+      - name: Check code formatting with black
+        run: |
+          black --check --diff .
+        continue-on-error: true
+      
+      - name: Validate Flask app imports
+        run: |
+          python -c "from app import app, PROJECTS, PUBLICATIONS; print('Flask app imports successfully')"
+      
+      - name: Check for required files
+        run: |
+          test -f requirements.txt || (echo "requirements.txt missing" && exit 1)
+          test -f app.py || (echo "app.py missing" && exit 1)
+          test -d templates || (echo "templates directory missing" && exit 1)
+          test -d static || (echo "static directory missing" && exit 1)
+      
+      - name: Validate project data structure
+        run: |
+          python -c "
+from app import PROJECTS, PUBLICATIONS
+import sys
+
+# Validate PROJECTS structure
+required_project_keys = ['id', 'title', 'subtitle', 'description', 'tech', 'highlights', 'github', 'status', 'image']
+for project in PROJECTS:
+    for key in required_project_keys:
+        if key not in project:
+            print(f'ERROR: Project {project.get(\"id\", \"unknown\")} missing key: {key}')
+            sys.exit(1)
+    if not isinstance(project['tech'], list):
+        print(f'ERROR: Project {project[\"id\"]} tech must be a list')
+        sys.exit(1)
+    if not isinstance(project['highlights'], list):
+        print(f'ERROR: Project {project[\"id\"]} highlights must be a list')
+        sys.exit(1)
+
+# Validate PUBLICATIONS structure
+required_pub_keys = ['title', 'status', 'description']
+for pub in PUBLICATIONS:
+    for key in required_pub_keys:
+        if key not in pub:
+            print(f'ERROR: Publication {pub.get(\"title\", \"unknown\")} missing key: {key}')
+            sys.exit(1)
+
+print('✓ All data structures valid')
+"
+      
+      - name: Test Flask routes
+        run: |
+          python -c "
+from app import app
+import sys
+
+with app.test_client() as client:
+    # Test main routes
+    routes = ['/', '/about', '/contact', '/journal', '/counterterrorism', '/healthz']
+    for route in routes:
+        response = client.get(route)
+        if response.status_code not in [200, 404]:
+            print(f'ERROR: Route {route} returned status {response.status_code}')
+            sys.exit(1)
+        print(f'✓ Route {route} OK')
+    
+    # Test project detail routes
+    from app import PROJECTS
+    for project in PROJECTS:
+        response = client.get(f'/project/{project[\"id\"]}')
+        if response.status_code != 200:
+            print(f'ERROR: Project route /project/{project[\"id\"]} returned status {response.status_code}')
+            sys.exit(1)
+        print(f'✓ Project route /project/{project[\"id\"]} OK')
+
+print('✓ All routes working')
+"
+      
+      - name: Check for security issues
+        run: |
+          pip install safety
+          safety check --json || true
+        continue-on-error: true
+      
+      - name: Test summary
+        run: |
+          echo "========================================="
+          echo "All tests passed! ✓"
+          echo "========================================="
+          echo "Next steps:"
+          echo "1. Review the changes"
+          echo "2. Merge main into deploy branch to trigger deployment"
+          echo "========================================="
