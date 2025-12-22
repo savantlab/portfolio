@@ -81,11 +81,29 @@ echo -e "${GREEN}All local tests passed!${NC}"
 echo -e "${GREEN}=========================================${NC}"
 echo ""
 
-# Clean up test data
+# Backup local data directory if it exists
+LOCAL_DATA_EXISTS=false
+if [ -d "data" ] && [ -n "$(ls -A data 2>/dev/null)" ]; then
+    LOCAL_DATA_EXISTS=true
+    echo "Backing up local data directory..."
+    mv data data_backup
+    echo -e "${GREEN}✓ Local data backed up${NC}"
+    echo ""
+fi
+
+# Clean up test data from deploy branch
 if [ -d "data" ]; then
     echo "Cleaning up test data..."
     rm -rf data/
     echo -e "${GREEN}✓ Test data cleaned up${NC}"
+    echo ""
+fi
+
+# Restore local data directory
+if [ "$LOCAL_DATA_EXISTS" = true ]; then
+    echo "Restoring local data directory..."
+    mv data_backup data
+    echo -e "${GREEN}✓ Local data restored${NC}"
     echo ""
 fi
 
