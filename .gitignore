@@ -50,3 +50,6 @@ data/
 instance/
 *.pyc
 __pycache__/
+
+# Private documents
+palantir_echo_resume_pitch.md
