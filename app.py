@@ -1,14 +1,16 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
 import os
 import json
 from functools import wraps
 from dotenv import load_dotenv
 from contact_list import ContactLinkedList
+import markdown
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
 
 # Authentication decorator
 def require_auth(f):
@@ -97,6 +99,11 @@ def api_contact():
 def api_navigation():
     """Get navigation links as JSON"""
     return jsonify(NAVIGATION)
+
+@app.route("/nav")
+def nav_component():
+    """Serve navigation menu component as HTML microservice"""
+    return render_template("nav_menu.html")
 
 @app.route("/api/reading-list")
 def api_reading_list():
@@ -276,6 +283,8 @@ def counterterrorism():
 @app.route("/reading")
 def reading():
     return render_template("reading_list.html")
+
+# Resume routes disabled - feature removed for security
 
 @app.route("/healthz")
 def healthz():
