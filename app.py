@@ -68,11 +68,13 @@ contact_services.append('collaboration', '/api/contact/collaboration', CONTACT_C
 
 # API Endpoints
 @app.route("/api/projects")
+@require_auth
 def api_projects():
     """Get all projects as JSON"""
     return jsonify(PROJECTS)
 
 @app.route("/api/projects/<project_id>")
+@require_auth
 def api_project_detail(project_id):
     """Get single project by ID as JSON"""
     project = next((p for p in PROJECTS if p["id"] == project_id), None)
@@ -81,21 +83,25 @@ def api_project_detail(project_id):
     return jsonify(project)
 
 @app.route("/api/publications")
+@require_auth
 def api_publications():
     """Get all publications as JSON"""
     return jsonify(PUBLICATIONS)
 
 @app.route("/api/about")
+@require_auth
 def api_about():
     """Get about page data as JSON"""
     return jsonify(ABOUT)
 
 @app.route("/api/contact")
+@require_auth
 def api_contact():
     """Get contact page data as JSON"""
     return jsonify(CONTACT)
 
 @app.route("/api/navigation")
+@require_auth
 def api_navigation():
     """Get navigation links as JSON"""
     return jsonify(NAVIGATION)
@@ -106,6 +112,7 @@ def nav_component():
     return render_template("nav_menu.html")
 
 @app.route("/api/reading-list")
+@require_auth
 def api_reading_list():
     """Get all reading list items"""
     return jsonify(READING_LIST)
@@ -181,26 +188,31 @@ def api_reading_list_update(item_id):
     }), 200
 
 @app.route("/api/contact/research")
+@require_auth
 def api_contact_research():
     """Get research participation microservice data"""
     return jsonify(CONTACT_RESEARCH)
 
 @app.route("/api/contact/speaking")
+@require_auth
 def api_contact_speaking():
     """Get speaking engagements microservice data"""
     return jsonify(CONTACT_SPEAKING)
 
 @app.route("/api/contact/consulting")
+@require_auth
 def api_contact_consulting():
     """Get technical consulting microservice data"""
     return jsonify(CONTACT_CONSULTING)
 
 @app.route("/api/contact/collaboration")
+@require_auth
 def api_contact_collaboration():
     """Get collaboration microservice data"""
     return jsonify(CONTACT_COLLABORATION)
 
 @app.route("/api/contact/list")
+@require_auth
 def api_contact_list():
     """Get the linked list of all contact microservices"""
     return jsonify(contact_services.to_list())
