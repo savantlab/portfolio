@@ -159,63 +159,63 @@ class TestWebRoutes:
 class TestAPIEndpoints:
     """Test API endpoints"""
     
-    def test_api_projects(self, client):
+    def test_api_projects(self, client, auth_headers):
         """Test projects API endpoint"""
-        response = client.get('/api/projects')
+        response = client.get('/api/projects', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, list)
         assert len(data) == len(PROJECTS)
     
-    def test_api_project_detail(self, client):
+    def test_api_project_detail(self, client, auth_headers):
         """Test individual project API endpoint"""
         for project in PROJECTS:
-            response = client.get(f'/api/projects/{project["id"]}')
+            response = client.get(f'/api/projects/{project["id"]}', headers=auth_headers)
             assert response.status_code == 200
             data = response.get_json()
             assert data['id'] == project['id']
     
-    def test_api_project_detail_404(self, client):
+    def test_api_project_detail_404(self, client, auth_headers):
         """Test 404 for nonexistent project in API"""
-        response = client.get('/api/projects/nonexistent-xyz')
+        response = client.get('/api/projects/nonexistent-xyz', headers=auth_headers)
         assert response.status_code == 404
         data = response.get_json()
         assert 'error' in data
     
-    def test_api_publications(self, client):
+    def test_api_publications(self, client, auth_headers):
         """Test publications API endpoint"""
-        response = client.get('/api/publications')
+        response = client.get('/api/publications', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, list)
         assert len(data) == len(PUBLICATIONS)
     
-    def test_api_about(self, client):
+    def test_api_about(self, client, auth_headers):
         """Test about API endpoint"""
-        response = client.get('/api/about')
+        response = client.get('/api/about', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, dict)
     
-    def test_api_contact(self, client):
+    def test_api_contact(self, client, auth_headers):
         """Test contact API endpoint"""
-        response = client.get('/api/contact')
+        response = client.get('/api/contact', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, dict)
     
-    def test_api_navigation(self, client):
+    def test_api_navigation(self, client, auth_headers):
         """Test navigation API endpoint"""
-        response = client.get('/api/navigation')
+        response = client.get('/api/navigation', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, dict)
         assert 'links' in data
         assert len(data['links']) > 0
     
-    def test_api_reading_list(self, client):
+    def test_api_reading_list(self, client, auth_headers):
         """Test reading list API endpoint"""
-        response = client.get('/api/reading-list')
+        response = client.get('/api/reading-list', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, list)
@@ -243,18 +243,18 @@ class TestAPIEndpoints:
         assert data['item']['title'] == 'Test Book'
         assert data['total_items'] == initial_count + 1
     
-    def test_api_contact_microservices(self, client):
+    def test_api_contact_microservices(self, client, auth_headers):
         """Test contact microservice API endpoints"""
         services = ['research', 'speaking', 'consulting', 'collaboration']
         for service in services:
-            response = client.get(f'/api/contact/{service}')
+            response = client.get(f'/api/contact/{service}', headers=auth_headers)
             assert response.status_code == 200, f"Contact API {service} failed"
             data = response.get_json()
             assert isinstance(data, dict)
     
-    def test_api_contact_list(self, client):
+    def test_api_contact_list(self, client, auth_headers):
         """Test contact services list API"""
-        response = client.get('/api/contact/list')
+        response = client.get('/api/contact/list', headers=auth_headers)
         assert response.status_code == 200
         data = response.get_json()
         assert isinstance(data, list)
