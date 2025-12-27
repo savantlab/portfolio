@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Savantlab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: var(--bg-primary, #ffffff);
+            border-radius: 12px;
+            padding: 48px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary, #000000);
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            color: var(--text-secondary, #666666);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .code-input-group {
+            margin-bottom: 24px;
+        }
+
+        .code-input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary, #000000);
+        }
+
+        .code-input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 2px solid var(--border-color, #e0e0e0);
+            border-radius: 8px;
+            font-family: 'Inter', monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: border-color 0.2s;
+        }
+
+        .code-input-group input:focus {
+            outline: none;
+            border-color: var(--primary, #007bff);
+        }
+
+        .code-input-group input.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        .modal-button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            background: var(--primary, #007bff);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-button:hover {
+            background: var(--primary-dark, #0056b3);
+        }
+
+        .modal-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Resume content styles */
+        #resume-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+            line-height: 1.8;
+        }
+
+        #resume-content h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary, #000000);
+        }
+
+        #resume-content h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 48px 0 24px;
+            color: var(--text-primary, #000000);
+            border-bottom: 2px solid var(--border-color, #e0e0e0);
+            padding-bottom: 8px;
+        }
+
+        #resume-content h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--text-primary, #000000);
+        }
+
+        #resume-content p {
+            margin-bottom: 16px;
+            color: var(--text-secondary, #666666);
+            font-size: 16px;
+        }
+
+        #resume-content ul, #resume-content ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+
+        #resume-content li {
+            margin-bottom: 8px;
+            color: var(--text-secondary, #666666);
+        }
+
+        #resume-content code {
+            background: var(--bg-secondary, #f5f5f5);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        #resume-content pre {
+            background: var(--bg-secondary, #f5f5f5);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        #resume-content blockquote {
+            border-left: 4px solid var(--primary, #007bff);
+            padding-left: 24px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-secondary, #666666);
+        }
+
+        #resume-content strong {
+            color: var(--text-primary, #000000);
+            font-weight: 600;
+        }
+
+        #resume-content a {
+            color: var(--primary, #007bff);
+            text-decoration: none;
+        }
+
+        #resume-content a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 18px;
+            color: var(--text-secondary, #666666);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Microservice -->
+    <div id="nav-container"></div>
+
+    <!-- Access Code Modal -->
+    <div id="access-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Resume Access</h2>
+            <p>This resume is protected. Please enter your access code to continue.</p>
+            
+            <div class="code-input-group">
+                <label for="access-code">Access Code</label>
+                <input 
+                    type="text" 
+                    id="access-code" 
+                    placeholder="Enter code"
+                    autocomplete="off"
+                    maxlength="20"
+                >
+                <div id="error-message" class="error-message">Invalid code. Please try again.</div>
+            </div>
+
+            <button id="submit-code" class="modal-button">Submit</button>
+        </div>
+    </div>
+
+    <!-- Resume Content -->
+    <div id="resume-content">
+        <div class="loading">Loading resume...</div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">STEPHANIE KING</div>
+                <div class="footer-links">
+                    <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
+                    <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
+                    <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Savantlab. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const resumeContent = document.getElementById('resume-content');
+
+        // Load resume content immediately without validation
+        async function loadResumeContent() {
+            try {
+                const response = await fetch('/api/resume/content');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load resume content');
+                }
+
+                const data = await response.json();
+                resumeContent.innerHTML = data.content;
+            } catch (error) {
+                resumeContent.innerHTML = '<div class="loading">Failed to load resume. Please refresh the page.</div>';
+                console.error('Error loading resume:', error);
+            }
+        }
+
+        // Load content on page load
+        document.addEventListener('DOMContentLoaded', loadResumeContent);
+
+        // Load navigation microservice
+        fetch('/nav')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('nav-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading navigation:', error);
+            });
+    </script>
+</body>
+</html>
