@@ -22,6 +22,8 @@ python flask_driver_runner.py app:app --port 5002
 python app.py
 ```
 
+**Note**: You can run both Jupyter and Flask driver simultaneously in the same Chrome/Chromedriver session.
+
 ### Production Deployment
 ```bash
 # Production server with Gunicorn
