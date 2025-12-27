@@ -296,7 +296,36 @@ def counterterrorism():
 def reading():
     return render_template("reading_list.html")
 
-# Resume routes disabled - feature removed for security
+@app.route("/resume")
+def resume():
+    """Protected Palantir resume page with code validation"""
+    return render_template("resume.html")
+
+@app.route("/api/resume/validate", methods=['POST'])
+def validate_resume_code():
+    """Validate access code for resume"""
+    data = request.get_json()
+    code = data.get('code', '').strip()
+    correct_code = os.getenv('RESUME_CODE', 'ARCHIMEDES2026')
+    
+    if code == correct_code:
+        session['resume_access'] = True
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Invalid code"}), 403
+
+@app.route("/api/resume/content")
+@require_auth
+def resume_content():
+    """Get resume content (requires API authentication)"""
+    # Read and convert markdown to HTML
+    filepath = os.path.join(os.path.dirname(__file__), 'palantir_echo_resume_pitch.md')
+    with open(filepath, 'r') as f:
+        md_content = f.read()
+    
+    html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables', 'toc'])
+    
+    return jsonify({"content": html_content}), 200
 
 @app.route("/healthz")
 def healthz():
