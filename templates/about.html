@@ -36,12 +36,13 @@
         </div>
     </section>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
         async function loadAbout() {
             const container = document.getElementById('about-content');
             
             try {
-                const response = await fetch('/api/about');
+                const response = await authFetch('/api/about');
                 if (!response.ok) throw new Error('Failed to load about data');
                 
                 const data = await response.json();

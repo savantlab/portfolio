@@ -250,13 +250,14 @@
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
         const resumeContent = document.getElementById('resume-content');
 
         // Load resume content immediately without validation
         async function loadResumeContent() {
             try {
-                const response = await fetch('/api/resume/content');
+                const response = await authFetch('/api/resume/content');
                 
                 if (!response.ok) {
                     throw new Error('Failed to load resume content');

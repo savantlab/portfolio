@@ -114,9 +114,10 @@
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
         // Fetch the linked list of contact microservices
-        fetch('/api/contact/list')
+        authFetch('/api/contact/list')
             .then(response => response.json())
             .then(services => {
                 const microservicesList = document.getElementById('microservices-list');

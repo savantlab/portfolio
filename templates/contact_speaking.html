@@ -66,8 +66,9 @@
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
-        fetch('/api/contact/speaking')
+        authFetch('/api/contact/speaking')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('content').innerHTML = `
