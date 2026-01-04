@@ -246,7 +246,7 @@
             const container = document.getElementById('projects-container');
             
             try {
-                const response = await authFetch('/api/projects');
+                const response = await fetch('/api/projects');
                 if (!response.ok) throw new Error('Failed to load projects');
                 
                 const projects = await response.json();
