@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archimedes - Mental Rotation Research - Savantlab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-brand a {
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: #f1f5f9;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        header .count {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        select, input[type="text"] {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            padding-bottom: 4rem;
+        }
+
+        .paper-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-left: 4px solid #60a5fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .paper-card:hover {
+            border-color: rgba(96, 165, 250, 0.3);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 1) 100%);
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .paper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            gap: 0.75rem;
+        }
+
+        .paper-year {
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            white-space: nowrap;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .paper-authors {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .paper-journal {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+
+        .paper-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .category-tag {
+            background: rgba(167, 139, 250, 0.1);
+            color: #a78bfa;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(167, 139, 250, 0.2);
+        }
+
+        .dataset-tag {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-bottom: 0.5rem;
+        }
+
+        .paper-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .citations {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+
+        .citations-count {
+            font-weight: 600;
+            color: #60a5fa;
+        }
+
+        .paper-doi {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .paper-doi:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/reading">Reading</a>
+                <a href="/journal">Journal</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <h1>Archimedes</h1>
+            <p class="subtitle">Citation Network Analysis: Shepard & Metzler (1971)</p>
+            <p class="count">{{ papers|length }} unique papers citing foundational mental rotation research</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid" id="stats-grid">
+            <!-- Stats populated by JS -->
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label">Search:</label>
+                <input type="text" id="search-input" placeholder="Search papers...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Dataset:</label>
+                <select id="dataset-filter">
+                    <option value="">All Datasets</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Year:</label>
+                <select id="year-filter">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Sort by:</label>
+                <select id="sort-select">
+                    <option value="citations-desc">Citations (High to Low)</option>
+                    <option value="citations-asc">Citations (Low to High)</option>
+                    <option value="year-desc">Year (Newest First)</option>
+                    <option value="year-asc">Year (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="papers-grid" id="papers-grid">
+            <!-- Papers populated by JS -->
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Savantlab. All rights reserved.
+    </footer>
+
+    <script>
+        const papers = {{ papers|tojson }};
+
+        function calculateStats() {
+            const totalPapers = papers.length;
+            const totalCitations = papers.reduce((sum, p) => sum + (p.cited_by_count || 0), 0);
+            const avgCitations = Math.round(totalCitations / totalPapers);
+            const years = papers.map(p => p.year).filter(y => y);
+            const yearRange = years.length ? `${Math.min(...years)}-${Math.max(...years)}` : 'N/A';
+            
+            const allCategories = new Set();
+            papers.forEach(p => {
+                if (p.categories) {
+                    p.categories.forEach(cat => allCategories.add(cat));
+                }
+            });
+
+            return {
+                totalPapers,
+                totalCitations,
+                avgCitations,
+                yearRange,
+                categories: allCategories.size
+            };
+        }
+
+        function renderStats() {
+            const stats = calculateStats();
+            const statsGrid = document.getElementById('stats-grid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalPapers}</div>
+                    <div class="stat-label">Papers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalCitations.toLocaleString()}</div>
+                    <div class="stat-label">Total Citations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.avgCitations}</div>
+                    <div class="stat-label">Avg Citations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.yearRange}</div>
+                    <div class="stat-label">Year Range</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.categories}</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+            `;
+        }
+
+        function populateDatasetFilter() {
+            const datasets = [...new Set(papers.map(p => p.source_dataset).filter(d => d))];
+            const datasetFilter = document.getElementById('dataset-filter');
+            
+            datasets.forEach(dataset => {
+                const option = document.createElement('option');
+                option.value = dataset;
+                option.textContent = dataset.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                datasetFilter.appendChild(option);
+            });
+        }
+
+        function populateYearFilter() {
+            const years = [...new Set(papers.map(p => p.year).filter(y => y))].sort((a, b) => b - a);
+            const yearFilter = document.getElementById('year-filter');
+            
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearFilter.appendChild(option);
+            });
+        }
+
+        function renderPapers(papersToRender) {
+            const grid = document.getElementById('papers-grid');
+            
+            if (papersToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No papers found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = papersToRender.map(paper => `
+                <div class="paper-card">
+                    <div class="paper-header">
+                        <div class="paper-year">${paper.year || 'N/A'}</div>
+                    </div>
+                    ${paper.source_dataset ? `<div class="dataset-tag">${paper.source_dataset.replace(/_/g, ' ')}</div>` : ''}
+                    <h3 class="paper-title">${paper.title}</h3>
+                    ${paper.authors ? `<div class="paper-authors">${paper.authors.join(', ')}</div>` : ''}
+                    ${paper.journal ? `<div class="paper-journal">${paper.journal}</div>` : ''}
+                    ${paper.categories && paper.categories.length > 0 ? `
+                        <div class="paper-categories">
+                            ${paper.categories.map(cat => `<span class="category-tag">${cat}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="paper-footer">
+                        <div class="citations">
+                            <span>Citations:</span>
+                            <span class="citations-count">${(paper.cited_by_count || 0).toLocaleString()}</span>
+                        </div>
+                        ${paper.doi ? `
+                            <a href="https://doi.org/${paper.doi}" target="_blank" class="paper-doi">
+                                DOI →
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterAndSortPapers() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const datasetFilter = document.getElementById('dataset-filter').value;
+            const yearFilter = document.getElementById('year-filter').value;
+            const sortBy = document.getElementById('sort-select').value;
+            
+            let filtered = papers.filter(paper => {
+                const matchesSearch = !searchTerm || 
+                    (paper.title && paper.title.toLowerCase().includes(searchTerm)) ||
+                    (paper.authors && paper.authors.some(a => a && a.toLowerCase().includes(searchTerm))) ||
+                    (paper.journal && paper.journal.toLowerCase().includes(searchTerm));
+                
+                const matchesDataset = !datasetFilter || paper.source_dataset === datasetFilter;
+                const matchesYear = !yearFilter || paper.year == yearFilter;
+                
+                return matchesSearch && matchesDataset && matchesYear;
+            });
+            
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'citations-desc':
+                        return (b.cited_by_count || 0) - (a.cited_by_count || 0);
+                    case 'citations-asc':
+                        return (a.cited_by_count || 0) - (b.cited_by_count || 0);
+                    case 'year-desc':
+                        return (b.year || 0) - (a.year || 0);
+                    case 'year-asc':
+                        return (a.year || 0) - (b.year || 0);
+                    case 'title':
+                        return a.title.localeCompare(b.title);
+                    default:
+                        return 0;
+                }
+            });
+            
+            renderPapers(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('search-input').addEventListener('input', filterAndSortPapers);
+        document.getElementById('dataset-filter').addEventListener('change', filterAndSortPapers);
+        document.getElementById('year-filter').addEventListener('change', filterAndSortPapers);
+        document.getElementById('sort-select').addEventListener('change', filterAndSortPapers);
+
+        // Initialize
+        renderStats();
+        populateDatasetFilter();
+        populateYearFilter();
+        filterAndSortPapers();
+    </script>
+</body>
+</html>
