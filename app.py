@@ -622,9 +622,12 @@ def validate_resume_code():
         return jsonify({"success": False, "error": "Invalid code"}), 403
 
 @app.route("/api/resume/content")
-@require_auth
 def resume_content():
-    """Get resume content (requires API authentication)"""
+    """Get resume content (requires session authentication via code validation)"""
+    # Check if user has validated access code
+    if not session.get('resume_access'):
+        return jsonify({"error": "Access code required"}), 403
+    
     # Read and convert markdown to HTML
     filepath = os.path.join(os.path.dirname(__file__), 'palantir_echo_resume_pitch.md')
     with open(filepath, 'r') as f:
