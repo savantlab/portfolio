@@ -37,8 +37,8 @@ def require_auth(f):
 
 # Load data from JSON files
 def load_json_data(filename):
-    """Load JSON data from data directory"""
-    filepath = os.path.join(os.path.dirname(__file__), 'data', filename)
+    """Load JSON data from flask_data directory"""
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', filename)
     with open(filepath, 'r') as f:
         return json.load(f)
 
@@ -49,6 +49,97 @@ ABOUT = load_json_data('about.json')
 CONTACT = load_json_data('contact.json')
 NAVIGATION = load_json_data('navigation.json')
 READING_LIST = load_json_data('reading_list.json')
+
+# Load Archimedes mental rotation research data
+ARCHIMEDES_DATASETS = {}
+archimedes_dir = os.path.join(os.path.expanduser('~'), 'Archimedes')
+
+# Define datasets to load
+# These are citation networks from foundational mental rotation papers
+datasets_to_load = {
+    'overlap_citations': 'overlap_citations_clean.json',  # Papers citing BOTH Shepard & Metzler (1971) AND Vandenberg & Kuse (1978)
+    'shepard_metzler_citations': 'shepard_metzler_1971_citations_clean.json',  # Papers citing Shepard & Metzler (1971)
+    'vandenberg_kuse_citations': 'vandenberg_kuse_1978_citations_clean.json',  # Papers citing Vandenberg & Kuse (1978)
+}
+
+for dataset_name, filename in datasets_to_load.items():
+    try:
+        filepath = os.path.join(archimedes_dir, filename)
+        with open(filepath, 'r') as f:
+            ARCHIMEDES_DATASETS[dataset_name] = json.load(f)
+        print(f"Loaded {len(ARCHIMEDES_DATASETS[dataset_name])} papers from {dataset_name}")
+    except FileNotFoundError:
+        print(f"Warning: {filename} not found")
+        ARCHIMEDES_DATASETS[dataset_name] = []
+
+# Create combined dataset (removing duplicates by DOI/title)
+# Filter to only papers published after 1971 (papers that could cite Shepard & Metzler 1971)
+# Exclude medical/clinical papers (pulmonary, radiology, etc.)
+all_papers = []
+seen_identifiers = set()
+
+# Medical concepts to exclude
+medical_exclude_concepts = {
+    'medicine', 'radiology', 'surgery', 'pulmonary', 'clinical', 'medical',
+    'patient', 'disease', 'therapy', 'diagnosis', 'pathology', 'anatomy',
+    'computed tomography', 'ct scan', 'mri', 'imaging', 'radiography',
+    'lung', 'heart', 'vascular', 'organ', 'tissue', 'cancer', 'tumor'
+}
+
+for dataset_name, papers in ARCHIMEDES_DATASETS.items():
+    for paper in papers:
+        # Filter: only papers from 1972 onwards
+        paper_year = paper.get('year')
+        if paper_year and paper_year < 1972:
+            continue
+        
+        # Filter: exclude medical/clinical papers
+        concepts = paper.get('concepts', [])
+        concepts_lower = [c.lower() for c in concepts]
+        if any(med_term in ' '.join(concepts_lower) for med_term in medical_exclude_concepts):
+            continue
+            
+        # Use DOI as primary identifier, fall back to title
+        identifier = paper.get('doi') or paper.get('title')
+        if identifier and identifier not in seen_identifiers:
+            seen_identifiers.add(identifier)
+            # Add dataset source tag
+            paper_copy = paper.copy()
+            paper_copy['source_dataset'] = dataset_name
+            all_papers.append(paper_copy)
+
+ARCHIMEDES_PAPERS = all_papers
+print(f"Total unique papers across all datasets (1972+): {len(ARCHIMEDES_PAPERS)}")
+
+# Load Peterson citation network data
+PETERSON_DATASETS = {}
+petersson_citations_dir = os.path.join(os.path.expanduser('~'), 'Archimedes', 'peterson_citations')
+
+petersson_datasets_to_load = {
+    'peterson_network': 'jordan_peterson_network_cleaned.json',
+    'peterson_papers': 'jordan_peterson_papers_cleaned.json',
+    'maps_of_meaning': 'maps_of_meaning_citations_openalex.json',
+    'maps_of_meaning_curated': 'maps_of_meaning_citations.json'
+}
+
+for dataset_name, filename in petersson_datasets_to_load.items():
+    try:
+        filepath = os.path.join(petersson_citations_dir, filename)
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+            # Handle both metadata+papers structure and simple papers structure
+            if isinstance(data, dict) and 'papers' in data:
+                PETERSON_DATASETS[dataset_name] = data['papers']
+            else:
+                PETERSON_DATASETS[dataset_name] = data
+        papers_count = len(PETERSON_DATASETS[dataset_name]) if isinstance(PETERSON_DATASETS[dataset_name], list) else 0
+        print(f"Loaded {papers_count} papers from {dataset_name}")
+    except FileNotFoundError:
+        print(f"Warning: {filename} not found in {petersson_citations_dir}")
+        PETERSON_DATASETS[dataset_name] = []
+    except Exception as e:
+        print(f"Error loading {filename}: {e}")
+        PETERSON_DATASETS[dataset_name] = []
 
 # Initialize contact microservices linked list
 contact_services = ContactLinkedList()
@@ -68,13 +159,11 @@ contact_services.append('collaboration', '/api/contact/collaboration', CONTACT_C
 
 # API Endpoints
 @app.route("/api/projects")
-@require_auth
 def api_projects():
     """Get all projects as JSON"""
     return jsonify(PROJECTS)
 
 @app.route("/api/projects/<project_id>")
-@require_auth
 def api_project_detail(project_id):
     """Get single project by ID as JSON"""
     project = next((p for p in PROJECTS if p["id"] == project_id), None)
@@ -83,25 +172,21 @@ def api_project_detail(project_id):
     return jsonify(project)
 
 @app.route("/api/publications")
-@require_auth
 def api_publications():
     """Get all publications as JSON"""
     return jsonify(PUBLICATIONS)
 
 @app.route("/api/about")
-@require_auth
 def api_about():
     """Get about page data as JSON"""
     return jsonify(ABOUT)
 
 @app.route("/api/contact")
-@require_auth
 def api_contact():
     """Get contact page data as JSON"""
     return jsonify(CONTACT)
 
 @app.route("/api/navigation")
-@require_auth
 def api_navigation():
     """Get navigation links as JSON"""
     return jsonify(NAVIGATION)
@@ -112,7 +197,6 @@ def nav_component():
     return render_template("nav_menu.html")
 
 @app.route("/api/reading-list")
-@require_auth
 def api_reading_list():
     """Get all reading list items"""
     return jsonify(READING_LIST)
@@ -144,7 +228,7 @@ def api_reading_list_add():
     READING_LIST.append(new_item)
     
     # Save to JSON file
-    filepath = os.path.join(os.path.dirname(__file__), 'data', 'reading_list.json')
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'reading_list.json')
     with open(filepath, 'w') as f:
         json.dump(READING_LIST, f, indent=2)
     
@@ -178,7 +262,7 @@ def api_reading_list_update(item_id):
         item['status'] = data['status']
     
     # Save to JSON file
-    filepath = os.path.join(os.path.dirname(__file__), 'data', 'reading_list.json')
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'reading_list.json')
     with open(filepath, 'w') as f:
         json.dump(READING_LIST, f, indent=2)
     
@@ -188,31 +272,26 @@ def api_reading_list_update(item_id):
     }), 200
 
 @app.route("/api/contact/research")
-@require_auth
 def api_contact_research():
     """Get research participation microservice data"""
     return jsonify(CONTACT_RESEARCH)
 
 @app.route("/api/contact/speaking")
-@require_auth
 def api_contact_speaking():
     """Get speaking engagements microservice data"""
     return jsonify(CONTACT_SPEAKING)
 
 @app.route("/api/contact/consulting")
-@require_auth
 def api_contact_consulting():
     """Get technical consulting microservice data"""
     return jsonify(CONTACT_CONSULTING)
 
 @app.route("/api/contact/collaboration")
-@require_auth
 def api_contact_collaboration():
     """Get collaboration microservice data"""
     return jsonify(CONTACT_COLLABORATION)
 
 @app.route("/api/contact/list")
-@require_auth
 def api_contact_list():
     """Get the linked list of all contact microservices"""
     return jsonify(contact_services.to_list())
@@ -238,6 +317,224 @@ def api_contact_add():
         },
         "total_services": len(contact_services)
     }), 201
+
+# Data Population Endpoints
+@app.route("/api/projects/<project_id>", methods=['DELETE'])
+@require_auth
+def api_project_delete(project_id):
+    """Delete a project by ID"""
+    global PROJECTS
+    
+    # Find and remove the project
+    project = next((p for p in PROJECTS if p['id'] == project_id), None)
+    if not project:
+        return jsonify({"error": "Project not found"}), 404
+    
+    PROJECTS = [p for p in PROJECTS if p['id'] != project_id]
+    
+    # Save to JSON file
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'projects.json')
+    with open(filepath, 'w') as f:
+        json.dump(PROJECTS, f, indent=2)
+    
+    return jsonify({
+        "message": "Project deleted successfully",
+        "deleted_project": project,
+        "remaining_projects": len(PROJECTS)
+    }), 200
+
+@app.route("/api/projects/populate", methods=['POST'])
+@require_auth
+def api_projects_populate():
+    """Populate/replace projects data"""
+    global PROJECTS
+    data = request.get_json()
+    
+    if not isinstance(data, list):
+        return jsonify({"error": "Data must be an array of projects"}), 400
+    
+    PROJECTS = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'projects.json')
+    with open(filepath, 'w') as f:
+        json.dump(PROJECTS, f, indent=2)
+    
+    return jsonify({
+        "message": "Projects populated successfully",
+        "total_projects": len(PROJECTS)
+    }), 200
+
+@app.route("/api/publications/populate", methods=['POST'])
+@require_auth
+def api_publications_populate():
+    """Populate/replace publications data"""
+    global PUBLICATIONS
+    data = request.get_json()
+    
+    if not isinstance(data, list):
+        return jsonify({"error": "Data must be an array of publications"}), 400
+    
+    PUBLICATIONS = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'publications.json')
+    with open(filepath, 'w') as f:
+        json.dump(PUBLICATIONS, f, indent=2)
+    
+    return jsonify({
+        "message": "Publications populated successfully",
+        "total_publications": len(PUBLICATIONS)
+    }), 200
+
+@app.route("/api/about/populate", methods=['POST'])
+@require_auth
+def api_about_populate():
+    """Populate/replace about page data"""
+    global ABOUT
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    ABOUT = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'about.json')
+    with open(filepath, 'w') as f:
+        json.dump(ABOUT, f, indent=2)
+    
+    return jsonify({
+        "message": "About page populated successfully"
+    }), 200
+
+@app.route("/api/contact/populate", methods=['POST'])
+@require_auth
+def api_contact_populate():
+    """Populate/replace contact page data"""
+    global CONTACT
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    CONTACT = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'contact.json')
+    with open(filepath, 'w') as f:
+        json.dump(CONTACT, f, indent=2)
+    
+    return jsonify({
+        "message": "Contact page populated successfully"
+    }), 200
+
+@app.route("/api/navigation/populate", methods=['POST'])
+@require_auth
+def api_navigation_populate():
+    """Populate/replace navigation data"""
+    global NAVIGATION
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    NAVIGATION = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'navigation.json')
+    with open(filepath, 'w') as f:
+        json.dump(NAVIGATION, f, indent=2)
+    
+    return jsonify({
+        "message": "Navigation populated successfully"
+    }), 200
+
+@app.route("/api/contact/research/populate", methods=['POST'])
+@require_auth
+def api_contact_research_populate():
+    """Populate/replace contact research microservice data"""
+    global CONTACT_RESEARCH
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    CONTACT_RESEARCH = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'contact_research.json')
+    with open(filepath, 'w') as f:
+        json.dump(CONTACT_RESEARCH, f, indent=2)
+    
+    # Update linked list
+    node = contact_services.get('research')
+    if node:
+        node.data = CONTACT_RESEARCH
+    
+    return jsonify({
+        "message": "Contact research populated successfully"
+    }), 200
+
+@app.route("/api/contact/speaking/populate", methods=['POST'])
+@require_auth
+def api_contact_speaking_populate():
+    """Populate/replace contact speaking microservice data"""
+    global CONTACT_SPEAKING
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    CONTACT_SPEAKING = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'contact_speaking.json')
+    with open(filepath, 'w') as f:
+        json.dump(CONTACT_SPEAKING, f, indent=2)
+    
+    # Update linked list
+    node = contact_services.get('speaking')
+    if node:
+        node.data = CONTACT_SPEAKING
+    
+    return jsonify({
+        "message": "Contact speaking populated successfully"
+    }), 200
+
+@app.route("/api/contact/consulting/populate", methods=['POST'])
+@require_auth
+def api_contact_consulting_populate():
+    """Populate/replace contact consulting microservice data"""
+    global CONTACT_CONSULTING
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    CONTACT_CONSULTING = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'contact_consulting.json')
+    with open(filepath, 'w') as f:
+        json.dump(CONTACT_CONSULTING, f, indent=2)
+    
+    # Update linked list
+    node = contact_services.get('consulting')
+    if node:
+        node.data = CONTACT_CONSULTING
+    
+    return jsonify({
+        "message": "Contact consulting populated successfully"
+    }), 200
+
+@app.route("/api/contact/collaboration/populate", methods=['POST'])
+@require_auth
+def api_contact_collaboration_populate():
+    """Populate/replace contact collaboration microservice data"""
+    global CONTACT_COLLABORATION
+    data = request.get_json()
+    
+    if not isinstance(data, dict):
+        return jsonify({"error": "Data must be an object"}), 400
+    
+    CONTACT_COLLABORATION = data
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'contact_collaboration.json')
+    with open(filepath, 'w') as f:
+        json.dump(CONTACT_COLLABORATION, f, indent=2)
+    
+    # Update linked list
+    node = contact_services.get('collaboration')
+    if node:
+        node.data = CONTACT_COLLABORATION
+    
+    return jsonify({
+        "message": "Contact collaboration populated successfully"
+    }), 200
 
 # Web Routes
 @app.route("/")
@@ -296,6 +593,16 @@ def counterterrorism():
 def reading():
     return render_template("reading_list.html")
 
+@app.route("/archimedes")
+def archimedes():
+    """Archimedes mental rotation research dashboard"""
+    return render_template("archimedes.html", papers=ARCHIMEDES_PAPERS)
+
+@app.route("/archimedes/dashboard")
+def archimedes_dashboard():
+    """Archimedes visualization dashboard"""
+    return render_template("archimedes_dashboard.html")
+
 @app.route("/resume")
 def resume():
     """Protected Palantir resume page with code validation"""
@@ -326,6 +633,109 @@ def resume_content():
     html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables', 'toc'])
     
     return jsonify({"content": html_content}), 200
+
+@app.route("/api/archimedes/papers")
+@require_auth
+def api_archimedes_papers():
+    """Get all mental rotation research papers (combined, deduplicated)"""
+    return jsonify(ARCHIMEDES_PAPERS)
+
+@app.route("/api/archimedes/datasets")
+@require_auth
+def api_archimedes_datasets():
+    """Get list of available datasets with counts"""
+    dataset_info = {
+        name: {
+            'count': len(papers),
+            'name': name.replace('_', ' ').title()
+        }
+        for name, papers in ARCHIMEDES_DATASETS.items()
+    }
+    dataset_info['all_papers'] = {
+        'count': len(ARCHIMEDES_PAPERS),
+        'name': 'All Papers (Deduplicated)'
+    }
+    return jsonify(dataset_info)
+
+@app.route("/api/archimedes/dataset/<dataset_name>")
+@require_auth
+def api_archimedes_dataset(dataset_name):
+    """Get papers from a specific dataset"""
+    if dataset_name not in ARCHIMEDES_DATASETS:
+        return jsonify({"error": "Dataset not found"}), 404
+    return jsonify(ARCHIMEDES_DATASETS[dataset_name])
+
+# Peterson Citation Network API Routes
+@app.route("/api/archimedes/peterson/network")
+@require_auth
+def api_peterson_network():
+    """Get Jordan Peterson citation network (cleaned, realistic statistics)"""
+    return jsonify({
+        "metadata": {
+            "description": "Jordan B. Peterson citation network with false positives removed",
+            "total_papers": len(PETERSON_DATASETS.get('peterson_network', [])),
+            "note": "Cleaned to remove methodology papers and false positives",
+            "average_citations": 1104,
+            "median_citations": 34
+        },
+        "papers": PETERSON_DATASETS.get('peterson_network', [])
+    })
+
+@app.route("/api/archimedes/peterson/papers")
+@require_auth
+def api_peterson_papers():
+    """Get verified Peterson authored papers"""
+    return jsonify({
+        "metadata": {
+            "description": "Papers with Jordan B. Peterson as author",
+            "total_papers": len(PETERSON_DATASETS.get('peterson_papers', [])),
+            "note": "Only 1 confirmed Peterson paper found in OpenAlex: goal-setting intervention study (2015)"
+        },
+        "papers": PETERSON_DATASETS.get('peterson_papers', [])
+    })
+
+@app.route("/api/archimedes/peterson/maps-of-meaning")
+@require_auth
+def api_maps_of_meaning():
+    """Get papers related to Maps of Meaning: The Architecture of Belief (1999)"""
+    return jsonify({
+        "metadata": {
+            "description": "Papers citing or related to Jordan Peterson's Maps of Meaning",
+            "total_papers": len(PETERSON_DATASETS.get('maps_of_meaning_curated', [])),
+            "subject": "Meaning-making, mythology, psychology, archetypal theory"
+        },
+        "papers": PETERSON_DATASETS.get('maps_of_meaning_curated', [])
+    })
+
+@app.route("/api/archimedes/peterson/citations")
+@require_auth
+def api_peterson_citations():
+    """Get all Peterson-related citations and datasets"""
+    return jsonify({
+        "metadata": {
+            "description": "Jordan B. Peterson citation network and related datasets",
+            "datasets": {
+                "peterson_network": len(PETERSON_DATASETS.get('peterson_network', [])),
+                "peterson_papers": len(PETERSON_DATASETS.get('peterson_papers', [])),
+                "maps_of_meaning": len(PETERSON_DATASETS.get('maps_of_meaning', [])),
+                "maps_of_meaning_curated": len(PETERSON_DATASETS.get('maps_of_meaning_curated', []))
+            }
+        },
+        "endpoints": {
+            "network": "/api/archimedes/peterson/network",
+            "papers": "/api/archimedes/peterson/papers",
+            "maps_of_meaning": "/api/archimedes/peterson/maps-of-meaning"
+        }
+    })
+
+@app.route("/archimedes/peterson")
+def archimedes_peterson():
+    """Peterson citations dashboard"""
+    return render_template(
+        "archimedes_peterson.html",
+        peterson_network=PETERSON_DATASETS.get('peterson_network', []),
+        maps_of_meaning=PETERSON_DATASETS.get('maps_of_meaning_curated', [])
+    )
 
 @app.route("/healthz")
 def healthz():

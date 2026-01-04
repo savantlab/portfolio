@@ -66,8 +66,9 @@
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
-        fetch('/api/contact/consulting')
+        authFetch('/api/contact/consulting')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('content').innerHTML = `

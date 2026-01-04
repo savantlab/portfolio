@@ -229,6 +229,7 @@
                     <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
                     <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
                     <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                    <a href="https://huggingface.co/SavantofIllusions" target="_blank">HuggingFace</a>
                 </div>
             </div>
             <div class="footer-copyright">
@@ -237,6 +238,7 @@
         </div>
     </footer>
 
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
         // Load projects from API
@@ -244,7 +246,7 @@
             const container = document.getElementById('projects-container');
             
             try {
-                const response = await fetch('/api/projects');
+                const response = await authFetch('/api/projects');
                 if (!response.ok) throw new Error('Failed to load projects');
                 
                 const projects = await response.json();
