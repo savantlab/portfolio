@@ -59,7 +59,8 @@ def main():
     project_images = [
         'mental-rotation-research.png',
         'savantlab.png',
-        'taxbudget.png'
+        'taxbudget.png',
+        'portfolio.png'
     ]
     
     print(f"Target dimensions: {TARGET_WIDTH}x{TARGET_HEIGHT} (16:9 ratio)")
