@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error | Savant Lab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-content">
+            <h1>500</h1>
+            <h2>Internal Server Error</h2>
+            <p>Something went wrong on our end. We're working to fix it.</p>
+            <div class="error-actions">
+                <a href="/" class="btn-primary">Go Home</a>
+                <a href="javascript:location.reload()" class="btn-secondary">Try Again</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 2rem;
+        }
+
+        .error-content {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+        }
+
+        .error-content h1 {
+            font-size: 8rem;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .error-content h2 {
+            font-size: 2rem;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+
+        .error-content p {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 2rem;
+            opacity: 0.9;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #f5576c;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+    </style>
+</body>
+</html>

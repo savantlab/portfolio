@@ -752,5 +752,16 @@ def archimedes_peterson():
 def healthz():
     return {"ok": True}
 
+# Error Handlers
+@app.errorhandler(404)
+def page_not_found(e):
+    """Handle 404 errors"""
+    return render_template("404.html"), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    """Handle 500 errors"""
+    return render_template("500.html"), 500
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
