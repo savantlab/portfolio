@@ -261,7 +261,6 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script>
         const accessModal = document.getElementById('access-modal');
         const resumeContent = document.getElementById('resume-content');
@@ -334,7 +333,9 @@
 
         async function loadResumeContent() {
             try {
-                const response = await authFetch('/api/resume/content');
+                const response = await fetch('/api/resume/content', {
+                    credentials: 'same-origin' // Include session cookie
+                });
                 
                 if (!response.ok) {
                     throw new Error('Failed to load resume content');
