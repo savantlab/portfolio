@@ -54,3 +54,4 @@ __pycache__/
 # Private documents
 palantir_echo_resume_pitch.md
 palantir_echo_resume_pitch.md
+static/images/*.png
