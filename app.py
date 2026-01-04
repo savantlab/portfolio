@@ -50,9 +50,12 @@ CONTACT = load_json_data('contact.json')
 NAVIGATION = load_json_data('navigation.json')
 READING_LIST = load_json_data('reading_list.json')
 
-# Load Archimedes mental rotation research data
+# Load Archimedes mental rotation research data from mental-rotation-research repository
 ARCHIMEDES_DATASETS = {}
-archimedes_dir = os.path.join(os.path.expanduser('~'), 'Archimedes')
+# Try mental-rotation-research repo first, fallback to Archimedes directory
+mental_rotation_repo = os.path.join(os.path.expanduser('~'), 'mental-rotation-research')
+archimedes_openalex_dir = os.path.join(mental_rotation_repo, 'data', 'archimedes_openalex')
+archimedes_fallback_dir = os.path.join(os.path.expanduser('~'), 'Archimedes')
 
 # Define datasets to load
 # These are citation networks from foundational mental rotation papers
@@ -64,12 +67,17 @@ datasets_to_load = {
 
 for dataset_name, filename in datasets_to_load.items():
     try:
-        filepath = os.path.join(archimedes_dir, filename)
+        # Try loading from mental-rotation-research repo first
+        filepath = os.path.join(archimedes_openalex_dir, filename)
+        if not os.path.exists(filepath):
+            # Fallback to Archimedes directory
+            filepath = os.path.join(archimedes_fallback_dir, filename)
+        
         with open(filepath, 'r') as f:
             ARCHIMEDES_DATASETS[dataset_name] = json.load(f)
         print(f"Loaded {len(ARCHIMEDES_DATASETS[dataset_name])} papers from {dataset_name}")
     except FileNotFoundError:
-        print(f"Warning: {filename} not found")
+        print(f"Warning: {filename} not found in mental-rotation-research or Archimedes directory")
         ARCHIMEDES_DATASETS[dataset_name] = []
 
 # Create combined dataset (removing duplicates by DOI/title)
