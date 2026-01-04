@@ -319,6 +319,30 @@ def api_contact_add():
     }), 201
 
 # Data Population Endpoints
+@app.route("/api/projects/<project_id>", methods=['DELETE'])
+@require_auth
+def api_project_delete(project_id):
+    """Delete a project by ID"""
+    global PROJECTS
+    
+    # Find and remove the project
+    project = next((p for p in PROJECTS if p['id'] == project_id), None)
+    if not project:
+        return jsonify({"error": "Project not found"}), 404
+    
+    PROJECTS = [p for p in PROJECTS if p['id'] != project_id]
+    
+    # Save to JSON file
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'projects.json')
+    with open(filepath, 'w') as f:
+        json.dump(PROJECTS, f, indent=2)
+    
+    return jsonify({
+        "message": "Project deleted successfully",
+        "deleted_project": project,
+        "remaining_projects": len(PROJECTS)
+    }), 200
+
 @app.route("/api/projects/populate", methods=['POST'])
 @require_auth
 def api_projects_populate():
