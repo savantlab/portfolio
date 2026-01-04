@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archimedes Dashboard - Contamination Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .nav-brand a {
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: #f1f5f9;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+
+        header .description {
+            font-size: 0.9rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .section-description {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .viz-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .viz-card:hover {
+            border-color: rgba(96, 165, 250, 0.3);
+            box-shadow: 0 10px 40px rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .viz-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+
+        .viz-card p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .viz-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .key-findings {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .key-findings h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+        }
+
+        .findings-list {
+            list-style: none;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .findings-list li {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .findings-list li::before {
+            content: "→";
+            color: #60a5fa;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .impact-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .impact-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fca5a5;
+            margin-bottom: 1rem;
+        }
+
+        .impact-box p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 4rem 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #60a5fa;
+            border: 2px solid #60a5fa;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 2rem 0;
+            margin-top: 6rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">SAVANTLAB</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/archimedes">Papers</a>
+                <a href="/archimedes/dashboard">Dashboard</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <h1>Archimedes Dashboard</h1>
+            <p class="subtitle">Contamination Analysis: Mental Rotation Citation Network</p>
+            <p class="description">
+                Systematic analysis of the downstream impact of unconstrained constructs in cognitive science
+            </p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="key-findings">
+            <h3>Key Findings</h3>
+            <ul class="findings-list">
+                <li><strong>8,600+ papers</strong> cite Shepard & Metzler (1971) and Vandenberg & Kuse (1978)</li>
+                <li><strong>50+ years</strong> of research built on insufficiently constrained constructs</li>
+                <li><strong>797 papers</strong> cite both foundational papers (overlap contamination)</li>
+                <li><strong>$200M-$750M</strong> estimated research cost (conservative)</li>
+                <li>Contamination spans cognitive psychology, education, neuroscience, gender studies</li>
+            </ul>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">Citation Network Analysis</h2>
+            <p class="section-description">
+                Visualization of citation patterns and temporal spread of the mental rotation construct through the scientific literature.
+            </p>
+            
+            <div class="viz-grid">
+                <div class="viz-card">
+                    <h3>Citation Distribution</h3>
+                    <p>Distribution of citations across the mental rotation literature, showing concentration patterns and highly-cited papers building on unconstrained foundations.</p>
+                    <img src="{{ url_for('static', filename='images/archimedes/citation_distribution.png') }}" alt="Citation Distribution">
+                </div>
+
+                <div class="viz-card">
+                    <h3>Contamination Timeline</h3>
+                    <p>Temporal spread of the mental rotation construct from 1971 to present, tracking how unconstrained concepts propagate through research communities.</p>
+                    <img src="{{ url_for('static', filename='images/archimedes/contamination_timeline.png') }}" alt="Contamination Timeline">
+                </div>
+
+                <div class="viz-card">
+                    <h3>Decade Analysis</h3>
+                    <p>Papers citing foundational mental rotation research by decade, showing acceleration in recent years despite unresolved conceptual issues.</p>
+                    <img src="{{ url_for('static', filename='images/archimedes/decade_analysis.png') }}" alt="Decade Analysis">
+                </div>
+
+                <div class="viz-card">
+                    <h3>Overlap Analysis</h3>
+                    <p>Papers citing both Shepard & Metzler (1971) and Vandenberg & Kuse (1978), representing compound contamination from multiple unconstrained sources.</p>
+                    <img src="{{ url_for('static', filename='images/archimedes/overlap_analysis.png') }}" alt="Overlap Analysis">
+                </div>
+            </div>
+        </section>
+
+        <div class="impact-box">
+            <h3>Estimated Research Impact</h3>
+            <p>
+                Conservative estimate: <strong>$200M-$750M</strong> in research funding directed toward studies using unconstrained mental rotation constructs as foundational concepts or primary measures. This includes papers where mental rotation is core to the research design, standardized tests built on the construct, and meta-analyses relying on invalid measures.
+            </p>
+            <p style="margin-top: 1rem;">
+                Extended network impact (2nd degree citations): <strong>80,000-400,000 papers</strong> potentially affected by propagation of unconstrained concepts through the literature.
+            </p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">NSF Funding Data Access Proposal</h2>
+            <p class="section-description">
+                To calculate precise financial impact, we need NSF award database access to match our 8,600+ identified papers to actual grant funding.
+            </p>
+
+            <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #60a5fa; margin-bottom: 1.5rem;">Executive Summary</h3>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">The Gap: No Systematic Tracking Infrastructure</h4>
+                    <p style="color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;">
+                        We can identify <strong>WHICH</strong> papers cite unconstrained mental rotation constructs (8,600+ papers from OpenAlex), but not <strong>HOW MUCH</strong> NSF funding supported this research. Current estimates ($200M-$750M) are based on assumed average costs per paper.
+                    </p>
+                    <div style="background: rgba(239, 68, 68, 0.05); border-left: 3px solid #ef4444; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                        <p style="color: #fca5a5; font-weight: 600; margin-bottom: 0.5rem;">Critical Infrastructure Failure:</p>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6;">
+                            There is <strong>no systematic way</strong> to track which publications resulted from which grants. Papers should acknowledge NSF awards, but enforcement is inconsistent. NSF-PAR (Public Access Repository) exists, but compliance is imperfect. The mental rotation case reveals we can identify thousands of contaminated papers but cannot easily determine taxpayer investment or notify affected researchers.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">NSF Data: What Exists vs. What We Need</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1rem;">
+                            <p style="color: #4ade80; font-weight: 600; margin-bottom: 0.75rem;">✓ Currently Available</p>
+                            <ul style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-left: 1.5rem;">
+                                <li><strong>NSF Award Search</strong> - All awards since 1989 (web + API)</li>
+                                <li>Award ID, PI, institution, amount, abstract, dates</li>
+                                <li><strong>NSF-PAR</strong> - Some publications→awards (2016+)</li>
+                                <li>Public access, no special permission needed</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 1rem;">
+                            <p style="color: #fca5a5; font-weight: 600; margin-bottom: 0.75rem;">✗ What's Missing</p>
+                            <ul style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-left: 1.5rem;">
+                                <li><strong>Comprehensive linkage</strong> - Publications→Awards for all time periods</li>
+                                <li>Historical data (pre-2016 publication tracking)</li>
+                                <li>Bulk export (API has rate limits)</li>
+                                <li>Institutional compliance reports (internal NSF systems)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                        <p style="color: #60a5fa; font-weight: 600; margin-bottom: 0.5rem;">Our Matching Strategy:</p>
+                        <ul style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-left: 1.5rem;">
+                            <li><strong>PI Name Matching:</strong> Match publication authors to NSF PI names + award dates</li>
+                            <li><strong>Abstract Search:</strong> Find grants mentioning "mental rotation" in abstracts</li>
+                            <li><strong>Acknowledgment Parsing:</strong> Extract NSF award numbers from paper acknowledgments</li>
+                            <li><strong>Cross-validation:</strong> Combine all three methods for comprehensive coverage</li>
+                        </ul>
+                        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.75rem; font-style: italic;">
+                            Estimated coverage: 60-80% of NSF-funded papers with available data
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Expected Outputs</h4>
+                    <ul style="color: #cbd5e1; line-height: 1.8; margin-left: 1.5rem;">
+                        <li><strong>Precise financial impact:</strong> Exact NSF investment in contaminated research</li>
+                        <li><strong>Field breakdown:</strong> Which directorates/programs funded affected studies</li>
+                        <li><strong>Temporal trends:</strong> When did funding peak? Is it still being awarded?</li>
+                        <li><strong>Institutional patterns:</strong> University-by-university accountability</li>
+                        <li><strong>Contamination severity:</strong> HIGH (primary construct) vs. MODERATE (background use)</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Why This Matters Now</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="background: rgba(96, 165, 250, 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid #60a5fa;">
+                            <strong style="color: #60a5fa;">AI Training Corpus</strong><br>
+                            <span style="color: #cbd5e1; font-size: 0.9rem;">Large language models are ingesting contaminated scientific literature NOW. Unconstrained constructs propagate to AI systems.</span>
+                        </div>
+                        <div style="background: rgba(96, 165, 250, 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid #60a5fa;">
+                            <strong style="color: #60a5fa;">Continued Funding</strong><br>
+                            <span style="color: #cbd5e1; font-size: 0.9rem;">Mental rotation research is still being funded. No systematic notification of upstream conceptual failures.</span>
+                        </div>
+                        <div style="background: rgba(96, 165, 250, 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid #60a5fa;">
+                            <strong style="color: #60a5fa;">Policy Impact</strong><br>
+                            <span style="color: #cbd5e1; font-size: 0.9rem;">Educational interventions and STEM assessments are being designed RIGHT NOW based on invalid measures.</span>
+                        </div>
+                        <div style="background: rgba(96, 165, 250, 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid #60a5fa;">
+                            <strong style="color: #60a5fa;">Scalable Model</strong><br>
+                            <span style="color: #cbd5e1; font-size: 0.9rem;">Mental rotation is ONE case. Hundreds of similar unconstrained constructs exist (fMRI methods, p-hacking). Archimedes demonstrates systematic correction is feasible.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #4ade80; margin-bottom: 1rem;">ROI Calculation</h4>
+                    <div style="color: #cbd5e1; line-height: 1.6;">
+                        <div style="font-size: 1.25rem; margin-bottom: 0.5rem;">
+                            <strong style="color: #4ade80;">1,538:1</strong> Return on Investment
+                        </div>
+                        <div style="font-size: 0.9rem;">
+                            • Mental rotation contamination: $200M (conservative)<br>
+                            • Cost to quantify impact: $130K<br>
+                            • <strong>Preventing ONE future contaminated grant pays for entire analysis</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Timeline</h4>
+                    <p style="color: #cbd5e1; line-height: 1.6;">
+                        <strong>10 months</strong> from NSF data access to complete analysis:<br>
+                        • 3 months: Data matching & classification<br>
+                        • 2 months: Financial impact calculation<br>
+                        • 2 months: Dashboard & visualization<br>
+                        • 3 months: Correction procedure development
+                    </p>
+                </div>
+
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 1.5rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #fca5a5; margin-bottom: 1rem;">The Ask</h4>
+                    <p style="color: #cbd5e1; line-height: 1.6; font-size: 1.05rem;">
+                        <strong style="color: #f1f5f9;">NSF Award Database Access</strong> to match 8,600+ identified papers to actual grant funding and calculate precise taxpayer investment in methodologically compromised research.
+                    </p>
+                    <p style="color: #cbd5e1; line-height: 1.6; margin-top: 1rem; font-style: italic;">
+                        "Give us access, and we'll show you the bill."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Gender Analysis</h2>
+            <p class="section-description">
+                Author gender distribution across the mental rotation citation network reveals important patterns in who is conducting research on spatial ability.
+            </p>
+
+            <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #60a5fa; margin-bottom: 1.5rem;">Author Demographics by Dataset</h3>
+                
+                <!-- Combined Stats -->
+                <div style="background: rgba(96, 165, 250, 0.05); border: 1px solid rgba(96, 165, 250, 0.2); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Combined Statistics (All Datasets)</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #60a5fa;">49.6%</div>
+                            <div style="color: #cbd5e1; font-size: 0.9rem;">Male Authors</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem;">12,270 of 24,728</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #a78bfa;">32.3%</div>
+                            <div style="color: #cbd5e1; font-size: 0.9rem;">Female Authors</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem;">7,979 of 24,728</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #94a3b8;">18.1%</div>
+                            <div style="color: #cbd5e1; font-size: 0.9rem;">Unknown</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem;">4,468 of 24,728</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dataset Breakdown -->
+                <div style="display: grid; gap: 1.5rem;">
+                    <!-- Shepard & Metzler -->
+                    <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 8px; padding: 1.5rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Shepard & Metzler (1971) Citations</h4>
+                        <div style="display: flex; gap: 2rem; align-items: center;">
+                            <div style="flex: 1;">
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">All Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">14,820 total</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 52.9%;" title="Male: 52.9%"></div>
+                                        <div style="background: #a78bfa; width: 28.1%;" title="Female: 28.1%"></div>
+                                        <div style="background: #94a3b8; width: 18.9%;" title="Unknown: 18.9%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 52.9%</span>
+                                        <span style="color: #a78bfa;">Female 28.1%</span>
+                                        <span style="color: #94a3b8;">Unknown 18.9%</span>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">First Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">5,983 papers</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 56.5%;" title="Male: 56.5%"></div>
+                                        <div style="background: #a78bfa; width: 26.9%;" title="Female: 26.9%"></div>
+                                        <div style="background: #94a3b8; width: 16.6%;" title="Unknown: 16.6%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 56.5%</span>
+                                        <span style="color: #a78bfa;">Female 26.9%</span>
+                                        <span style="color: #94a3b8;">Unknown 16.6%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vandenberg & Kuse -->
+                    <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 8px; padding: 1.5rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Vandenberg & Kuse (1978) Citations</h4>
+                        <div style="display: flex; gap: 2rem; align-items: center;">
+                            <div style="flex: 1;">
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">All Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">7,626 total</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 44.1%;" title="Male: 44.1%"></div>
+                                        <div style="background: #a78bfa; width: 38.6%;" title="Female: 38.6%"></div>
+                                        <div style="background: #94a3b8; width: 17.2%;" title="Unknown: 17.2%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 44.1%</span>
+                                        <span style="color: #a78bfa;">Female 38.6%</span>
+                                        <span style="color: #94a3b8;">Unknown 17.2%</span>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">First Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">2,526 papers</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 42.0%;" title="Male: 42.0%"></div>
+                                        <div style="background: #a78bfa; width: 40.5%;" title="Female: 40.5%"></div>
+                                        <div style="background: #94a3b8; width: 17.6%;" title="Unknown: 17.6%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 42.0%</span>
+                                        <span style="color: #a78bfa;">Female 40.5%</span>
+                                        <span style="color: #94a3b8;">Unknown 17.6%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overlap -->
+                    <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 8px; padding: 1.5rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem;">Overlap Citations (Both Papers)</h4>
+                        <div style="display: flex; gap: 2rem; align-items: center;">
+                            <div style="flex: 1;">
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">All Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">2,282 total</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 46.4%;" title="Male: 46.4%"></div>
+                                        <div style="background: #a78bfa; width: 37.9%;" title="Female: 37.9%"></div>
+                                        <div style="background: #94a3b8; width: 15.6%;" title="Unknown: 15.6%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 46.4%</span>
+                                        <span style="color: #a78bfa;">Female 37.9%</span>
+                                        <span style="color: #94a3b8;">Unknown 15.6%</span>
+                                    </div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 1rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="color: #cbd5e1; font-size: 0.9rem;">First Authors</span>
+                                        <span style="color: #94a3b8; font-size: 0.85rem;">793 papers</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.25rem; height: 24px; border-radius: 4px; overflow: hidden;">
+                                        <div style="background: #60a5fa; width: 46.0%;" title="Male: 46.0%"></div>
+                                        <div style="background: #a78bfa; width: 37.6%;" title="Female: 37.6%"></div>
+                                        <div style="background: #94a3b8; width: 16.4%;" title="Unknown: 16.4%"></div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                                        <span style="color: #60a5fa;">Male 46.0%</span>
+                                        <span style="color: #a78bfa;">Female 37.6%</span>
+                                        <span style="color: #94a3b8;">Unknown 16.4%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Finding -->
+                <div style="background: rgba(167, 139, 250, 0.1); border: 1px solid rgba(167, 139, 250, 0.3); border-left: 4px solid #a78bfa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 600; color: #a78bfa; margin-bottom: 1rem;">Key Finding: Gender Balance Varies by Research Focus</h4>
+                    <p style="color: #cbd5e1; line-height: 1.6;">
+                        The Vandenberg & Kuse (1978) citation network shows nearly <strong>equal male/female first authorship</strong> (42% vs. 40.5%), significantly more balanced than Shepard & Metzler citations (56.5% vs. 26.9%). This pattern reflects the role of the Mental Rotation Test in gender differences research and STEM ability assessment—a field that has attracted more female researchers studying spatial cognition.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="cta-buttons">
+            <a href="/archimedes" class="btn btn-primary">Explore Papers</a>
+            <a href="/contact" class="btn btn-secondary">Contact for Collaboration</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Savantlab. Project Archimedes - Surgical Tool for Correcting the Scientific Record
+    </footer>
+</body>
+</html>
