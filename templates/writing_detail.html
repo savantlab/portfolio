@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Savantlab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .reader-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .reader-header {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .reader-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: #f1f5f9;
+        }
+        
+        .reader-header .subtitle {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reader-header .author {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        .reader-content {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 3rem;
+            min-height: 60vh;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+        
+        .reader-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .reader-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .btn {
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover:not(:disabled) {
+            background: rgba(96, 165, 250, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .page-info {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .reader-container {
+                padding: 0 1rem 2rem;
+            }
+            
+            .reader-content {
+                padding: 2rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .reader-header h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'nav_menu.html' %}
+
+    <div class="reader-container">
+        <div class="reader-header">
+            <h1>{{ post.title }}</h1>
+            {% if post.subtitle %}
+            <p class="subtitle">{{ post.subtitle }}</p>
+            {% endif %}
+            <p class="author">by {{ post.author }}</p>
+        </div>
+
+        <div class="reader-content" id="reader-content">
+            <!-- Content populated by JavaScript -->
+        </div>
+
+        <div class="reader-controls">
+            <button class="btn" id="prev-btn" onclick="prevPage()">← Previous</button>
+            <span class="page-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+            <button class="btn" id="next-btn" onclick="nextPage()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        const fullText = {{ post.text|tojson }};
+        let currentPage = 1;
+        let totalPages = 1;
+        const wordsPerPage = 600; // Adjust for reading comfort
+        
+        function splitTextIntoPages(text) {
+            const words = text.split(/\s+/);
+            const pages = [];
+            
+            for (let i = 0; i < words.length; i += wordsPerPage) {
+                const pageWords = words.slice(i, i + wordsPerPage);
+                pages.push(pageWords.join(' '));
+            }
+            
+            return pages.length > 0 ? pages : [''];
+        }
+        
+        const pages = splitTextIntoPages(fullText);
+        totalPages = pages.length;
+        
+        function renderPage() {
+            const content = document.getElementById('reader-content');
+            const pageText = pages[currentPage - 1];
+            
+            // Convert line breaks to paragraphs
+            const paragraphs = pageText.split('\\n').filter(p => p.trim());
+            content.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+            
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage();
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextPage();
+            if (e.key === 'ArrowLeft') prevPage();
+        });
+        
+        // Initial render
+        renderPage();
+    </script>
+</body>
+</html>

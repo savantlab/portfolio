@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # Ephemeral Ollama - starts fresh each time
+  ollama-fresh:
+    image: ollama/ollama:latest
+    container_name: peterson-ollama-fresh
+    ports:
+      - "11435:11434"  # Different port to avoid conflict
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    # No volume mount = fresh start every time
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Flask API (persistent)
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: peterson-flask
+    ports:
+      - "5002:5001"  # Different port for isolation
+    volumes:
+      - ./flask_data:/app/flask_data:ro  # Read-only
+      - ./.env:/app/.env:ro
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+    command: gunicorn -w 2 -b 0.0.0.0:5001 app:app
+
+  # Automated analysis agent
+  analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile.analyzer
+    container_name: peterson-analyzer
+    depends_on:
+      ollama-fresh:
+        condition: service_healthy
+      flask:
+        condition: service_started
+    environment:
+      - FLASK_URL=http://flask:5001
+      - OLLAMA_URL=http://ollama-fresh:11434
+      - OLLAMA_MODEL=gemma3:latest
+    volumes:
+      - ./analysis_output:/output  # Store analysis results
+      - ./.env:/app/.env:ro
+    restart: "no"
+
+networks:
+  default:
+    name: peterson-analysis-network

@@ -1,0 +1,42 @@
+[
+  {
+    "video_id": "IsXdO5RD_NU",
+    "attempt": 1,
+    "timestamp": "2026-01-08T16:59:02.604311",
+    "status": "ip_blocked",
+    "error_type": "IP_BLOCKED",
+    "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=IsXdO5RD_NU! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the"
+  },
+  {
+    "video_id": "epoRGnCWyXw",
+    "attempt": 2,
+    "timestamp": "2026-01-08T16:59:05.715431",
+    "status": "ip_blocked",
+    "error_type": "IP_BLOCKED",
+    "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=epoRGnCWyXw! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the"
+  },
+  {
+    "video_id": "h69SwIn-bA4",
+    "attempt": 3,
+    "timestamp": "2026-01-08T16:59:08.999251",
+    "status": "ip_blocked",
+    "error_type": "IP_BLOCKED",
+    "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=h69SwIn-bA4! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the"
+  },
+  {
+    "video_id": "Nn1Np7mrFck",
+    "attempt": 4,
+    "timestamp": "2026-01-08T16:59:12.513487",
+    "status": "ip_blocked",
+    "error_type": "IP_BLOCKED",
+    "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=Nn1Np7mrFck! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the"
+  },
+  {
+    "video_id": "r9ZCYC1nsvc",
+    "attempt": 5,
+    "timestamp": "2026-01-08T16:59:16.366019",
+    "status": "ip_blocked",
+    "error_type": "IP_BLOCKED",
+    "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=r9ZCYC1nsvc! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the"
+  }
+]
