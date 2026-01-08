@@ -198,5 +198,15 @@
       "Test Category"
     ],
     "status": "To Read"
+  },
+  {
+    "id": 21,
+    "title": "Test Book",
+    "description": "Test description",
+    "url": "https://example.com",
+    "categories": [
+      "Test Category"
+    ],
+    "status": "To Read"
   }
 ]
