@@ -865,6 +865,19 @@ def gorgon_peterson_podcasts():
         "episodes": episodes
     })
 
+@app.route("/gorgon/peterson-basic-stats")
+def gorgon_peterson_stats():
+    """Password-protected Peterson podcast statistics dashboard (Project Gorgon)"""
+    password = request.args.get('password') or request.headers.get('X-Gorgon-Password')
+    correct_password = os.getenv('GORGON_PASSWORD', 'ARCHIMEDES2026')
+    
+    if password != correct_password:
+        return "<html><body style='background:#0a0a0a;color:#e0e0e0;font-family:monospace;padding:40px;'><h1>🔒 Access Denied</h1><p>Valid password required. Use ?password=YOUR_PASSWORD</p></body></html>", 403
+    
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'peterson-stats.html')
+    with open(filepath, 'r') as f:
+        return f.read()
+
 @app.route("/healthz")
 def healthz():
     return {"ok": True}
