@@ -6,9 +6,22 @@ Usage: python generate_resume_pdf.py
 import markdown
 import subprocess
 import os
+import sys
+
+# Check if weasyprint is available
+try:
+    from weasyprint import HTML
+    WEASYPRINT_AVAILABLE = True
+except ImportError:
+    WEASYPRINT_AVAILABLE = False
 
 # Read markdown file
-with open('palantir_echo_resume_pitch.md', 'r') as f:
+md_file = 'resume.md'
+if not os.path.exists(md_file):
+    print(f"Error: {md_file} not found")
+    sys.exit(1)
+
+with open(md_file, 'r') as f:
     md_content = f.read()
 
 # Convert to HTML with styling
@@ -97,13 +110,28 @@ styled_html = f"""
 """
 
 # Save HTML temporarily
-with open('temp_resume.html', 'w') as f:
+html_file = 'temp_resume.html'
+pdf_file = 'resume.pdf'
+
+with open(html_file, 'w') as f:
     f.write(styled_html)
 
-print("HTML generated: temp_resume.html")
-print("\nTo generate PDF, run one of:")
-print("  1. Open temp_resume.html in browser and print to PDF")
-print("  2. Install wkhtmltopdf: brew install wkhtmltopdf")
-print("     Then run: wkhtmltopdf temp_resume.html stephanie_king_resume.pdf")
-print("  3. Install weasyprint: pip install weasyprint")
-print("     Then run: weasyprint temp_resume.html stephanie_king_resume.pdf")
+print(f"✓ HTML generated: {html_file}")
+
+# Try to generate PDF automatically
+if WEASYPRINT_AVAILABLE:
+    try:
+        HTML(string=styled_html).write_pdf(pdf_file)
+        print(f"✓ PDF generated: {pdf_file}")
+        file_size = os.path.getsize(pdf_file) / 1024
+        print(f"  Size: {file_size:.1f} KB")
+    except Exception as e:
+        print(f"Error generating PDF with weasyprint: {e}")
+        print("\nFallback: Open temp_resume.html in browser and print to PDF")
+else:
+    print("\nTo generate PDF automatically, install weasyprint:")
+    print("  pip install weasyprint")
+    print("\nOr generate manually:")
+    print(f"  1. Open {html_file} in browser and print to PDF")
+    print(f"  2. Install wkhtmltopdf: brew install wkhtmltopdf")
+    print(f"     Then run: wkhtmltopdf {html_file} {pdf_file}")
