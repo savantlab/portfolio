@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request, session, send_file
 import os
 import json
 from functools import wraps
@@ -877,6 +877,21 @@ def gorgon_peterson_stats():
     filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'peterson-stats.html')
     with open(filepath, 'r') as f:
         return f.read()
+
+@app.route("/gorgon/resume.pdf")
+def gorgon_resume_pdf():
+    """Password-protected resume PDF (Project Gorgon)"""
+    password = request.args.get('password') or request.headers.get('X-Gorgon-Password')
+    correct_password = os.getenv('GORGON_PASSWORD', 'ARCHIMEDES2026')
+    
+    if password != correct_password:
+        return "<html><body style='background:#0a0a0a;color:#e0e0e0;font-family:monospace;padding:40px;'><h1>🔒 Access Denied</h1><p>Valid password required. Use ?password=YOUR_PASSWORD</p></body></html>", 403
+    
+    filepath = os.path.join(os.path.dirname(__file__), 'resume.pdf')
+    if not os.path.exists(filepath):
+        return "<html><body style='background:#0a0a0a;color:#e0e0e0;font-family:monospace;padding:40px;'><h1>⚠️ Resume Not Found</h1><p>Run 'python generate_resume_pdf.py' to generate resume.pdf</p></body></html>", 404
+    
+    return send_file(filepath, mimetype='application/pdf', as_attachment=False, download_name='resume.pdf')
 
 @app.route("/healthz")
 def healthz():
