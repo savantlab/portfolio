@@ -1,0 +1,8 @@
+{
+  "links": [
+    {"label": "Home", "url": "/", "external": false},
+    {"label": "Projects", "url": "/#projects", "external": false},
+    {"label": "About", "url": "/about", "external": false},
+    {"label": "Contact", "url": "/contact", "external": false}
+  ]
+}

@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy agent scripts
+COPY podcast_ai_agent.py .
+COPY .env .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python", "podcast_ai_agent.py", "--api-url", "http://flask:5001", "--ollama-url", "http://ollama:11434"]

@@ -49,6 +49,8 @@ ABOUT = load_json_data('about.json')
 CONTACT = load_json_data('contact.json')
 NAVIGATION = load_json_data('navigation.json')
 READING_LIST = load_json_data('reading_list.json')
+WRITING = load_json_data('writing.json')
+PODCASTS = load_json_data('podcasts.json')
 
 # Load Archimedes mental rotation research data from mental-rotation-research repository
 ARCHIMEDES_DATASETS = {}
@@ -198,6 +200,96 @@ def api_contact():
 def api_navigation():
     """Get navigation links as JSON"""
     return jsonify(NAVIGATION)
+
+@app.route("/api/podcasts")
+def api_podcasts():
+    """Get all podcast episodes with transcripts"""
+    return jsonify(PODCASTS)
+
+@app.route("/api/podcasts/<podcast_id>")
+def api_podcast_detail(podcast_id):
+    """Get single podcast episode by ID"""
+    podcast = next((p for p in PODCASTS if p["id"] == podcast_id), None)
+    if not podcast:
+        return jsonify({"error": "Podcast not found"}), 404
+    return jsonify(podcast)
+
+# Writing API and pages
+@app.route("/api/writing")
+def api_writing_list():
+    """Get list of writing samples"""
+    return jsonify(WRITING)
+
+@app.route("/api/writing/<post_id>")
+def api_writing_detail(post_id):
+    post = next((w for w in WRITING if w["id"] == post_id), None)
+    if not post:
+        return jsonify({"error": "Writing sample not found"}), 404
+    return jsonify(post)
+
+@app.route("/api/writing/upload", methods=['POST'])
+@require_auth
+def api_writing_upload():
+    """Upload a .txt file as a new writing sample (multipart/form-data)"""
+    file = request.files.get('file')
+    title = request.form.get('title', '').strip() or 'Untitled'
+    subtitle = request.form.get('subtitle', '').strip()
+    tags = request.form.get('tags', '')
+    tags_list = [t.strip() for t in tags.split(',') if t.strip()]
+
+    if not file or not file.filename.lower().endswith('.txt'):
+        return jsonify({"error": "A .txt file is required under form field 'file'"}), 400
+
+    # Create ID slug
+    slug = title.lower().replace(' ', '-').replace('/', '-').replace("'", "")
+    idx = 1
+    base_slug = slug or 'writing'
+    existing_ids = {w['id'] for w in WRITING}
+    while slug in existing_ids:
+        idx += 1
+        slug = f"{base_slug}-{idx}"
+
+    # Save file into flask_data/writing_files/
+    files_dir = os.path.join(os.path.dirname(__file__), 'flask_data', 'writing_files')
+    os.makedirs(files_dir, exist_ok=True)
+    filepath = os.path.join(files_dir, f"{slug}.txt")
+    file.save(filepath)
+
+    # Read text content
+    with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+        text = f.read()
+
+    # Build record
+    new_post = {
+        'id': slug,
+        'title': title,
+        'subtitle': subtitle,
+        'status': 'In Development',
+        'tags': tags_list,
+        'author': 'Stephanie King',
+        'created': None,
+        'description': subtitle or title,
+        'text': text
+    }
+
+    # Update in-memory and persist
+    WRITING.append(new_post)
+    outpath = os.path.join(os.path.dirname(__file__), 'flask_data', 'writing.json')
+    with open(outpath, 'w') as f:
+        json.dump(WRITING, f, indent=2)
+
+    return jsonify({"message": "Writing uploaded", "id": slug}), 201
+
+@app.route("/writing")
+def writing_list_page():
+    return render_template("writing.html", writing=WRITING)
+
+@app.route("/writing/<post_id>")
+def writing_detail_page(post_id):
+    post = next((w for w in WRITING if w["id"] == post_id), None)
+    if not post:
+        return "Writing sample not found", 404
+    return render_template("writing_detail.html", post=post)
 
 @app.route("/nav")
 def nav_component():
@@ -747,6 +839,31 @@ def archimedes_peterson():
         peterson_network=PETERSON_DATASETS.get('peterson_network', []),
         maps_of_meaning=PETERSON_DATASETS.get('maps_of_meaning_curated', [])
     )
+
+# Project Gorgon: Peterson Podcast Episodes
+@app.route("/gorgon/peterson-podcasts.json")
+def gorgon_peterson_podcasts():
+    """Password-protected Peterson podcast episode list (Project Gorgon)"""
+    password = request.args.get('password') or request.headers.get('X-Gorgon-Password')
+    correct_password = os.getenv('GORGON_PASSWORD', 'ARCHIMEDES2026')
+    
+    if password != correct_password:
+        return jsonify({
+            "error": "Access denied",
+            "message": "Valid password required",
+            "hint": "Use ?password=YOUR_PASSWORD or X-Gorgon-Password header"
+        }), 403
+    
+    filepath = os.path.join(os.path.dirname(__file__), 'flask_data', 'peterson-podcasts.json')
+    with open(filepath, 'r') as f:
+        episodes = json.load(f)
+    
+    return jsonify({
+        "project": "GORGON",
+        "description": "Peterson podcast episode URLs for transcript analysis",
+        "total_episodes": len(episodes),
+        "episodes": episodes
+    })
 
 @app.route("/healthz")
 def healthz():

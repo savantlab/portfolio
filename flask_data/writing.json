@@ -1,0 +1,24 @@
+[
+  {
+    "id": "surreal-rotation-sample",
+    "title": "Surreal Rotation Sample",
+    "subtitle": "Lorem ipsum dolor sit amet",
+    "status": "In Development",
+    "tags": ["surreal", "cognition"],
+    "author": "Stephanie King",
+    "created": null,
+    "description": "Sample long-form writing with fake latin content.",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel eros nec metus hendrerit convallis. Sed ut risus nec lectus hendrerit ultrices. Proin id mattis nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras at convallis metus. Integer sed dignissim nisl. Praesent vel arcu a est luctus laoreet. Vivamus at augue nec dolor cursus elementum. Etiam porta, massa non commodo ullamcorper, turpis nunc faucibus nibh, sed sodales lectus sem et sapien.\n\nCurabitur fermentum, urna non iaculis rhoncus, tellus lacus facilisis mauris, non vulputate nisi lorem at est. Integer posuere sem nec velit pretium, at laoreet risus condimentum. Suspendisse at sagittis mi, vitae luctus lorem. Mauris dapibus lorem a dapibus ultricies. Ut eget neque tincidunt, gravida nibh non, tempor nisl. Nam non euismod lacus.\n\nDuis feugiat arcu vitae mi iaculis, non ultricies dui pulvinar. Sed placerat lectus ac dapibus hendrerit. Vivamus non urna maximus, tristique lectus a, gravida ligula. Integer vestibulum, lorem quis vulputate interdum, nibh risus elementum tortor, at interdum justo felis eu neque. Mauris luctus porta orci, eu imperdiet justo varius non.\n\nPhasellus efficitur gravida lorem, in tincidunt nunc semper ac. Integer id mi sed urna posuere porta. Nullam et risus non ipsum aliquet ultrices. Vivamus cursus, massa ac congue aliquet, nisi arcu tristique nisi, eu interdum erat justo non nisl. Vestibulum non lacinia tortor.\n\nEtiam posuere sem id tincidunt gravida. Aliquam aliquam, velit id porttitor porttitor, mi nisl dictum mi, non varius nisl nunc sed nisl. Aenean at arcu sit amet mi fermentum tincidunt. Curabitur at ipsum vestibulum, efficitur nibh sed, sollicitudin est. Nam tempor felis sed mi sagittis, a rhoncus ligula sagittis.\n\nPraesent laoreet, nibh at bibendum congue, dolor sem dictum erat, non accumsan lorem turpis vitae purus. Vivamus semper suscipit mi, vitae dapibus arcu euismod a. Quisque nec risus a lectus fermentum tristique. Integer a accumsan libero.\n\nSuspendisse potenti. Integer viverra vel odio sit amet placerat. Pellentesque venenatis, sem at finibus sodales, lacus nulla hendrerit ipsum, a convallis enim lacus sit amet ligula. Maecenas et tellus vel erat efficitur mollis.\n\nDonec ornare mi vel pharetra luctus. Integer id nisl sit amet arcu consequat malesuada. Aenean iaculis mi et lectus consequat, sit amet dapibus nibh luctus. Vestibulum a tincidunt risus, et placerat sem."
+  },
+  {
+    "id": "peterson-effect-sample",
+    "title": "The Peterson Effect (Sample)",
+    "subtitle": "Lorem ipsum for structure",
+    "status": "In Development",
+    "tags": ["nlp", "rhetoric"],
+    "author": "Stephanie King",
+    "created": null,
+    "description": "Sample long-form writing with fake latin content.",
+    "text": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\nUt enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.\n\nVel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.\n\nEt harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.\n\nOmnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.\n\nItaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.\n\nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur."
+  }
+]

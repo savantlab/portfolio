@@ -1,0 +1,175 @@
+[
+  {
+    "description": "Single product e-comm cart with email 2FA by default  Built with Python, JavaScript, HTML.",
+    "github": "https://github.com/savantlab/digital-product-system",
+    "highlights": [
+      "Updated: 2025-12-25",
+      "Language: Python"
+    ],
+    "id": "digital-product-system",
+    "image": null,
+    "status": "Active",
+    "subtitle": "Single product e-comm cart with email 2FA by default ",
+    "tech": [
+      "Python",
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Dockerfile"
+    ],
+    "title": "Digital Product System"
+  },
+  {
+    "description": "Contains prompt rules and instructions as well as a Selenium startup script for driving development ",
+    "github": "https://github.com/savantlab/full-stack-setup",
+    "highlights": [
+      "Updated: 2025-12-25",
+      "Language: Shell"
+    ],
+    "id": "full-stack-setup",
+    "image": null,
+    "status": "Active",
+    "subtitle": "Contains prompt rules and instructions as well as a Selenium startup script for driving development ",
+    "tech": [
+      "Shell"
+    ],
+    "title": "Full Stack Setup"
+  },
+  {
+    "description": "Automated data science pipeline featuring: async web scraping, ML analysis (TF-IDF, topic modeling, clustering), and citation network tracking. Includes Archimedes dataset: 6,581 unique papers (1972+) from Shepard & Metzler (1971) and Vandenberg & Kuse (1978) citation networks via OpenAlex API",
+    "github": "https://github.com/savantlab/mental-rotation-research",
+    "highlights": [
+      "Updated: 2025-11-29",
+      "Language: Python",
+      "Frameworks: Pandas, NumPy, Requests",
+      "6,581 papers from OpenAlex",
+      "Citation network analysis",
+      "ML pipeline with topic modeling",
+      "Contamination detection system"
+    ],
+    "id": "mental-rotation-research",
+    "image": "/static/images/mental-rotation-research.png",
+    "status": "Active",
+    "subtitle": "ML-powered research pipeline with OpenAlex citation network analysis (6,581 papers from foundational mental rotation literature)",
+    "tech": [
+      "Python",
+      "Jupyter Notebook",
+      "HTML",
+      "Shell"
+    ],
+    "title": "Mental Rotation Research",
+    "frameworks": [
+      "Pandas",
+      "NumPy",
+      "Requests",
+      "Scikit-learn"
+    ]
+  },
+  {
+    "description": "NLP and network analysis examining the 75% conceptual overlap between Jordan Peterson's PragerU video \"Who Is Teaching Your Kids?\" and Anders Breivik's terrorist manifesto. Uses TF-IDF vectorization, n-gram analysis, and network co-occurrence to reveal rhetorical strategies and ideological transmission patterns.",
+    "github": "https://github.com/savantlab/nlp-counterterrorism-peterson",
+    "highlights": [
+      "Updated: 2025-12-14",
+      "Language: Jupyter Notebook",
+      "75% conceptual overlap detected",
+      "16% semantic similarity (TF-IDF)",
+      "Network co-occurrence analysis",
+      "Book manuscript in progress"
+    ],
+    "id": "nlp-counterterrorism-peterson",
+    "image": null,
+    "status": "Active",
+    "subtitle": "Computational analysis of ideological rhetoric and radicalization pathways",
+    "tech": [
+      "Jupyter Notebook",
+      "Python"
+    ],
+    "title": "Counterterrorism NLP Analysis"
+  },
+  {
+    "description": "The portfolio app of Stephanie King  Built with HTML, Python, CSS.",
+    "github": "https://github.com/savantlab/portfolio",
+    "highlights": [
+      "Updated: 2025-12-27",
+      "Language: HTML",
+      "Frameworks: Flask, Gunicorn, Pytest"
+    ],
+    "id": "portfolio",
+    "image": "/static/images/portfolio.png",
+    "status": "Active",
+    "subtitle": "The portfolio app of Stephanie King ",
+    "tech": [
+      "HTML",
+      "Python",
+      "CSS",
+      "Shell",
+      "JavaScript"
+    ],
+    "title": "Portfolio",
+    "frameworks": [
+      "Flask",
+      "Gunicorn",
+      "Pytest"
+    ]
+  },
+  {
+    "description": "The drawing data analysis for surreal mental rotation tasks Built with Python, Swift, JavaScript.",
+    "github": "https://github.com/savantlab/savantlab",
+    "highlights": [
+      "Updated: 2025-11-22",
+      "Language: Python"
+    ],
+    "id": "savantlab",
+    "image": "/static/images/savantlab.png",
+    "status": "Active",
+    "subtitle": "The drawing data analysis for surreal mental rotation tasks",
+    "tech": [
+      "Python",
+      "Swift",
+      "JavaScript",
+      "Jupyter Notebook",
+      "Shell",
+      "HTML"
+    ],
+    "title": "Savantlab"
+  },
+  {
+    "description": "The web app and API for savantofillusions.com - an E-Comm app for a Surrealist ",
+    "github": "https://github.com/savantlab/savantofillusions",
+    "highlights": [
+      "Updated: 2025-11-23",
+      "Language: Unknown"
+    ],
+    "id": "savantofillusions",
+    "image": null,
+    "status": "Active",
+    "subtitle": "The web app and API for savantofillusions.com - an E-Comm app for a Surrealist ",
+    "tech": [],
+    "title": "Savantofillusions"
+  },
+  {
+    "description": "GitHub Repository Built with Python, HTML, Shell.",
+    "github": "https://github.com/savantlab/taxbudget",
+    "highlights": [
+      "Updated: 2025-12-20",
+      "Language: Python",
+      "Frameworks: Django, Celery, Redis"
+    ],
+    "id": "taxbudget",
+    "image": "/static/images/taxbudget.png",
+    "status": "Active",
+    "subtitle": "GitHub Repository",
+    "tech": [
+      "Python",
+      "HTML",
+      "Shell",
+      "Dockerfile"
+    ],
+    "title": "Taxbudget",
+    "frameworks": [
+      "Django",
+      "Celery",
+      "Redis"
+    ]
+  }
+]

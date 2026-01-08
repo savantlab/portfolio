@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example - Using Navigation Microservice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation microservice loads here -->
+    <div id="nav-container"></div>
+
+    <section style="padding: 120px 0 80px;">
+        <div class="container">
+            <h1>Example Page</h1>
+            <p>This page demonstrates loading the navigation menu from the microservice endpoint.</p>
+            
+            <div style="background: var(--bg-secondary); padding: 32px; border-radius: 12px; margin-top: 32px;">
+                <h2 style="margin-bottom: 16px;">How it works:</h2>
+                <ol style="line-height: 2;">
+                    <li>Navigation menu is served from <code>/nav</code> endpoint</li>
+                    <li>JavaScript fetches and injects the HTML component</li>
+                    <li>The component includes mobile-responsive hamburger menu</li>
+                    <li>All pages can load the same navigation microservice</li>
+                </ol>
+                
+                <div style="margin-top: 24px; padding: 16px; background: white; border-radius: 8px; border: 1px solid var(--border);">
+                    <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">API Endpoints:</h3>
+                    <ul style="font-family: monospace; font-size: 13px; list-style: none; padding: 0;">
+                        <li style="margin-bottom: 8px;">→ <strong>GET /nav</strong> - HTML component</li>
+                        <li>→ <strong>GET /api/navigation</strong> - JSON data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">STEPHANIE KING</div>
+                <div class="footer-links">
+                    <a href="https://x.com/surrealsavant" target="_blank">X/Twitter</a>
+                    <a href="https://instagram.com/surrealsavantgenius" target="_blank">Instagram</a>
+                    <a href="https://github.com/savantlab" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Savantlab. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load navigation microservice
+        fetch('/nav')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('nav-container').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading navigation:', error);
+            });
+    </script>
+</body>
+</html>

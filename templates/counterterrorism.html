@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="/">SAVANTLAB</a>
-            </div>
-            <div class="nav-links">
-                <a href="/#research">Research</a>
-                <a href="/#projects">Projects</a>
-                <a href="/counterterrorism">Counterterrorism</a>
-                <a href="/journal">Journal</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-            </div>
-        </div>
-    </nav>
+    {% include 'nav_menu.html' %}
 
     <section style="padding: 80px 0;">
         <div class="container">
