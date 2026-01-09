@@ -58,3 +58,7 @@ static/images/*.png
 portfolio-cli.sh
 resume.pdf
 temp_resume.html
+
+# Large/local artifacts
+venv-ml/
+dump.rdb
