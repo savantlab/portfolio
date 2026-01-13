@@ -1,7 +1,7 @@
 #!/bin/bash
 # Push enriched project data to production
 
-API_TOKEN="${API_TOKEN:-LGAhPDfdAgjozkNP2YrDLb_txhydOa1pv0fsdix16EQ}"
+: "${API_TOKEN:?Set API_TOKEN in your environment}"
 
 echo "Pushing enriched project data to production..."
 curl -X POST https://savantlab.org/api/projects/populate \
