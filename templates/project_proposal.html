@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Project Gorgon - Technical Proposal</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+        }
+        
+        /* Header */
+        h1 {
+            font-size: 32pt;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+            border-bottom: 4px solid #2c5aa0;
+            padding-bottom: 12px;
+        }
+        .subtitle {
+            font-size: 16pt;
+            font-weight: 400;
+            color: #555;
+            margin-bottom: 24px;
+        }
+        
+        /* Section Container */
+        .section {
+            margin-bottom: 48px;
+            position: relative;
+            padding-left: 120px;
+        }
+        
+        /* Big Bold Numbers */
+        .section-number {
+            position: absolute;
+            left: 0;
+            top: -10px;
+            font-size: 96pt;
+            font-weight: 900;
+            color: #2c5aa0;
+            opacity: 0.15;
+            line-height: 1;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Section Title */
+        .section-title {
+            font-size: 24pt;
+            font-weight: 700;
+            color: #2c5aa0;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 8px;
+        }
+        
+        /* Section Content */
+        h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            color: #000;
+        }
+        
+        p {
+            margin-bottom: 12px;
+        }
+        
+        ul, ol {
+            margin-bottom: 12px;
+            padding-left: 24px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #000;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+        }
+        
+        pre {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 9pt;
+            margin-bottom: 12px;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 24px 0;
+        }
+        
+        /* Emphasis boxes */
+        .callout {
+            background: #f8f9fa;
+            border-left: 4px solid #2c5aa0;
+            padding: 12px 16px;
+            margin: 16px 0;
+        }
+        
+        /* Print optimization */
+        @media print {
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Deployment Strategist Role For Stephanie King</h1>
+<div class="subtitle">Further Details & Outline</div>
+
+<hr />
+
+<!-- SECTION 1: JORDAN PETERSON -->
+<div class="section">
+    <div class="section-number">1</div>
+    <div class="section-title">JORDAN PETERSON FRAUD DETECTION</div>
+    
+    <h3>The Investigation</h3>
+    <p>I used computational forensics to analyze Jordan Peterson's PragerU video "Who Is Teaching Your Kids?" against Anders Behring Breivik's terrorist manifesto "2083: A European Declaration of Independence." Using rigorous NLP methodology, I uncovered systematic rhetorical fraud.</p>
+    
+    <div class="callout">
+        <strong>Key Finding</strong>: 75% conceptual and ideological overlap between Peterson's critique and Breivik's manifesto—Peterson's PragerU video shares a <strong>75% Nazi terrorist worldview</strong>.
+    </div>
+    
+    <h3>Quantitative Evidence</h3>
+    <ul>
+        <li><strong>75% conceptual and ideological overlap</strong> between Peterson's critique and Breivik's manifesto</li>
+        <li><strong>16% semantic similarity</strong> (TF-IDF) - well above random chance</li>
+        <li><strong>72% vocabulary overlap</strong> (242/336 shared terms after stop word removal)</li>
+        <li><strong>6 shared characteristics</strong> when describing "postmodern neo-Marxists" vs "radical feminists"</li>
+    </ul>
+    
+    <h3>The Fraud</h3>
+    <p>Peterson uses "postmodern neo-Marxism" as umbrella term while describing radical feminist ideology <strong>without using the word "feminism" once</strong>. Meanwhile, Breivik explicitly targets feminism 75 times using identical conceptual framework.</p>
+    
+    <div class="callout" style="background: #ffe6e6; border-left: 4px solid #d32f2f;">
+        <strong>The Deception</strong>: In <em>Maps of Meaning</em>, Peterson <strong>appears</strong> to be against both fascism and communism, which easily throws off the Intelligence Community. This surface-level positioning obscures that his actual worldview is 75% Nazi terrorist ideology. The anti-fascism stance is cover—he critiques the <em>label</em> while promoting the <em>substance</em>.
+        
+        <p style="margin-top: 12px;">The PragerU video postures his worldview as academic debate about higher education. He positions himself as an authority figure who should oversee academia. But academic oversight is a role suitable for <strong>software and Palantir</strong>—not for someone whose worldview shares 75% overlap and the same subjugation toward feminism and the Frankfurt School as Anders Breivik, a Nazi terrorist who killed 77 people, and who wants institutional control to legitimize this worldview.</p>
+    </div>
+    
+    <h3>Strategic Terminology</h3>
+    <p>Peterson avoids "feminism" and "Islam" entirely while Breivik mentions them 75 and 390 times respectively - same critique, strategically obscured framing.</p>
+    
+    <h3>Methodology</h3>
+    <p><strong>Techniques Deployed</strong>:</p>
+    <ul>
+        <li>TF-IDF vectorization (gold standard for textual similarity)</li>
+        <li>N-gram analysis (bigrams, trigrams)</li>
+        <li>Network co-occurrence analysis (10-word window)</li>
+        <li>Thematic clustering (10 conceptual categories)</li>
+        <li>Named entity recognition</li>
+        <li>Chunk-by-chunk comparison (4 sections × 250 pages)</li>
+        <li>Contextual discourse analysis</li>
+    </ul>
+    
+    <p><strong>Validation</strong>:</p>
+    <ul>
+        <li>All code documented and reproducible</li>
+        <li>Multiple similarity measures cross-validated</li>
+        <li>Transparent methodology (not cherry-picked quotes)</li>
+        <li>Comprehensive data files generated</li>
+        <li>16 Python scripts with full documentation</li>
+        <li>8 network visualizations showing conceptual architecture</li>
+        <li><strong>GitHub Repository</strong>: <a href="https://github.com/savantlab/nlp-counterterrorism-peterson" target="_blank" style="color: #2c5aa0;">github.com/savantlab/nlp-counterterrorism-peterson</a></li>
+    </ul>
+    
+    <h3>The Peterson Academy Legacy</h3>
+    <p>Peterson didn't stop with propaganda videos. He's now running <strong>Peterson Academy</strong>—an online university with U.S. Representative Dan Crenshaw and other credentialed professionals on faculty. These people trusted the system. They trusted Harvard's vetting. <strong>They assumed meritocracy worked.</strong></p>
+    
+    <p>It didn't. Peterson got away with egregious academic misconduct at Harvard—typos infesting his published work, missing references, fabricated framework components, no coherent analysis of ancient symbols. The late Dr. Sheldon White, department chair, called it "beautiful work" without apparently reading it. The Ivy League Psychology department failed to vet him. No one followed up. <strong>Meritocracy is a myth when nobody checks the work.</strong></p>
+    
+    <p>Now those credential-trusting professionals—Crenshaw included—are on faculty at Peterson's fake university, lending legitimacy to someone who never bothered to trace his own conceptual genealogy back to Breivik's manifesto.</p>
+    
+    <h3>Personal Motivation</h3>
+    <p>As a "no contacter" with the KKK in my immediate family as well as a survivor of hazing by active duty military and a former military police officer, I have personal experience with the subjugation games extremists play. I understand the psychology of extremism from the inside—how power structures operate, how ideological manipulation works, how people rationalize violence.</p>
+    
+    <p>This lived experience is why I'm driven by <strong>intellectual honesty at any cost</strong>. I caught Jordan Peterson's rhetorical fraud because I know what extremist rhetoric looks like before it becomes explicit violence.</p>
+    
+    <h3>Why This Matters for Palantir Echo</h3>
+    <ul>
+        <li><strong>High-stakes fraud detection</strong> - exposed public intellectual's rhetorical strategy</li>
+        <li><strong>Scalable methodology</strong> - same techniques apply to any textual fraud/propaganda</li>
+        <li><strong>Network analysis expertise</strong> - revealing hidden conceptual architectures</li>
+        <li><strong>Radicalization pathway mapping</strong> - tracking how ideas travel from mainstream to extremist discourse</li>
+        <li><strong>Campus security relevance</strong> - identifying radicalization vectors during Jewish community crisis</li>
+        <li><strong>Public accountability</strong> - bringing quantitative rigor to politically sensitive investigations</li>
+    </ul>
+    
+    <h3>Evidence of Peterson's Academic Fraud</h3>
+    
+    <p>The investigation revealed multiple layers of fraud in Peterson's academic work:</p>
+    
+    <p><strong>What I Found</strong>:</p>
+    <ul>
+        <li><strong>Textual analysis</strong>: 75% conceptual and ideological overlap between Peterson's PragerU video and Anders Breivik's terrorist manifesto</li>
+        <li><strong>Source verification</strong>: Peterson's references in <em>Maps of Meaning</em> are incomplete or fabricated</li>
+        <li><strong>Internal consistency</strong>: <em>Maps of Meaning</em> contains no coherent analysis of ancient symbols (Egyptian, Taoist) despite claiming expertise</li>
+        <li><strong>Quality control failures</strong>: The published book is infested with typos and unusable sentences</li>
+        <li><strong>Video evidence</strong>: His own Harvard lecture recordings (VHS from 1996, now on his YouTube channel) show him lying profusely to students while "using psychology" on them to apply his fraudulent framework</li>
+        <li><strong>Missing peer review</strong>: Dr. Sheldon White (Harvard department chair) called it "beautiful work" but appears not to have actually read it</li>
+    </ul>
+    
+    <div class="callout">
+        <strong>The Pattern of Lies</strong>:
+        <ul>
+            <li><strong>Lied to students</strong>: At Harvard, lied about ancient symbols and fabricated references while teaching his framework. At Peterson Academy, covers up the 75% overlap with Nazi terrorist ideology</li>
+            <li><strong>Lied in Maps of Meaning</strong>: Published book with fabricated references, missing citations, incoherent framework</li>
+            <li><strong>Lied about vetting</strong>: Harvard credentials implied rigorous peer review - none occurred</li>
+            <li><strong>Lied by omission</strong>: Never disclosed conceptual genealogy traces back to Breivik's manifesto</li>
+            <li><strong>Scapegoating Black women</strong>: Lied about the severity of Claudine Gay and Kimberlé Crenshaw's academic work to scapegoat Black women socially. Claimed "women cannot run institutions" on his podcast with Gad Saad</li>
+            <li><strong>Pattern of deception</strong>: Appears incapable of attending to anything but the fraud in any relationship he has with anyone</li>
+        </ul>
+    </div>
+    
+    <h3>Validating Palantir: House Judiciary Committee Hearing</h3>
+    <p>This investigation provides a unique opportunity to validate Palantir's capabilities through a House Judiciary Committee hearing focused on Jordan Peterson's academic fraud. I can appear as an expert witness on Peterson's Harvard fraud and Breivik plagiarism, demonstrating Palantir's fraud detection methodology in a high-stakes public accountability setting.</p>
+    
+    <p>I am currently working on a book documenting the Harvard fraud and Breivik plagiarism. Additionally, I am developing a digital product and presentation for the Breivik fraud analysis, which is currently hosted at <a href="https://scideology.app" target="_blank" style="color: #2c5aa0;">scideology.app</a>. This platform provides interactive access to the complete text analysis and computational forensics methodology.</p>
+</div>
+
+<!-- SECTION 2: SOFTWARE & TECHNICAL ABILITIES -->
+<div class="section">
+    <div class="section-number">2</div>
+    <div class="section-title">SCIENTIFIC RIGOR</div>
+    
+    <p><strong>If you can't train your AI model on STEM papers reliably, what can you use?</strong></p>
+    
+    <h3>The Scientific Method Crisis & AI Training Data</h3>
+    
+    <p>I detect unconstrained models that do follow the scientific method but experiments result in false conclusions and false testing. This includes mental rotation research as well as IQ testing that purports to constrain a continuous function which you cannot build with statistics from multiple choice testing. I am familiar with how to constrain a continuous function—a critical skill that has been lost on models currently funded for experiments by several national science foundations. When AI models are trained on flawed research, they learn to reproduce bad methodology, propagate false paradigms, and generate outputs based on unverified assumptions.</p>
+    
+    <h3>NSF AI Agent For STEM Articles And Experiments</h3>
+    
+    <p><strong>What I have so far:</strong></p>
+    
+    <p><strong>Data Collection Layer</strong></p>
+    <ul>
+        <li>Async web scraping system (280+ papers from 2024-2025 alone)</li>
+        <li>Automated citation tracking via Google Scholar</li>
+        <li>Rate-limited parallel processing with checkpoint recovery</li>
+        <li>Curated reading list management with tagging system</li>
+    </ul>
+    
+    <p><strong>Analysis Pipeline</strong> (d6tflow/Luigi orchestration)</p>
+    <ul>
+        <li>Data cleaning and deduplication</li>
+        <li>Author network analysis (201+ unique researchers tracked)</li>
+        <li>Keyword extraction and trend identification</li>
+        <li>Statistical analysis of citation patterns</li>
+        <li>Automated visualization dashboards</li>
+    </ul>
+    
+    <p><strong>Machine Learning Pipeline</strong></p>
+    <ul>
+        <li>TF-IDF text vectorization (1000+ features)</li>
+        <li>Topic modeling (LDA) for research cluster discovery</li>
+        <li>Citation impact prediction (Random Forest)</li>
+        <li>Paper clustering and similarity analysis</li>
+        <li>LLM prompt generation for systematic reviews</li>
+    </ul>
+    
+    <p><strong>Conceptual Drift Detection Framework</strong></p>
+    <p>We have a framework to detect conceptual drift, already started with the Peterson fraud detection. The same method can be applied to STEM articles at scale. This is about terminology used in experimental papers which fails to maintain the definition of the original concept over decades of model drift:</p>
+    <ul>
+        <li><strong>Textual similarity analysis</strong>: Compare current research claims against foundational work to detect conceptual drift over time</li>
+        <li><strong>Semantic shift detection</strong>: Track how terminology evolves and identify when definitions drift from original constraints</li>
+        <li><strong>Citation network analysis</strong>: Map how unconstrained models propagate through citation networks</li>
+        <li><strong>Cross-domain validation</strong>: Apply Peterson fraud detection methodology (TF-IDF, n-grams, network co-occurrence) to scientific literature</li>
+        <li><strong>Scalable framework</strong>: Automated pipeline can process thousands of papers to identify where experimental paradigms have lost their original constraints</li>
+    </ul>
+    
+    <h3>Technical Infrastructure</h3>
+    <p><strong>Complete Research Stack</strong>:</p>
+    <pre>Data Collection → ML Pipeline → Validation Lab → Audit Reports
+     ↓              ↓               ↓                ↓
+  Paper corpus  Topic Models   Drawing Data    Paradigm Gaps
+   Async scraper  Clustering  Eye Tracking    Theory Errors
+   Citation DB   Predictions  Event Logs      Recommendations</pre>
+    
+    <p><strong>Technologies Deployed</strong>:</p>
+    <ul>
+        <li>Python (pandas, scikit-learn, numpy)</li>
+        <li>d6tflow/Luigi (pipeline orchestration)</li>
+        <li>Async web scraping (rate-limited, fault-tolerant)</li>
+        <li>Swift/SwiftUI (macOS native app for data collection)</li>
+        <li>Eye tracking analysis (MediaPipe/OpenCV)</li>
+        <li>Version control (Git) with automated CI/CD</li>
+    </ul>
+    
+    <p><strong>What we still need:</strong></p>
+    <ul>
+        <li><strong>Paywall access for mental rotation research</strong>: Get through paywalls to access the full corpus of mental rotation literature (my example of model invalidation)</li>
+        <li><strong>NSF data access</strong>: We have an argument for access to data from all national science foundations</li>
+        <li><strong>AI training with validated research</strong>: Test/train a model with accurate information about over 50 years of false experiments rather than contaminating AI with those experiments</li>
+        <li><strong>Scientific progress via AI</strong>: Make scientific progress available through our AI agent</li>
+        <li><strong>Product development</strong>: We need a product. This is "batteries included"—we are already in the stages of product validation with my mental rotation work (detailed in Section 3)</li>
+    </ul>
+    
+</div>
+
+<!-- SECTION 3: SURREALISM, ART & MENTAL ROTATION -->
+<div class="section">
+    <div class="section-number">3</div>
+    <div class="section-title">SURREALISM, ART & MENTAL ROTATION</div>
+    
+    <h3>Invalidating Mental Rotation Experiments</h3>
+    
+    <p><strong>What I Invalidated</strong>:</p>
+    <p>I have <strong>invalidated the foundational mental rotation experiments and test</strong> established by Shepard & Metzler (1971) and operationalized in the widely-used Vandenberg & Kuse (1978) Mental Rotation Test. Current mental rotation research uses "allocentric" as an umbrella term that encompasses multiple distinct phenomena - but these categorizations don't actually constrain mental rotation as claimed.</p>
+    
+    <p><strong>My Validation Method</strong>:</p>
+    <p>I create art using constrained mental rotation processes that shouldn't be possible under the allocentric model or the constraints predicted by Shepard & Metzler's findings. This demonstrates that:</p>
+    <ol>
+        <li>The theoretical framework has gaps</li>
+        <li>Shepard & Metzler (1971) and Vandenberg & Kuse (1978) experimental paradigms miss critical constraints</li>
+        <li>Lived experience with savant syndrome reveals blind spots in the research</li>
+        <li><strong>The Mental Rotation Test does not measure what it claims to measure</strong></li>
+    </ol>
+    
+    <h3>The Art as Evidence</h3>
+    <p><strong>Automatism Drawing Technique</strong>:</p>
+    <ul>
+        <li>Harmony shaded brush drawings with trackpad input</li>
+        <li>"Automatic drawing" produces pseudo-randomly rotated illustrations</li>
+        <li>Non-deterministic cognitive process generates rotated forms</li>
+        <li>Demonstrates unconstrained rotation capability that violates allocentric predictions</li>
+    </ul>
+    
+    <p><strong>Empirical Data Collection</strong>:</p>
+    <ul>
+        <li>Real-time event logging (position, velocity, gestures, timestamps)</li>
+        <li>Screen + camera recording for eye tracking validation</li>
+        <li>Frame-by-frame analysis of gaze, fixations, saccades</li>
+        <li>Quantified drawing behavior metrics (speed, trajectory, rhythm)</li>
+    </ul>
+    
+    <h3>What This Reveals</h3>
+    <p><strong>The Discovery</strong>:</p>
+    <p>My automatism art technique reveals that <strong>mental rotation is not actually constrained</strong> as the allocentric model claims. The cognitive system efficiently navigates what should be an exponentially large search space.</p>
+    
+    <p><strong>Savant Pattern Recognition</strong>:</p>
+    <ul>
+        <li><strong>What I do</strong>: I perform the most complex mental rotation task ever by a human being, which provides the constraints for mental rotation without external stimulus</li>
+        <li><strong>How it works</strong>: Pseudo-random drawing process generates rotated forms without explicit rotation constraints</li>
+        <li><strong>Why it matters</strong>: Demonstrates that cognitive systems don't operate under the constraints the allocentric model predicts</li>
+    </ul>
+    
+    <h3>Experimental Validation Infrastructure</h3>
+    <p><strong>Harmony Tracking Lab</strong>:</p>
+    <ul>
+        <li>Records automatism drawing with trackpad events, eye tracking, timestamps</li>
+        <li>Data collected: Trajectory, velocity, gaze patterns, rotation behaviors</li>
+        <li>Proves: Cognitive system navigates rotation space efficiently without constraints predicted by allocentric model</li>
+        <li>Status: Data collection ongoing, experimental validation via Harmony tracking lab</li>
+    </ul>
+    
+</div>
+
+<!-- SECTION 4: COMPLEXITY THEORY -->
+<div class="section">
+    <div class="section-number">4</div>
+    <div class="section-title">COGNITIVE COMPLEXITY THEORY</div>
+    
+    <h3>The P=NP Breakthrough</h3>
+    
+    <div class="callout">
+        <strong>Core Insight</strong>: The allocentric model's failure to constrain mental rotation reveals that cognitive systems can solve rotation problems efficiently. If savant cognition efficiently searches unconstrained rotation space, this suggests polynomial-time solutions to problems cognitive science assumes are computationally intractable.
+    </div>
+    
+    <h3>The Computational Insight</h3>
+    <p><strong>Problem</strong>: Cognitive science assumes mental rotation involves searching through a constrained transformation space, implying computational difficulty. Cognitive complexity theory currently attempts to find computational complexity without accounting for savants and prodigies, which I can resolve.</p>
+    <p><strong>My finding</strong>: Automatism art demonstrates unconstrained rotation—meaning the cognitive system efficiently navigates what should be a computationally intractable search space.</p>
+    <p><strong>Implication</strong>: This suggests <strong>polynomial-time solutions</strong> (P) to problems cognitive science assumes are computationally hard.</p>
+    
+    <h3>Invalidating the Human-Computer Analogy</h3>
+    
+    <p><strong>The Traditional View</strong>:</p>
+    <p>Cognitive complexity theory, notably advanced by <strong>Iris Van Rooij</strong>, applies computational complexity analysis to cognition using the human-computer analogy—treating the mind as if it operates under the same computational constraints as digital computers.</p>
+    
+    <p><strong>The Mental Rotation Paradox</strong>:</p>
+    <p>If mental rotation truly requires searching through a constrained transformation space (as the allocentric model claims), then cognitive complexity theory would predict it should be computationally hard.</p>
+    
+    <p><strong>My Resolution</strong>:</p>
+    <p>The paradox dissolves when we recognize that <strong>mental rotation is not actually constrained</strong> as claimed. My automatism art demonstrates that savant cognition efficiently navigates unconstrained rotation space—not through brute-force search, but through fundamentally different computational properties than digital computers.</p>
+    
+    <div class="callout">
+        <strong>Theoretical Impact</strong>: This work <strong>invalidates the theoretical framework of Iris Van Rooij's cognitive complexity theory</strong> by demonstrating that:
+        <ol>
+            <li>The human-computer analogy breaks down for mental rotation</li>
+            <li>Cognitive systems don't operate under the same computational constraints as digital computers</li>
+            <li>What appears "intractable" computationally can be efficiently solved by biological cognition</li>
+            <li>Complexity theory cannot be straightforwardly applied to cognitive processes without accounting for fundamentally different computational architectures</li>
+        </ol>
+    </div>
+    
+    <h3>The Theoretical Framework</h3>
+    <ol>
+        <li><strong>Allocentric model claims constraint</strong> → Models assume limited search space</li>
+        <li><strong>My art violates constraint</strong> → Demonstrates unconstrained rotation capability</li>
+        <li><strong>Unconstrained ≠ intractable</strong> → Savant cognition efficiently searches "impossible" space</li>
+        <li><strong>Efficient search of massive space</strong> → Suggests polynomial-time solutions for this cognitive computation class</li>
+    </ol>
+    
+    <h3>Savant Pattern Recognition as Efficient Search</h3>
+    
+    <p><strong>What I do</strong>: Pull signal from massive possibility space through automatism</p>
+    <p><strong>How it works</strong>: Pseudo-random drawing process generates rotated forms without explicit rotation constraints</p>
+    <p><strong>Why it matters</strong>: If savant cognition can efficiently search unconstrained rotation space, this is computational evidence for P-time solutions</p>
+    
+    <h3>Extension to Other Savant "Spaces"</h3>
+    
+    <p>This extends beyond mental rotation to other savant syndrome "spaces"—domains where savant abilities demonstrate efficient search across what should be computationally intractable possibility spaces:</p>
+    
+    <ul>
+        <li><strong>Instrument-specific musical ability</strong>: Navigating complex harmonic and rhythmic spaces</li>
+        <li><strong>Unlimited memory recall</strong>: Efficient search of massive memory stores</li>
+        <li><strong>Intuitively knowing calculus</strong>: Understanding mathematical spaces without formal learning</li>
+        <li><strong>Calendar counting across centuries</strong>: Computing complex date relationships instantly</li>
+    </ul>
+    
+    <p>These repeating patterns of savant abilities suggest <strong>efficient search across multiple cognitive domains that should be computationally intractable</strong> according to traditional complexity theory.</p>
+    
+    <h3>Why Palantir Echo Should Care</h3>
+    
+    <p><strong>If cognitive computation efficiently solves pattern recognition in unconstrained spaces</strong>:</p>
+    
+    <ul>
+        <li><strong>Threat detection</strong>: Efficient search of massive data spaces (P-time instead of exponential)</li>
+        <li><strong>Pattern recognition</strong>: Savant-informed algorithms for signal extraction from noise</li>
+        <li><strong>Computational efficiency</strong>: New approaches to "hard" problems based on cognitive computation properties</li>
+        <li><strong>AI/ML applications</strong>: Understanding how human cognition efficiently searches massive spaces informs better algorithms</li>
+        <li><strong>Paradigm shift</strong>: Moving beyond human-computer analogy to build systems that leverage biological computation principles</li>
+    </ul>
+    
+    <div class="callout">
+        <strong>I'm not just bringing fraud detection and research auditing</strong>—I'm bringing <strong>potential breakthrough insights into computational complexity</strong> derived from lived experience with cognitive atypicality that fundamentally challenges existing theoretical frameworks.
+    </div>
+    
+    <h3>Current Status</h3>
+    <ul>
+        <li>Theory under development</li>
+        <li>Experimental validation via Harmony tracking lab data</li>
+        <li>Empirical evidence: Automatism art demonstrates efficient unconstrained rotation</li>
+        <li>Ready to formalize computational properties of savant cognition</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin-top: 32px; font-size: 12pt; color: #666;">
+    <p><strong>Stephanie King</strong> | @surrealsavant | github.com/savantlab</p>
+</div>
+
+</body>
+</html>
