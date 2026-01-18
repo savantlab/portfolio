@@ -705,12 +705,12 @@ def archimedes_dashboard():
 
 @app.route("/resume")
 def resume():
-    """Protected Palantir resume page with code validation"""
+    """Protected resume page with password modal"""
     return render_template("resume.html")
 
 @app.route("/api/resume/validate", methods=['POST'])
 def validate_resume_code():
-    """Validate access code for resume"""
+    """Validate access code for resume (legacy endpoint)"""
     data = request.get_json()
     code = data.get('code', '').strip()
     correct_code = os.getenv('RESUME_CODE', 'ARCHIMEDES2026')
@@ -728,12 +728,19 @@ def resume_content():
     if not session.get('resume_access'):
         return jsonify({"error": "Access code required"}), 403
     
-    # Read and convert markdown to HTML
-    filepath = os.path.join(os.path.dirname(__file__), 'palantir_echo_resume_pitch.md')
-    with open(filepath, 'r') as f:
-        md_content = f.read()
+    # Read resume_modular.html content (extract body content only)
+    filepath = os.path.join(os.path.dirname(__file__), 'resume_modular.html')
+    with open(filepath, 'r', encoding='utf-8') as f:
+        html_content = f.read()
     
-    html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables', 'toc'])
+    # Extract content between <body> and </body> tags
+    import re
+    body_match = re.search(r'<body>(.*?)</body>', html_content, re.DOTALL)
+    if body_match:
+        html_content = body_match.group(1)
+    else:
+        # If no body tags found, use the full content
+        html_content = html_content
     
     return jsonify({"content": html_content}), 200
 
@@ -892,6 +899,17 @@ def gorgon_resume_pdf():
         return "<html><body style='background:#0a0a0a;color:#e0e0e0;font-family:monospace;padding:40px;'><h1>⚠️ Resume Not Found</h1><p>Run 'python generate_resume_pdf.py' to generate resume.pdf</p></body></html>", 404
     
     return send_file(filepath, mimetype='application/pdf', as_attachment=False, download_name='resume.pdf')
+
+@app.route("/gorgon/project-proposal")
+def gorgon_project_proposal():
+    """Password-protected Project Gorgon Technical Proposal"""
+    password = request.args.get('password') or request.headers.get('X-Gorgon-Password')
+    correct_password = os.getenv('GORGON_PASSWORD', 'ARCHIMEDES2026')
+    
+    if password != correct_password:
+        return "<html><body style='background:#0a0a0a;color:#e0e0e0;font-family:monospace;padding:40px;'><h1>🔒 Access Denied</h1><p>Valid password required. Use ?password=YOUR_PASSWORD</p></body></html>", 403
+    
+    return render_template("project_proposal.html")
 
 @app.route("/healthz")
 def healthz():
