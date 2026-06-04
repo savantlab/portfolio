@@ -1,12 +1,12 @@
 [
   {
     "title": "The Surreal Art of Mental Rotation",
-    "status": "In Development",
-    "description": "Research on mental rotation tasks using surreal and impossible objects"
+    "status": "Draft",
+    "description": "The Mental Rotaion Paradox is resolved with Surreal art technique and probably what is savant syndrome"
   },
   {
-    "title": "The Peterson Effect: Deceptive Ideology As Psychological Truth",
-    "status": "In Development",
-    "description": "Analysis of how Jordan Peterson's rhetorical strategies frame ideological positions as psychological insights, examining the 75% conceptual overlap with extremist manifestos while maintaining mainstream academic credibility through strategic terminology and psychological framing."
+    "title": "IQ Tests And Scores Do Not Measure An Interval On A Continuum Of Intelligence",
+    "status": "Preprint",
+    "description": "The Gaussian distribution and the Rasch model are shown to be mathematically unsound."
   }
 ]
